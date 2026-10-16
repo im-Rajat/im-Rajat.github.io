@@ -53,6 +53,7 @@
 - [Vertical vs. Horizontal Scaling](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/DBMS/html/Vertical-vs-Horizontal-Scaling.html)
 - [Normalization vs Denormalization](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/DBMS/html/Normalization-vs-Denormalization.html)
 - [Indexing](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/DBMS/html/Indexing.html)
+- [Concurrency Control and Database Locking Guide](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/DBMS/html/concurrency-db-locking-guide.html)
 - [Shared Lock vs Exclusive Lock](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/DBMS/html/Shared-vs-Exclusive-Locks.html)
 - [Conflict Serializability](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/DBMS/html/Conflict-Serializability.html)
 - [Concurrency Control Protocols](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/DBMS/html/Concurrency-Control-Protocols.html)
