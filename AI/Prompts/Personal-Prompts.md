@@ -4,7 +4,7 @@
  
 Explain "" in technical terms (in detail) with examples, and it should be easy to understand. Also, if asked by an interviewer:
   
-Export all the data (in detail) with examples to a webpage and add animations and interective session to make it easy for the user to understand it.
+Export all the data (in detail) with examples to a webpage and add animations and interactive session to make it easy for the user to understand it.
 
 Also Write Curated by Rajat Kumar linkedin profile: https://www.linkedin.com/in/imRajat/, and github profile: https://github.com/im-Rajat/
  
