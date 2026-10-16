@@ -1,16 +1,12 @@
 # Personal Prompts
 
 ### Explaining Technical Topics:
-
-Create a detailed image of the above content that explains "" in technical terms (in detail, with examples) and is easy to understand. Also, if asked by an interviewer:
- 
-Add my initials also @imRajat
  
 Explain "" in technical terms (in detail) with examples, and it should be easy to understand. Also, if asked by an interviewer:
- 
-And add my name: Rajat Kumar, linkedin profile: https://www.linkedin.com/in/imRajat/, and github profile: https://github.com/im-Rajat/
- 
-Also, export the dynamic view to a webpage (add an option very-very small download .html file option in left/right down corner). Instead of writing Created by, write Curated by.
+  
+Export all the data (in detail) with examples to a webpage and add animations and interactive session to make it easy for the user to understand it.
+
+Also add my initials like Write Curated by Rajat Kumar linkedin profile: https://www.linkedin.com/in/imRajat/, and github profile: https://github.com/im-Rajat/
  
 Image Strategy (STRICT RULES): 
 - For Analogies (Real Life): Do NOT use generative AI or Pollinations. Instead, use Google images or LoremFlickr to fetch real stock photos only if required. 
