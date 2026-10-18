@@ -1,5 +1,7 @@
 # Git
- 
+
+Interactive version: [Git & GitHub Notes](https://im-rajat.github.io/Notes/DevOps/Git/html/git-notes.html)
+
 - Git is a version control system.
 - Git helps us to keep track of code changes.
 - Git is used to collaborate on code.

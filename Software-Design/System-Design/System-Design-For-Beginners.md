@@ -192,7 +192,7 @@ If our Service crashes (the management logic fails), our application will **stay
 
 **The Catch:** However, since the "Manager" (Service) is down, the system enters an **unmanaged state**. If a specific Task fails or crashes during this time, **no replacement Task will be started** because the auto-healing mechanism is broken. You lose the ability to self-heal until the Service is restored.
 
-#### **[Click here to see Simulator to understand it better](https://im-rajat.github.io/Notes/System-Design/html/aws-ecs-architecture-sim.html)**
+#### **[Click here to see Simulator to understand it better](https://im-rajat.github.io/Notes/Software-Design/System-Design/html/aws-ecs-architecture-sim.html)**
 
 ![client-to-task.png](https://i.postimg.cc/sXNSnPdF/client-to-task.png)
 

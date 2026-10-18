@@ -1,5 +1,6 @@
 # Some Useful Websites
 
+Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resources/Websites/html/web-resource-hub.html)
 
 ### Important/Financial :
 - Purchasing Power Parity Calculator to compare Money/Salary of 2 Countries	-	<https://www.chrislross.com/PPPConverter>

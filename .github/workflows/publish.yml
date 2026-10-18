@@ -34,7 +34,7 @@ jobs:
           restore-keys: |
             mkdocs-material-
             
-      - run: pip install mkdocs-material 
+      - run: pip install mkdocs-material mkdocs-redirects
       
       # Retaining our folder hack to keep the root directory clean
       - name: Hack to fix the folder structure dynamically

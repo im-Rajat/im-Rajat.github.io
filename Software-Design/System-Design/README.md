@@ -1,6 +1,6 @@
 # System Design
 
-[System Design for Beginners](https://im-rajat.github.io/Notes/System-Design/System-Design-For-Beginners)
+[System Design for Beginners](System-Design-For-Beginners.md)
 
 
 ### References

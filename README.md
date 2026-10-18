@@ -1,47 +1,52 @@
 # Rajat's Knowledge Base
 
-Welcome to my personal notes repository. Select a topic below to browse the notes directly.
+Welcome to my personal notes repository. Browse the site at **<https://im-rajat.github.io/Notes/>** or pick a topic below.
 
-## 🚀 DevOps & Tools
+## 💻 [Programming](Programming/README.md)
 
-* **[CI/CD & Jenkins](https://im-rajat.github.io/Notes/CICD/)**
-    * Pipelines, Jenkins setup, and automation.
-    * **[CICD Basics](https://im-rajat.github.io/Notes/CICD/CICD-Basics/)**
-* **[Docker](https://im-rajat.github.io/Notes/Docker/)**
-    * Containerization basics, commands, and images.
-* **[Git & GitHub](https://im-rajat.github.io/Notes/Git/)**
-    * Version control commands, workflows, and pages setup.
-* **[Linux](https://im-rajat.github.io/Notes/Linux/)**
-    * System administration, commands, and utilities.
+* **[C](Programming/C/README.md)**: Language basics, I/O, and pointers.
+* **[C++](Programming/CPP/README.md)**, **[Java](Programming/Java/README.md)**, **[Python](Programming/Python/README.md)**, **[Django](Programming/Django/README.md)**, **[SQL](Programming/SQL/README.md)**: Each lives in its own repository.
 
-## 💻 Programming & Architecture
+## 🏗️ [Software Design](Software-Design/README.md)
 
-* **[SOLID Principles](https://im-rajat.github.io/Notes/SOLID-Principles/)**
-    * Deep dive into software design principles with C++ examples.
-    * **[Single Responsibility (SRP)](https://im-rajat.github.io/Notes/SOLID-Principles/02_Single_Responsibility/)**
-    * **[Open/Closed (OCP)](https://im-rajat.github.io/Notes/SOLID-Principles/03_Open_Close/)**
-    * **[Liskov Substitution (LSP)](https://im-rajat.github.io/Notes/SOLID-Principles/04_Liskov_Substitution/)**
-    * **[Interface Segregation (ISP)](https://im-rajat.github.io/Notes/SOLID-Principles/05_Interface_Segregation/)**
-    * **[Dependency Inversion (DIP)](https://im-rajat.github.io/Notes/SOLID-Principles/06_Dependency_Inversion/)**
-* **[Ethical Hacking](https://im-rajat.github.io/Notes/Ethical-Hacking/)**
-    * Network security, wifi hacking basics, and tools.
+* **[SOLID Principles](Software-Design/SOLID-Principles/README.md)**: Design principles with C++ examples.
+* **[Design Patterns](Software-Design/Design-Patterns/README.md)**: Creational, structural, and behavioral patterns.
+* **[System Design](Software-Design/System-Design/README.md)**: Scaling, load balancing, and architecture basics.
 
-## 📈 Finance & Life
+## 🚀 [DevOps](DevOps/README.md)
 
-* **[Share Market](https://im-rajat.github.io/Notes/Share-Market/)**
-    * Trading vs. Investing, Intraday strategies, and financial notes.
+* **[Git & GitHub](DevOps/Git/README.md)**: Version control commands, workflows, and Pages setup.
+* **[Docker](DevOps/Docker/README.md)**: Containerization basics, commands, and images.
+* **[CI/CD & Jenkins](DevOps/CICD/README.md)**: Pipelines, Jenkins setup, and automation.
+* **[Linux](DevOps/Linux/README.md)**: Commands for files, binaries, and processes.
+* **[GitHub Actions](DevOps/Github-Actions/README.md)**: Lives in its own repository.
 
-## 📚 Guides & Resources
+## 🤖 [AI](AI/README.md)
 
-* **[Paths to Learn](https://im-rajat.github.io/Notes/Paths-to-Learn/)**
-    * Roadmaps and guided learning paths for various technologies.
-* **[PDF Collection](https://im-rajat.github.io/Notes/PDF/)**
-    * Downloadable PDFs for Arduino, Azure IoT, AWS, MQTT, and more.
+* **[Generative AI for Beginners](AI/Courses/Generative-AI-for-Beginners.md)**: Course notes on fundamentals, tools, and prompts.
+* **[Prompts](AI/Prompts/README.md)**: Reusable prompts for work and image enhancement.
+* **[Computer Vision](AI/Computer-Vision/README.md)**: Lives in its own repository.
 
-## 🛠️ Tools & Utilities
+## 🎯 [Interviews](Interviews/README.md)
 
-* **[Useful Websites](https://im-rajat.github.io/Notes/Websites/)**
-    * Curated list of useful websites, tools and extensions.
+* **[Interview Questions](Interviews/Interview-Questions/README.md)**: System design, OS, networks, DBMS, and C/C++, with interactive explainers.
+* **[DSA & Problem Solving](Interviews/DSA-Problem-Solving/README.md)**: Patterns, tricks, and LeetCode solutions.
+* **[Company Interviews](Interviews/Company-Interviews/README.md)**: Questions and solutions from past interviews.
+
+## 🔐 [Security](Security/README.md)
+
+* **[Ethical Hacking](Security/Ethical-Hacking/README.md)**: Network security, wifi hacking basics, and tools.
+
+## 📈 [Personal](Personal/README.md)
+
+* **[Share Market](Personal/Share-Market/README.md)**: Trading vs. investing, intraday strategies, and financial notes.
+* **[Life Concepts of a Programmer](Personal/Life-Concepts-of-a-Programmer.md)**: OOP principles as life lessons.
+
+## 📚 [Resources](Resources/README.md)
+
+* **[PDF Collection](Resources/PDF/README.md)**: Downloadable PDFs for Arduino, Azure IoT, AWS, MQTT, and more.
+* **[Paths to Learn](Resources/PDF/Paths-to-Learn.pdf)**: Roadmaps and learning paths for various technologies.
+* **[Useful Websites](Resources/Websites/README.md)**: Curated list of useful websites, tools, and extensions.
 
 ---
-*Note: This site is hosted on GitHub Pages.*
+*This site is hosted on GitHub Pages.*

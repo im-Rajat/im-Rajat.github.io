@@ -28,6 +28,42 @@ theme:
 
 docs_dir: 'docs'
 
+plugins:
+  - search                    # Must be listed explicitly once a plugins section exists
+  - redirects:                # Keeps old URLs working after folders moved into categories
+      redirect_maps:
+        'C/README.md': 'Programming/C/README.md'
+        'CPP/README.md': 'Programming/CPP/README.md'
+        'Java/README.md': 'Programming/Java/README.md'
+        'Python/README.md': 'Programming/Python/README.md'
+        'Django/README.md': 'Programming/Django/README.md'
+        'SQL/README.md': 'Programming/SQL/README.md'
+        'SOLID-Principles/README.md': 'Software-Design/SOLID-Principles/README.md'
+        'SOLID-Principles/01_Introduction/README.md': 'Software-Design/SOLID-Principles/01_Introduction/README.md'
+        'SOLID-Principles/02_Single_Responsibility/README.md': 'Software-Design/SOLID-Principles/02_Single_Responsibility/README.md'
+        'SOLID-Principles/03_Open_Close/README.md': 'Software-Design/SOLID-Principles/03_Open_Close/README.md'
+        'SOLID-Principles/04_Liskov_Substitution/README.md': 'Software-Design/SOLID-Principles/04_Liskov_Substitution/README.md'
+        'SOLID-Principles/05_Interface_Segregation/README.md': 'Software-Design/SOLID-Principles/05_Interface_Segregation/README.md'
+        'SOLID-Principles/06_Dependency_Inversion/README.md': 'Software-Design/SOLID-Principles/06_Dependency_Inversion/README.md'
+        'Design-Patterns/README.md': 'Software-Design/Design-Patterns/README.md'
+        'Design-Patterns/Creational-Design-Patterns/Singleton/README.md': 'Software-Design/Design-Patterns/Creational-Design-Patterns/Singleton/README.md'
+        'System-Design/README.md': 'Software-Design/System-Design/README.md'
+        'System-Design/01_Basics/README.md': 'Software-Design/System-Design/01_Basics/README.md'
+        'System-Design/System-Design-For-Beginners.md': 'Software-Design/System-Design/System-Design-For-Beginners.md'
+        'System-Design/index_.md': 'Software-Design/System-Design/index_.md'
+        'Git/README.md': 'DevOps/Git/README.md'
+        'Github-Actions/README.md': 'DevOps/Github-Actions/README.md'
+        'Docker/README.md': 'DevOps/Docker/README.md'
+        'CICD/README.md': 'DevOps/CICD/README.md'
+        'CICD/CICD-Basics/README.md': 'DevOps/CICD/CICD-Basics/README.md'
+        'Linux/README.md': 'DevOps/Linux/README.md'
+        'Computer-Vision/README.md': 'AI/Computer-Vision/README.md'
+        'Ethical-Hacking/README.md': 'Security/Ethical-Hacking/README.md'
+        'Share-Market/README.md': 'Personal/Share-Market/README.md'
+        'Personal-Notes/Life-Concepts-of-a-Programmer.md': 'Personal/Life-Concepts-of-a-Programmer.md'
+        'PDF/README.md': 'Resources/PDF/README.md'
+        'Websites/README.md': 'Resources/Websites/README.md'
+
 markdown_extensions:
   - tables                    # Enables GitHub-style tables
   - sane_lists                # Fixes common list formatting issues
