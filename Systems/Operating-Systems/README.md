@@ -5,10 +5,10 @@
 - [Process vs Thread](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/Process-vs-Thread.html)
 - [Mutex vs Semaphore](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/Mutex-vs-Semaphore.html)
 - [Main Memory vs Secondary Memory](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/Main-vs-Secondary-Memory.html)
-- [Deadlock and its Conditions](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/Deadlock-and-its-Conditions.html)
-- [Why Deleting a File Is Faster Than Copying It](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/why-delete-is-fast.html)
-- [How Compression Works](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/how-compression-works.html)
-- [x86 vs x64 Systems](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/x86-vs-x64-systems.html)
+- [Deadlock and it's conditions](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/Deadlock-and-its-Conditions.html)
+- [When we copy a 10gb file, it look 10 min, but when we delete it look 10 secons. Why?](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/why-delete-is-fast.html)
+- [How does a 75GB file become 20GB when zipped? And then magically turn back to 75GB again?](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/how-compression-works.html)
+- [What's the difference between x86 and x64 systems?](https://im-rajat.github.io/Notes/Systems/Operating-Systems/html/x86-vs-x64-systems.html)
 
 ## 1. Memory Segments: Stack vs. Heap
 When a program runs, the OS allocates a chunk of RAM for it. That chunk isn't just a messy pile of data; it’s organized into specific segments.

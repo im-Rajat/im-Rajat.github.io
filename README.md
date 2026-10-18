@@ -36,7 +36,7 @@ Welcome to my personal notes repository. Browse the site at **<https://im-rajat.
 
 ## 🎯 [Interviews](Interviews/README.md)
 
-* **[Question Bank](Interviews/README.md)**: Interview questions by topic, linking to the notes and explainers.
+* **[Questions by Topic](Interviews/README.md)**: Points to the interview questions in each topic's notes.
 * **[DSA & Problem Solving](Interviews/DSA-Problem-Solving/README.md)**: Patterns, tricks, and LeetCode solutions.
 * **[Company Interviews](Interviews/Company-Interviews/README.md)**: Questions and solutions from past interviews.
 

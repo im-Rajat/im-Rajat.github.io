@@ -3,7 +3,7 @@
 ## Interactive Explainers
 
 - [ACID Properties](https://im-rajat.github.io/Notes/Systems/DBMS/html/ACID-Properties.html)
-- [Vertical vs Horizontal Scaling](https://im-rajat.github.io/Notes/Systems/DBMS/html/Vertical-vs-Horizontal-Scaling.html)
+- [Vertical vs. Horizontal Scaling](https://im-rajat.github.io/Notes/Systems/DBMS/html/Vertical-vs-Horizontal-Scaling.html)
 - [Normalization vs Denormalization](https://im-rajat.github.io/Notes/Systems/DBMS/html/Normalization-vs-Denormalization.html)
 - [Indexing](https://im-rajat.github.io/Notes/Systems/DBMS/html/Indexing.html)
 - [Concurrency Control and Database Locking Guide](https://im-rajat.github.io/Notes/Systems/DBMS/html/concurrency-db-locking-guide.html)

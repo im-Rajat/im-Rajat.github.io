@@ -1,6 +1,9 @@
 # C Tutorial
 
-Interactive explainer: [C Memory Layout & Storage Classes](https://im-rajat.github.io/Notes/Programming/C/html/c-memory-visualizer.html)
+## Interactive Explainers
+
+- [C Memory Layout & Storage Classes](https://im-rajat.github.io/Notes/Programming/C/html/c-memory-visualizer.html)
+- [Why Array Indexing Starts at 0?](https://i.imghippo.com/files/FA2186mI.png)
 
 ## Variables
 
