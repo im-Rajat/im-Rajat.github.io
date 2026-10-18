@@ -22,7 +22,10 @@ Welcome to my personal notes repository. Browse the site at **<https://im-rajat.
 
 ## 🖥️ [Systems](Systems/README.md)
 
+* **[Operating Systems](Systems/Operating-Systems/README.md)**: Processes, threads, memory, paging, and deadlocks.
 * **[Linux](Systems/Linux/README.md)**: Commands for files, binaries, and processes.
+* **[Computer Networks](Systems/Computer-Networks/README.md)**: TCP/UDP, DNS, IP addressing, subnetting, and HTTP(S).
+* **[DBMS](Systems/DBMS/README.md)**: ACID, indexing, normalization, locking, and concurrency control.
 * **[Ethical Hacking](Systems/Ethical-Hacking/README.md)**: Wireless network security with Linux tools.
 
 ## 🤖 [AI](AI/README.md)
@@ -33,7 +36,7 @@ Welcome to my personal notes repository. Browse the site at **<https://im-rajat.
 
 ## 🎯 [Interviews](Interviews/README.md)
 
-* **[Interview Questions](Interviews/Interview-Questions/README.md)**: System design, OS, networks, DBMS, and C/C++, with interactive explainers.
+* **[Question Bank](Interviews/README.md)**: Interview questions by topic, linking to the notes and explainers.
 * **[DSA & Problem Solving](Interviews/DSA-Problem-Solving/README.md)**: Patterns, tricks, and LeetCode solutions.
 * **[Company Interviews](Interviews/Company-Interviews/README.md)**: Questions and solutions from past interviews.
 

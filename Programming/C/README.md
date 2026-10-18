@@ -1,5 +1,7 @@
 # C Tutorial
 
+Interactive explainer: [C Memory Layout & Storage Classes](https://im-rajat.github.io/Notes/Programming/C/html/c-memory-visualizer.html)
+
 ## Variables
 
 ```c

@@ -63,6 +63,15 @@ plugins:
         'Personal-Notes/Life-Concepts-of-a-Programmer.md': 'Wealth-and-Wisdom/Life-Concepts-of-a-Programmer.md'
         'PDF/README.md': 'Resources/PDF/README.md'
         'Websites/README.md': 'Resources/Websites/README.md'
+        'Interviews/Interview-Questions/README.md': 'Interviews/README.md'
+        'Interviews/Interview-Questions/Operating-Systems/README.md': 'Systems/Operating-Systems/README.md'
+        'Interviews/Interview-Questions/Computer-Networks/README.md': 'Systems/Computer-Networks/README.md'
+        'Interviews/Interview-Questions/DBMS/README.md': 'Systems/DBMS/README.md'
+        'Interviews/Interview-Questions/System-Design/README.md': 'Software-Design/System-Design/README.md'
+        'Interviews/Interview-Questions/C-CPP/README.md': 'Programming/README.md'
+
+hooks:
+  - hooks/html_redirects.py   # Redirects for moved .html explainers (mkdocs-redirects only handles .md)
 
 markdown_extensions:
   - tables                    # Enables GitHub-style tables
