@@ -50,6 +50,7 @@
 
 ### Education :
 - You can access all Medium articles for free    -    <https://freedium-mirror.cfd/>
+- Learn algorithms and data structures visually    -    <https://algomaster.io/>
 - Online Editor (VSCode)    -    https://vscode.dev/
 - Useful Git Repositories    -    <https://github.com/im-Rajat?tab=stars>
 - Transform your handwriting or calligraphy into a font!    -    <https://www.calligraphr.com/en/>
