@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimistic vs. Pessimistic Locking | Interactive System Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #090d16;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-amber {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.35);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.35);
+        }
+        .glow-rose {
+            box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.45);
+        }
+        .sql-keyword { color: #38bdf8; font-weight: 600; }
+        .sql-string { color: #a7f3d0; }
+        .sql-number { color: #fbbf24; }
+        .sql-comment { color: #64748b; font-style: italic; }
+        
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #1e293b;
+            border-radius: 999px;
+            border: 1px solid #334155;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -7px;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+            transition: transform 0.15s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+        .step-active {
+            border-color: #38bdf8 !important;
+            background: rgba(56, 189, 248, 0.1) !important;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out 2;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-sky-500 selection:text-white">
+
+    <nav class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-4 sm:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 via-sky-500 to-emerald-500 p-0.5">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-database text-sky-400 text-lg"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="font-bold text-white tracking-tight text-lg">Concurrency<span class="text-sky-400">Lab</span></span>
+                    <span class="hidden sm:inline-block ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Interactive Guide</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-medium overflow-x-auto max-w-full py-1">
+                <a href="#analogy" class="px-3 py-1.5 rounded-lg hover:bg-slate-800/80 text-slate-300 hover:text-white transition whitespace-nowrap"><i class="fa-solid fa-lightbulb text-amber-400 mr-1.5"></i>Analogy</a>
+                <a href="#simulator" class="px-3 py-1.5 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/30 hover:bg-sky-500/20 transition whitespace-nowrap"><i class="fa-solid fa-play mr-1.5"></i>DB Simulator</a>
+                <a href="#deep-dive" class="px-3 py-1.5 rounded-lg hover:bg-slate-800/80 text-slate-300 hover:text-white transition whitespace-nowrap"><i class="fa-solid fa-code text-emerald-400 mr-1.5"></i>Deep Dive</a>
+                <a href="#advisor" class="px-3 py-1.5 rounded-lg hover:bg-slate-800/80 text-slate-300 hover:text-white transition whitespace-nowrap"><i class="fa-solid fa-Sliders text-purple-400 mr-1.5"></i>Decision Matrix</a>
+                <a href="#interview" class="px-3 py-1.5 rounded-lg hover:bg-slate-800/80 text-slate-300 hover:text-white transition whitespace-nowrap"><i class="fa-solid fa-user-tie text-rose-400 mr-1.5"></i>Interview Prep</a>
+                
+                <div class="hidden xl:flex items-center gap-2 pl-3 ml-2 border-l border-slate-800">
+                    <span class="w-7 h-7 rounded-full bg-gradient-to-tr from-sky-500 to-emerald-400 text-slate-950 font-extrabold text-xs flex items-center justify-center shadow-sm" title="Curated by Rajat Kumar">RK</span>
+                    <a href="https://www.linkedin.com/in/imRajat/" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-slate-900 hover:bg-sky-500/20 text-slate-400 hover:text-sky-400 border border-slate-800 hover:border-sky-500/40 flex items-center justify-center transition" title="LinkedIn - Rajat Kumar">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/im-Rajat/" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 flex items-center justify-center transition" title="GitHub - Rajat Kumar">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative pt-12 pb-16 px-4 sm:px-8 overflow-hidden border-b border-slate-800/60">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-tr from-amber-500/10 via-sky-500/10 to-emerald-500/10 blur-3xl -z-10 pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-700/80 text-xs font-medium text-sky-400 mb-6">
+                <span class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span>
+                Database Concurrency Control Visualized
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Pessimistic</span> vs. 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500">Optimistic</span> Locking
+            </h1>
+            <p class="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-8">
+                When multiple users try to modify the exact same record at the exact same millisecond, how do you prevent <span class="text-white font-semibold underline decoration-rose-500/60">lost updates</span> and corrupted data without tanking database performance?
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#simulator" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold shadow-lg shadow-sky-500/20 transition flex items-center gap-2">
+                    <i class="fa-solid fa-bolt"></i> Launch Live DB Simulator
+                </a>
+                <a href="#interview" class="px-6 py-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-microphone-lines text-rose-400"></i> Interview Cheat Sheet
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 py-12 space-y-24">
+
+        <section id="analogy" class="scroll-mt-24">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Section 01 // The Core Philosophy</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mt-2">Permission vs. Forgiveness</h2>
+                <p class="text-slate-400 mt-3">Imagine two people trying to edit a shared document at the exact same time. Click the action buttons below to see how each philosophy handles concurrent access.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Pessimistic Analogy Card -->
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border-t-4 border-t-amber-500 flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                                <i class="fa-solid fa-lock mr-1.5"></i>Pessimistic Locking
+                            </span>
+                            <span class="text-xs font-mono text-slate-400">"Ask for Permission"</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">The Safe Vault Analogy</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            You assume <strong class="text-amber-400">conflicts WILL happen</strong>. Before editing the document, you lock it inside a vault. While you hold the key, nobody else can edit it. Everyone else must wait in a single-file line until you put it back.
+                        </p>
+
+                        <!-- Interactive Mini-Stage -->
+                        <div class="bg-slate-950/90 rounded-xl p-5 border border-slate-800 mb-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-center">
+                                    <div class="w-12 h-12 rounded-full bg-sky-500/20 border border-sky-500 flex items-center justify-center mx-auto text-sky-400 font-bold">A</div>
+                                    <span class="text-xs text-slate-400 mt-1 block">Editor A</span>
+                                </div>
+
+                                <div id="pess-vault" class="px-5 py-3 rounded-xl bg-slate-900 border-2 border-slate-700 flex flex-col items-center transition-all duration-300">
+                                    <i id="pess-vault-icon" class="fa-solid fa-lock-open text-2xl text-emerald-400 mb-1"></i>
+                                    <span id="pess-vault-status" class="text-xs font-mono font-semibold text-emerald-400">UNLOCKED (Doc v1)</span>
+                                </div>
+
+                                <div class="text-center">
+                                    <div id="pess-user-b" class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500 flex items-center justify-center mx-auto text-purple-400 font-bold transition-all">B</div>
+                                    <span id="pess-user-b-label" class="text-xs text-slate-400 mt-1 block">Editor B</span>
+                                </div>
+                            </div>
+                            <div id="pess-analogy-log" class="text-xs font-mono text-center py-2 px-3 rounded bg-slate-900 text-slate-300 border border-slate-800">
+                                Click below to simulate locking the document in the safe.
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="runPessimisticAnalogy()" id="pess-analogy-btn" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
+                        <i class="fa-solid fa-key"></i> Simulate Vault Lock Flow
+                    </button>
+                </div>
+
+                <!-- Optimistic Analogy Card -->
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border-t-4 border-t-emerald-500 flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                                <i class="fa-solid fa-code-branch mr-1.5"></i>Optimistic Locking
+                            </span>
+                            <span class="text-xs font-mono text-slate-400">"Ask for Forgiveness"</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">The Git / Version Copy Analogy</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            You assume <strong class="text-emerald-400">conflicts RARELY happen</strong>. Everyone grabs a copy of "Version 1" at the same time. When you save, the system checks if the master copy is still at Version 1. If someone beat you to Version 2, your save is <strong class="text-rose-400">rejected</strong>!
+                        </p>
+
+                        <!-- Interactive Mini-Stage -->
+                        <div class="bg-slate-950/90 rounded-xl p-5 border border-slate-800 mb-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-center">
+                                    <div id="opt-user-a" class="w-12 h-12 rounded-full bg-sky-500/20 border border-sky-500 flex items-center justify-center mx-auto text-sky-400 font-bold text-xs">A (v1)</div>
+                                    <span class="text-xs text-slate-400 mt-1 block">Editor A</span>
+                                </div>
+
+                                <div id="opt-master" class="px-5 py-3 rounded-xl bg-slate-900 border-2 border-emerald-500/50 flex flex-col items-center transition-all duration-300">
+                                    <i id="opt-master-icon" class="fa-solid fa-file-signature text-2xl text-emerald-400 mb-1"></i>
+                                    <span id="opt-master-status" class="text-xs font-mono font-semibold text-emerald-400">MASTER: Version 1</span>
+                                </div>
+
+                                <div class="text-center">
+                                    <div id="opt-user-b" class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500 flex items-center justify-center mx-auto text-purple-400 font-bold text-xs transition-all">B (v1)</div>
+                                    <span id="opt-user-b-label" class="text-xs text-slate-400 mt-1 block">Editor B</span>
+                                </div>
+                            </div>
+                            <div id="opt-analogy-log" class="text-xs font-mono text-center py-2 px-3 rounded bg-slate-900 text-slate-300 border border-slate-800">
+                                Click below to simulate concurrent version checking.
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="runOptimisticAnalogy()" id="opt-analogy-btn" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-code-merge"></i> Simulate Version Conflict Flow
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulator" class="scroll-mt-24">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-sky-500/30 relative overflow-hidden">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-8 border-b border-slate-800">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Section 02 // Interactive Sandbox</span>
+                        <h2 class="text-2xl sm:text-4xl font-bold text-white mt-1">The Last PlayStation 5 Simulator</h2>
+                        <p class="text-slate-400 text-sm sm:text-base mt-2">
+                            E-Commerce Scenario: Only <code class="text-amber-400 font-mono bg-slate-900 px-1.5 py-0.5 rounded">quantity = 1</code> PlayStation (`product_id = 99`) is left in stock. User A and User B click <strong>"Buy"</strong> at the exact same millisecond.
+                        </p>
+                    </div>
+
+                    <!-- Mode Switcher -->
+                    <div class="bg-slate-950 p-1.5 rounded-2xl border border-slate-800 flex items-center self-start lg:self-auto shrink-0">
+                        <button id="mode-pessimistic" onclick="switchSimMode('pessimistic')" class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 bg-amber-500 text-slate-950 shadow-md">
+                            <i class="fa-solid fa-lock"></i> Pessimistic Mode
+                        </button>
+                        <button id="mode-optimistic" onclick="switchSimMode('optimistic')" class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-code-compare"></i> Optimistic Mode
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step Progress Bar & Playback Controls -->
+                <div class="my-6 flex flex-wrap items-center justify-between gap-4 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <button onclick="prevSimStep()" id="sim-prev-btn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-white text-sm font-medium transition">
+                            <i class="fa-solid fa-backward-step"></i> Prev
+                        </button>
+                        <button onclick="nextSimStep()" id="sim-next-btn" class="px-5 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-sky-500/20">
+                            <span>Next Step</span> <i class="fa-solid fa-forward-step"></i>
+                        </button>
+                        <button onclick="toggleAutoPlay()" id="sim-auto-btn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-sm font-medium border border-slate-700 transition flex items-center gap-1.5">
+                            <i id="auto-play-icon" class="fa-solid fa-play"></i> <span id="auto-play-text">Auto-Play</span>
+                        </button>
+                        <button onclick="resetSim()" class="px-3 py-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-white text-sm transition" title="Reset Simulation">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Step Pills -->
+                    <div class="flex items-center gap-2" id="sim-step-dots">
+                        <!-- Dynamically rendered -->
+                    </div>
+                </div>
+
+                <!-- Live Step Narrative Box -->
+                <div id="sim-narrative-box" class="mb-8 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border-l-4 border-l-amber-400 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="sim-step-badge" class="text-xs font-mono uppercase px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Step 1 of 5</span>
+                            <h4 id="sim-step-title" class="text-lg font-bold text-white">Initial State: 1 PlayStation in Stock</h4>
+                        </div>
+                        <p id="sim-step-desc" class="text-sm text-slate-300 mt-1">Both User A and User B are about to click 'Buy Now' at the exact same millisecond.</p>
+                    </div>
+                    <div id="sim-time-pill" class="shrink-0 font-mono text-xs px-3 py-1.5 rounded-lg bg-slate-950 text-sky-400 border border-slate-800 self-start sm:self-center">
+                        t = 0ms
+                    </div>
+                </div>
+
+                <!-- 3-Column Visual Execution Engine -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                    
+                    <!-- Transaction A (User A) -->
+                    <div id="tx-a-card" class="lg:col-span-4 bg-slate-950/90 rounded-2xl p-5 border-2 border-slate-800 flex flex-col justify-between transition-all duration-300">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-500/50 text-sky-400 flex items-center justify-center font-bold text-sm">A</span>
+                                    <div>
+                                        <h5 class="font-bold text-white text-sm">Transaction A (User A)</h5>
+                                        <span class="text-[11px] text-slate-400 font-mono">Arrives at t = 10ms</span>
+                                    </div>
+                                </div>
+                                <span id="tx-a-status" class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-slate-800 text-slate-300">IDLE</span>
+                            </div>
+
+                            <div class="text-xs font-mono text-slate-400 mb-2">SQL Execution Terminal:</div>
+                            <pre id="tx-a-sql" class="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800/90 font-mono text-xs text-slate-200 overflow-x-auto leading-relaxed min-h-[160px]">-- Waiting for transaction to start...</pre>
+                        </div>
+                        <div id="tx-a-Variables" class="mt-4 pt-3 border-t border-slate-900 flex items-center justify-between text-xs font-mono text-slate-400">
+                            <span>Local Memory Read:</span>
+                            <span id="tx-a-mem" class="text-sky-400 font-bold">None</span>
+                        </div>
+                    </div>
+
+                    <!-- Central Database Engine Table -->
+                    <div class="lg:col-span-4 flex flex-col justify-between bg-slate-900/60 rounded-2xl p-5 border-2 border-slate-700/80 relative">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-mono uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-server text-sky-400"></i> Table: <strong class="text-white">Inventory</strong>
+                                </span>
+                                <span id="db-lock-badge" class="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-lock-open"></i> UNLOCKED
+                                </span>
+                            </div>
+
+                            <!-- Live Row Representation -->
+                            <div id="db-row-box" class="bg-slate-950 rounded-xl p-4 border-2 border-slate-800 transition-all duration-300">
+                                <div class="text-[11px] font-mono text-slate-400 uppercase mb-2 flex justify-between">
+                                    <span>Primary Key: product_id = 99</span>
+                                    <span class="text-amber-400">PS5 Console</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3 text-center my-2">
+                                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                                        <span class="text-xs text-slate-400 block font-mono">quantity</span>
+                                        <span id="db-col-qty" class="text-3xl font-extrabold text-white font-mono">1</span>
+                                    </div>
+                                    <div id="db-version-cell" class="bg-slate-900 p-3 rounded-lg border border-slate-800 transition-opacity">
+                                        <span class="text-xs text-slate-400 block font-mono">version</span>
+                                        <span id="db-col-ver" class="text-3xl font-extrabold text-emerald-400 font-mono">5</span>
+                                    </div>
+                                </div>
+                                <div id="db-holder-info" class="text-center text-xs font-mono py-1.5 mt-2 rounded bg-slate-900 text-slate-400">
+                                    No active row locks held
+                                </div>
+                            </div>
+
+                            <!-- Connection Wait Queue Visualizer -->
+                            <div class="mt-4 bg-slate-950/70 rounded-xl p-3.5 border border-slate-800/80">
+                                <div class="text-xs font-mono text-slate-400 mb-2 flex items-center justify-between">
+                                    <span>DB Engine Event Log:</span>
+                                    <i class="fa-solid fa-wave-square text-sky-400"></i>
+                                </div>
+                                <div id="db-engine-log" class="text-xs font-mono text-slate-300 leading-relaxed min-h-[48px] flex items-center">
+                                    Database ready. Accepting connections.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                            <span>Isolation: READ COMMITTED</span>
+                            <span id="sim-mode-indicator" class="text-amber-400 font-semibold">Row-Level X-Lock</span>
+                        </div>
+                    </div>
+
+                    <!-- Transaction B (User B) -->
+                    <div id="tx-b-card" class="lg:col-span-4 bg-slate-950/90 rounded-2xl p-5 border-2 border-slate-800 flex flex-col justify-between transition-all duration-300">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/50 text-purple-400 flex items-center justify-center font-bold text-sm">B</span>
+                                    <div>
+                                        <h5 class="font-bold text-white text-sm">Transaction B (User B)</h5>
+                                        <span class="text-[11px] text-slate-400 font-mono">Arrives at t = 11ms</span>
+                                    </div>
+                                </div>
+                                <span id="tx-b-status" class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-slate-800 text-slate-300">IDLE</span>
+                            </div>
+
+                            <div class="text-xs font-mono text-slate-400 mb-2">SQL Execution Terminal:</div>
+                            <pre id="tx-b-sql" class="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800/90 font-mono text-xs text-slate-200 overflow-x-auto leading-relaxed min-h-[160px]">-- Waiting for transaction to start...</pre>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-900 flex items-center justify-between text-xs font-mono text-slate-400">
+                            <span>Local Memory Read:</span>
+                            <span id="tx-b-mem" class="text-purple-400 font-bold">None</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="deep-dive" class="scroll-mt-24 space-y-12">
+            <div class="text-center max-w-3xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Section 03 // Under The Hood</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mt-2">Technical Deep Dive & Mechanics</h2>
+                <p class="text-slate-400 mt-3">Explore the SQL mechanics, lock variations, timestamp pitfalls, and architectural trade-offs of each strategy.</p>
+            </div>
+
+            <!-- Interactive Lock Types & Nuances Tabs -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Pessimistic Details -->
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                            <i class="fa-solid fa-shield-halved text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Pessimistic Locking Mechanics</h3>
+                            <p class="text-xs text-slate-400">Database-level blocking via Lock Manager</p>
+                        </div>
+                    </div>
+
+                    <!-- Shared vs Exclusive Interactive Toggle -->
+                    <div class="bg-slate-950 rounded-xl p-4 border border-slate-800">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Types of Database Locks (Click to inspect):</div>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button onclick="showLockType('shared')" id="btn-lock-shared" class="py-2 px-3 rounded-lg text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 transition">
+                                Shared Lock (S-Lock)
+                            </button>
+                            <button onclick="showLockType('exclusive')" id="btn-lock-exclusive" class="py-2 px-3 rounded-lg text-xs font-mono font-bold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition">
+                                Exclusive Lock (X-Lock)
+                            </button>
+                        </div>
+                        <div id="lock-type-content" class="text-xs text-slate-300 space-y-2 leading-relaxed">
+                            <code class="text-sky-400 font-mono block bg-slate-900 p-2 rounded border border-slate-800">SELECT ... FOR SHARE;</code>
+                            <p><strong>Read Lock:</strong> Multiple transactions can hold a Shared Lock on the same row simultaneously to read data, but <strong>no transaction can modify it</strong> (acquire an X-Lock) until all shared locks are released.</p>
+                        </div>
+                    </div>
+
+                    <!-- Pros & Cons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-4">
+                            <h4 class="text-xs font-bold uppercase text-emerald-400 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-check"></i> Pros
+                            </h4>
+                            <ul class="text-xs text-slate-300 space-y-2">
+                                <li><strong class="text-white">Guaranteed Safety:</strong> Zero chance of lost updates; enforced strictly by DB engine.</li>
+                                <li><strong class="text-white">No Wasted Compute:</strong> You don't run heavy business logic only to get rejected at commit time.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-rose-950/20 border border-rose-500/20 rounded-xl p-4">
+                            <h4 class="text-xs font-bold uppercase text-rose-400 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Cons
+                            </h4>
+                            <ul class="text-xs text-slate-300 space-y-2">
+                                <li><strong class="text-white">Deadlocks:</strong> Tx1 locks Row A & waits for B; Tx2 locks B & waits for A. Both freeze!</li>
+                                <li><strong class="text-white">Connection Exhaustion:</strong> Hanging queries tie up database connection pools.</li>
+                                <li><strong class="text-white">Terrible for UI Flows:</strong> Never hold a DB lock while a user fills out a web form.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optimistic Details -->
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                            <i class="fa-solid fa-bolt text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Optimistic Locking Mechanics</h3>
+                            <p class="text-xs text-slate-400">Application/ORM conflict detection at Write phase</p>
+                        </div>
+                    </div>
+
+                    <!-- Critical Warning: Version vs Timestamp -->
+                    <div class="bg-slate-950 rounded-xl p-4 border border-amber-500/30">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-bug"></i> Why Version Integers Beat Timestamps
+                            </span>
+                            <span class="text-[11px] font-mono bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded">Critical Gotcha</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                            Always prefer an incrementing integer (<code class="text-emerald-400 font-mono">version = version + 1</code>) or UUID over a timestamp (<code class="text-rose-400 font-mono">updated_at</code>). Under high concurrency, two transactions can execute within the <strong>exact same millisecond</strong> (`12:00:00.004`), causing a timestamp check to falsely pass and silently overwrite data!
+                        </p>
+                        <div class="flex items-center justify-between text-[11px] font-mono bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                            <span class="text-emerald-400"><i class="fa-solid fa-check mr-1"></i> WHERE version = 5</span>
+                            <span class="text-rose-400"><i class="fa-solid fa-xmark mr-1"></i> WHERE updated_at = '12:00:00.004'</span>
+                        </div>
+                    </div>
+
+                    <!-- Pros & Cons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-4">
+                            <h4 class="text-xs font-bold uppercase text-emerald-400 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-check"></i> Pros
+                            </h4>
+                            <ul class="text-xs text-slate-300 space-y-2">
+                                <li><strong class="text-white">High Scalability:</strong> Zero threads blocked on reads; blazingly fast throughput.</li>
+                                <li><strong class="text-white">Zero Deadlocks:</strong> No locks held across steps means deadlocks are impossible.</li>
+                                <li><strong class="text-white">Stateless HTTP Ready:</strong> Send `version = 5` to a browser form and verify 10 mins later.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-rose-950/20 border border-rose-500/20 rounded-xl p-4">
+                            <h4 class="text-xs font-bold uppercase text-rose-400 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Cons
+                            </h4>
+                            <ul class="text-xs text-slate-300 space-y-2">
+                                <li><strong class="text-white">Retry Storms (Thundering Herd):</strong> If 100 users buy 1 ticket, 1 succeeds and 99 fail & retry, hammering the DB.</li>
+                                <li><strong class="text-white">Code Complexity:</strong> Must catch `OptimisticLockException` and write retry/merge logic.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="advisor" class="scroll-mt-24 space-y-12">
+            <div class="text-center max-w-3xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-widest text-purple-400">Section 04 // Architecture Advisor</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mt-2">Interactive Decision Calculator & Matrix</h2>
+                <p class="text-slate-400 mt-3">Adjust the workload sliders below or pick a real-world preset to see which concurrency strategy fits your architecture.</p>
+            </div>
+
+            <!-- Interactive Workload Calculator -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-purple-500/30 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="text-xs text-slate-400 font-semibold mr-1">Load Preset:</span>
+                        <button onclick="setAdvisorPreset(95, 10, 90)" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition">
+                            <i class="fa-solid fa-bolt mr-1"></i> Flash Sale (1,000 users / 1 SKU)
+                        </button>
+                        <button onclick="setAdvisorPreset(15, 80, 20)" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 transition">
+                            <i class="fa-solid fa-file-pen mr-1"></i> Collaborative Wiki / CMS
+                        </button>
+                        <button onclick="setAdvisorPreset(85, 15, 95)" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 transition">
+                            <i class="fa-solid fa-building-columns mr-1"></i> Core Banking Ledger
+                        </button>
+                    </div>
+
+                    <!-- Slider 1: Contention -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-2">
+                            <label class="font-semibold text-white">1. Contention Rate (Probability two users hit the same row)</label>
+                            <span id="val-contention" class="font-mono text-sky-400 font-bold">20% (Low)</span>
+                        </div>
+                        <input type="range" id="slider-contention" min="0" max="100" value="20" oninput="updateAdvisor()">
+                    </div>
+
+                    <!-- Slider 2: Transaction Duration / Human Interaction -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-2">
+                            <label class="font-semibold text-white">2. Transaction Span (Fast DB query vs. Human Form Editing)</label>
+                            <span id="val-duration" class="font-mono text-sky-400 font-bold">75% (Human / HTTP)</span>
+                        </div>
+                        <input type="range" id="slider-duration" min="0" max="100" value="75" oninput="updateAdvisor()">
+                    </div>
+
+                    <!-- Slider 3: Retry Cost -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-2">
+                            <label class="font-semibold text-white">3. Failure / Retry Cost (CPU waste if rolled back)</label>
+                            <span id="val-retry" class="font-mono text-sky-400 font-bold">25% (Cheap)</span>
+                        </div>
+                        <input type="range" id="slider-retry" min="0" max="100" value="25" oninput="updateAdvisor()">
+                    </div>
+                </div>
+
+                <!-- Recommendation Output Card -->
+                <div id="advisor-result-card" class="lg:col-span-5 bg-slate-950 rounded-2xl p-6 border-2 border-emerald-500/60 glow-emerald transition-all duration-300 flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Recommended Strategy</span>
+                            <span id="advisor-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">92% Match</span>
+                        </div>
+                        <h3 id="advisor-title" class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mb-3">
+                            Optimistic Locking
+                        </h3>
+                        <p id="advisor-reason" class="text-sm text-slate-300 leading-relaxed mb-4">
+                            Because contention is low and user interaction spans across stateless HTTP requests, holding database locks would exhaust your connection pool. Use a <code class="text-emerald-300 font-mono">version</code> column instead.
+                        </p>
+                    </div>
+                    <div class="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 text-xs font-mono text-slate-300">
+                        <div class="text-slate-400 mb-1">Implementation Pattern:</div>
+                        <div id="advisor-sql" class="text-emerald-400">UPDATE table SET val = ?, version = version + 1 WHERE id = ? AND version = ?</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side-by-Side Comparison Matrix Table -->
+            <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
+                <div class="p-5 bg-slate-900/80 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-table-columns text-sky-400"></i> Side-by-Side Comparison Matrix
+                    </h3>
+                    <span class="text-xs text-slate-400">Hover over any row to highlight key differences</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-950/80 text-slate-400 font-mono text-xs uppercase border-b border-slate-800">
+                                <th class="py-4 px-6">Feature</th>
+                                <th class="py-4 px-6 text-amber-400"><i class="fa-solid fa-lock mr-1.5"></i>Pessimistic Locking</th>
+                                <th class="py-4 px-6 text-emerald-400"><i class="fa-solid fa-code-branch mr-1.5"></i>Optimistic Locking</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/70">
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-6 font-semibold text-white">Core Mechanism</td>
+                                <td class="py-4 px-6 text-slate-300">Database row/table locks (<code class="text-amber-300 font-mono text-xs bg-slate-900 px-1.5 py-0.5 rounded">FOR UPDATE</code>)</td>
+                                <td class="py-4 px-6 text-slate-300">Version numbers, hashes, or timestamps (<code class="text-emerald-300 font-mono text-xs bg-slate-900 px-1.5 py-0.5 rounded">WHERE version = X</code>)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-6 font-semibold text-white">When is conflict checked?</td>
+                                <td class="py-4 px-6 text-slate-300"><strong class="text-amber-400">Before</strong> the operation (at Read time)</td>
+                                <td class="py-4 px-6 text-slate-300"><strong class="text-emerald-400">After</strong> the operation (at Write/Commit time)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-6 font-semibold text-white">Blocking Behavior</td>
+                                <td class="py-4 px-6 text-slate-300">Blocks other transactions (they must wait inline)</td>
+                                <td class="py-4 px-6 text-slate-300">Non-blocking (others proceed and fail later if conflicting)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-6 font-semibold text-white">Read/Write Ratio</td>
+                                <td class="py-4 px-6 text-slate-300">Best for <strong class="text-white">Write-Heavy</strong> workloads</td>
+                                <td class="py-4 px-6 text-slate-300">Best for <strong class="text-white">Read-Heavy</strong> workloads</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-6 font-semibold text-white">Contention Level</td>
+                                <td class="py-4 px-6 text-slate-300"><strong class="text-amber-400">High Contention</strong> (conflicts are very likely)</td>
+                                <td class="py-4 px-6 text-slate-300"><strong class="text-emerald-400">Low Contention</strong> (conflicts are rare)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-6 font-semibold text-white">Deadlock Risk</td>
+                                <td class="py-4 px-6 text-rose-400 font-medium">High (requires careful lock ordering)</td>
+                                <td class="py-4 px-6 text-emerald-400 font-medium">None (zero locks held)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-6 font-semibold text-white">Failure Cost</td>
+                                <td class="py-4 px-6 text-slate-300">Low (waits inline, rarely needs full retry)</td>
+                                <td class="py-4 px-6 text-slate-300">High (must roll back and re-run business logic)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="interview" class="scroll-mt-24 space-y-12">
+            <div class="text-center max-w-3xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-widest text-rose-400">Section 05 // Ace The System Design Interview</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mt-2">The 3-Part Interview Framework + Quiz</h2>
+                <p class="text-slate-400 mt-3">When an interviewer asks: <em>"Explain Optimistic vs. Pessimistic locking and when you would use each"</em>, use this structured 3-part framework to deliver a staff-level answer.</p>
+            </div>
+
+            <!-- 3-Part Scripted Framework -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Part 1 -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-t-sky-500 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono font-bold uppercase px-2.5 py-1 rounded bg-sky-500/10 text-sky-400">Part 1 // 30-Sec Pitch</span>
+                            <button onclick="copyPitch('pitch-1', this)" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition">
+                                <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                            </button>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-3">Under-The-Hood Definition</h3>
+                        <blockquote id="pitch-1" class="text-sm text-slate-300 italic leading-relaxed bg-slate-950/70 p-4 rounded-xl border border-slate-800/80">
+                            "Both are concurrency control strategies used to prevent race conditions and lost updates when multiple transactions modify the same data.
+                            <br><br>
+                            <strong class="text-amber-400 not-italic">Pessimistic locking</strong> assumes conflicts are likely, so it locks the record at the database level when reading it—using <code class="text-sky-300 font-mono not-italic">SELECT ... FOR UPDATE</code>—forcing other transactions to wait until the lock is released.
+                            <br><br>
+                            <strong class="text-emerald-400 not-italic">Optimistic locking</strong> assumes conflicts are rare. It doesn't lock rows on read; instead, it uses a <code class="text-emerald-300 font-mono not-italic">version</code> column. When updating, it checks <code class="text-emerald-300 font-mono not-italic">WHERE version = old_version</code>. If another transaction modified the row in the meantime, 0 rows are updated, and the application catches the exception and retries or aborts."
+                        </blockquote>
+                    </div>
+                </div>
+
+                <!-- Part 2 -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-t-purple-500 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono font-bold uppercase px-2.5 py-1 rounded bg-purple-500/10 text-purple-400">Part 2 // Real-World Mapping</span>
+                            <button onclick="copyPitch('pitch-2', this)" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition">
+                                <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                            </button>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-3">Contention & Duration Trade-Offs</h3>
+                        <blockquote id="pitch-2" class="text-sm text-slate-300 italic leading-relaxed bg-slate-950/70 p-4 rounded-xl border border-slate-800/80">
+                            "Choosing between them comes down to <strong class="text-white not-italic">contention rate</strong> and <strong class="text-white not-italic">transaction duration</strong>:
+                            <br><br>
+                            I use <strong class="text-emerald-400 not-italic">Optimistic Locking</strong> when reads vastly outnumber writes and conflicts are rare, or when human interaction is involved—like a <strong class="text-white not-italic">Collaborative Wiki, CMS</strong>, or <strong class="text-white not-italic">User Profile update</strong>. It scales much better because we aren't holding DB locks open.
+                            <br><br>
+                            I use <strong class="text-amber-400 not-italic">Pessimistic Locking</strong> when contention is extremely high and retrying is expensive—like a <strong class="text-white not-italic">Flash Sale inventory system</strong> where 1,000 users fight for the same SKU, or a <strong class="text-white not-italic">Core Banking ledger transfer</strong>. Optimistic locking there would cause 999 transactions to fail and trigger retry storms."
+                        </blockquote>
+                    </div>
+                </div>
+
+                <!-- Part 3: Senior Engineer Bonus Points -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-t-rose-500 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono font-bold uppercase px-2.5 py-1 rounded bg-rose-500/10 text-rose-400">Part 3 // Staff-Level Nuances</span>
+                            <span class="text-xs text-slate-400">Click to expand</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-3">Drop One of These Bonus Points</h3>
+                        
+                        <div class="space-y-3">
+                            <!-- Bonus 1 -->
+                            <div class="bg-slate-950/80 rounded-xl p-3.5 border border-slate-800">
+                                <div class="font-bold text-xs text-amber-400 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> 1. The Atomic Update Alternative
+                                </div>
+                                <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                                    Sometimes you don't need application-level locking at all. A single atomic SQL statement acquires a brief implicit row lock inside the DB engine in one round-trip:
+                                </p>
+                                <code class="text-[11px] font-mono text-sky-300 bg-slate-900 p-2 rounded block border border-slate-800">UPDATE Inventory SET quantity = quantity - 1 WHERE id = 99 AND quantity > 0;</code>
+                            </div>
+
+                            <!-- Bonus 2 -->
+                            <div class="bg-slate-950/80 rounded-xl p-3.5 border border-slate-800">
+                                <div class="font-bold text-xs text-emerald-400 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-globe"></i> 2. HTTP ETag in REST APIs
+                                </div>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Optimistic locking isn't just for databases! In REST APIs, we implement it using HTTP <code class="text-emerald-300 font-mono">ETag</code> and <code class="text-emerald-300 font-mono">If-Match</code> headers (returning <code class="text-rose-400 font-mono">412 Precondition Failed</code> on conflict).
+                                </p>
+                            </div>
+
+                            <!-- Bonus 3 -->
+                            <div class="bg-slate-950/80 rounded-xl p-3.5 border border-slate-800">
+                                <div class="font-bold text-xs text-sky-400 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-forward-fast"></i> 3. SKIP LOCKED & NOWAIT
+                                </div>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    To avoid connection pool exhaustion in pessimistic locking, modern DBs support <code class="text-sky-300 font-mono">FOR UPDATE NOWAIT</code> (fails immediately instead of hanging) or <code class="text-sky-300 font-mono">FOR UPDATE SKIP LOCKED</code> (ideal for database-backed job queues).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Scenario Quiz -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-800">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
+                    <div>
+                        <span class="text-xs font-mono uppercase text-rose-400 font-bold">Interactive Challenge</span>
+                        <h3 class="text-xl font-bold text-white">Rapid-Fire System Design Quiz</h3>
+                    </div>
+                    <div class="text-xs font-mono bg-slate-900 px-3.5 py-2 rounded-xl border border-slate-800 text-slate-300">
+                        Scenario <span id="quiz-idx" class="text-sky-400 font-bold">1</span> of 4
+                    </div>
+                </div>
+
+                <div id="quiz-container" class="space-y-6">
+                    <p id="quiz-question" class="text-base sm:text-lg text-white font-medium leading-relaxed bg-slate-950 p-5 rounded-2xl border border-slate-800">
+                        <!-- Populated via JS -->
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button onclick="submitQuizAnswer('pessimistic')" class="p-4 rounded-xl bg-slate-900 hover:bg-amber-500/10 border border-slate-800 hover:border-amber-500/50 text-left transition group">
+                            <div class="font-bold text-amber-400 mb-1 flex items-center justify-between">
+                                <span>Pessimistic Locking</span>
+                                <i class="fa-solid fa-lock opacity-60 group-hover:opacity-100"></i>
+                            </div>
+                            <span class="text-xs text-slate-400">SELECT ... FOR UPDATE</span>
+                        </button>
+                        <button onclick="submitQuizAnswer('optimistic')" class="p-4 rounded-xl bg-slate-900 hover:bg-emerald-500/10 border border-slate-800 hover:border-emerald-500/50 text-left transition group">
+                            <div class="font-bold text-emerald-400 mb-1 flex items-center justify-between">
+                                <span>Optimistic Locking</span>
+                                <i class="fa-solid fa-code-branch opacity-60 group-hover:opacity-100"></i>
+                            </div>
+                            <span class="text-xs text-slate-400">WHERE version = X</span>
+                        </button>
+                        <button onclick="submitQuizAnswer('skip_locked')" class="p-4 rounded-xl bg-slate-900 hover:bg-sky-500/10 border border-slate-800 hover:border-sky-500/50 text-left transition group">
+                            <div class="font-bold text-sky-400 mb-1 flex items-center justify-between">
+                                <span>Pessimistic SKIP LOCKED</span>
+                                <i class="fa-solid fa-forward-fast opacity-60 group-hover:opacity-100"></i>
+                            </div>
+                            <span class="text-xs text-slate-400">FOR UPDATE SKIP LOCKED</span>
+                        </button>
+                    </div>
+
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl border text-sm leading-relaxed flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div id="quiz-feedback-text"></div>
+                        <button onclick="nextQuizQuestion()" class="shrink-0 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition">
+                            Next Scenario <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/60 py-10 px-4 sm:px-8 text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-emerald-500 text-slate-950 font-extrabold text-sm flex items-center justify-center shadow-md shadow-sky-500/10">
+                    RK
+                </div>
+                <div class="text-left">
+                    <div class="text-slate-200 font-semibold text-sm">
+                        Curated by <span class="text-white font-bold">Rajat Kumar</span>
+                    </div>
+                    <div class="text-slate-500 font-mono text-[11px]">
+                        ConcurrencyLab // Interactive System Design Guide
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <a href="https://www.linkedin.com/in/imRajat/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-sky-500/15 text-slate-200 hover:text-sky-400 border border-slate-800 hover:border-sky-500/40 font-medium transition flex items-center gap-2">
+                    <i class="fa-brands fa-linkedin text-sky-400 text-sm"></i>
+                    <span>LinkedIn</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-60"></i>
+                </a>
+                <a href="https://github.com/im-Rajat/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-800 hover:border-slate-600 font-medium transition flex items-center gap-2">
+                    <i class="fa-brands fa-github text-white text-sm"></i>
+                    <span>GitHub</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-60"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ==========================================
+         * 1. ANALOGY MINI-SIMULATORS
+         * ========================================== */
+        let pessAnalogyRunning = false;
+        function runPessimisticAnalogy() {
+            if (pessAnalogyRunning) return;
+            pessAnalogyRunning = true;
+            const vault = document.getElementById('pess-vault');
+            const icon = document.getElementById('pess-vault-icon');
+            const status = document.getElementById('pess-vault-status');
+            const userB = document.getElementById('pess-user-b');
+            const userBLabel = document.getElementById('pess-user-b-label');
+            const log = document.getElementById('pess-analogy-log');
+            const btn = document.getElementById('pess-analogy-btn');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+
+            // Step 1: Editor A locks the vault
+            vault.className = "px-5 py-3 rounded-xl bg-amber-500/10 border-2 border-amber-500 flex flex-col items-center transition-all duration-300 glow-amber";
+            icon.className = "fa-solid fa-lock text-2xl text-amber-400 mb-1";
+            status.className = "text-xs font-mono font-semibold text-amber-400";
+            status.innerText = "LOCKED BY EDITOR A";
+            log.innerHTML = "<span class='text-amber-400 font-bold'>[1/3]</span> Editor A locks Doc v1 in the vault and begins editing...";
+
+            // Step 2: Editor B tries to access and is blocked
+            setTimeout(() => {
+                userB.className = "w-12 h-12 rounded-full bg-rose-500/20 border-2 border-rose-500 flex items-center justify-center mx-auto text-rose-400 font-bold animate-pulse";
+                userBLabel.innerHTML = "<span class='text-rose-400 font-mono'>WAITING...</span>";
+                log.innerHTML = "<span class='text-rose-400 font-bold'>[2/3]</span> Editor B tries to open the vault but is <strong>BLOCKED</strong> in line!";
+            }, 1400);
+
+            // Step 3: Editor A finishes, unlocks, Editor B gets v2
+            setTimeout(() => {
+                vault.className = "px-5 py-3 rounded-xl bg-slate-900 border-2 border-emerald-500 flex flex-col items-center transition-all duration-300";
+                icon.className = "fa-solid fa-lock-open text-2xl text-emerald-400 mb-1";
+                status.className = "text-xs font-mono font-semibold text-emerald-400";
+                status.innerText = "UNLOCKED (Doc v2)";
+                userB.className = "w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center mx-auto text-emerald-400 font-bold";
+                userBLabel.innerText = "Reads v2!";
+                log.innerHTML = "<span class='text-emerald-400 font-bold'>[3/3]</span> Editor A saves v2 & unlocks. Editor B finally enters and sees v2!";
+                btn.disabled = false;
+                btn.classList.remove('opacity-50');
+                pessAnalogyRunning = false;
+            }, 3100);
+        }
+
+        let optAnalogyRunning = false;
+        function runOptimisticAnalogy() {
+            if (optAnalogyRunning) return;
+            optAnalogyRunning = true;
+            const master = document.getElementById('opt-master');
+            const status = document.getElementById('opt-master-status');
+            const userA = document.getElementById('opt-user-a');
+            const userB = document.getElementById('opt-user-b');
+            const userBLabel = document.getElementById('opt-user-b-label');
+            const log = document.getElementById('opt-analogy-log');
+            const btn = document.getElementById('opt-analogy-btn');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+
+            // Reset initial
+            userA.innerText = "A (v1)";
+            userB.innerText = "B (v1)";
+            userB.className = "w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500 flex items-center justify-center mx-auto text-purple-400 font-bold text-xs";
+            userBLabel.innerText = "Editor B";
+            status.innerText = "MASTER: Version 1";
+            log.innerHTML = "<span class='text-sky-400 font-bold'>[1/3]</span> Both Editor A and Editor B grab a copy of <strong>Version 1</strong> simultaneously (No locks!).";
+
+            // Step 2: Editor A saves first
+            setTimeout(() => {
+                master.className = "px-5 py-3 rounded-xl bg-emerald-500/10 border-2 border-emerald-400 flex flex-col items-center transition-all duration-300 glow-emerald";
+                status.innerText = "MASTER: Version 2";
+                userA.innerText = "A (Saved)";
+                log.innerHTML = "<span class='text-emerald-400 font-bold'>[2/3]</span> Editor A saves first! Master is still v1, so update succeeds -> <strong>Version 2</strong>.";
+            }, 1500);
+
+            // Step 3: Editor B tries to save with stale v1
+            setTimeout(() => {
+                userB.className = "w-12 h-12 rounded-full bg-rose-500/20 border-2 border-rose-500 flex items-center justify-center mx-auto text-rose-400 font-bold text-xs animate-shake";
+                userB.innerText = "REJECTED";
+                userBLabel.innerHTML = "<span class='text-rose-400 font-mono'>Stale v1!</span>";
+                log.innerHTML = "<span class='text-rose-400 font-bold'>[3/3]</span> Editor B tries saving based on v1, but Master is now v2! <strong>Conflict detected — Save Rejected!</strong>";
+                btn.disabled = false;
+                btn.classList.remove('opacity-50');
+                optAnalogyRunning = false;
+            }, 3200);
+        }
+
+        /* ==========================================
+         * 2. MAIN SQL CONCURRENCY SIMULATOR DATA & ENGINE
+         * ========================================== */
+        const simSteps = {
+            pessimistic: [
+                {
+                    title: "Initial State: 1 PlayStation Left in Stock",
+                    time: "t = 0ms",
+                    desc: "Product #99 has quantity = 1. Both User A and User B click 'Buy Now' at virtually the same millisecond.",
+                    txAStatus: "READY", txAColor: "slate",
+                    txASql: `-- Transaction A (User A)\n-- Ready to start checkout...`,
+                    txAMem: "None",
+                    txBStatus: "READY", txBColor: "slate",
+                    txBSql: `-- Transaction B (User B)\n-- Ready to start checkout...`,
+                    txBMem: "None",
+                    dbQty: 1, dbVer: 5,
+                    dbLock: "UNLOCKED", dbLockColor: "emerald",
+                    dbHolder: "No active row locks held",
+                    dbLog: "Database idle. Row product_id = 99 is unlocked."
+                },
+                {
+                    title: "Tx A Acquires Exclusive Lock (FOR UPDATE)",
+                    time: "t = 10ms",
+                    desc: "Transaction A arrives 1ms earlier and runs SELECT ... FOR UPDATE. The database places an Exclusive Lock (X-Lock) on product_id = 99.",
+                    txAStatus: "HOLDING X-LOCK", txAColor: "amber",
+                    txASql: `<span class="sql-keyword">BEGIN TRANSACTION</span>;\n\n<span class="sql-comment">-- 1. Acquire exclusive row lock</span>\n<span class="sql-keyword">SELECT</span> quantity <span class="sql-keyword">FROM</span> Inventory\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span>\n<span class="sql-keyword">FOR UPDATE</span>;\n<span class="sql-comment">-- Returns quantity: 1 (Row LOCKED)</span>`,
+                    txAMem: "quantity = 1",
+                    txBStatus: "STARTING", txBColor: "slate",
+                    txBSql: `<span class="sql-keyword">BEGIN TRANSACTION</span>;\n<span class="sql-comment">-- Preparing query...</span>`,
+                    txBMem: "None",
+                    dbQty: 1, dbVer: 5,
+                    dbLock: "X-LOCKED (Tx A)", dbLockColor: "amber",
+                    dbHolder: "Locked exclusively by Transaction A",
+                    dbLog: "Granted X-Lock on row 99 to Transaction A."
+                },
+                {
+                    title: "Tx B Attempts Read & Gets BLOCKED!",
+                    time: "t = 11ms",
+                    desc: "Transaction B runs SELECT ... FOR UPDATE 1ms later. Because Tx A holds the X-Lock, the database forces Tx B's query to HANG (wait in line).",
+                    txAStatus: "PROCESSING", txAColor: "amber",
+                    txASql: `<span class="sql-keyword">SELECT</span> quantity <span class="sql-keyword">FROM</span> Inventory\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span> <span class="sql-keyword">FOR UPDATE</span>;\n\n<span class="sql-comment">-- App checks: quantity (1) > 0 ✓</span>\n<span class="sql-comment">-- Proceeding to decrement stock...</span>`,
+                    txAMem: "quantity = 1",
+                    txBStatus: "BLOCKED (WAITING)", txBColor: "rose",
+                    txBSql: `<span class="sql-keyword">BEGIN TRANSACTION</span>;\n\n<span class="sql-keyword">SELECT</span> quantity <span class="sql-keyword">FROM</span> Inventory\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span>\n<span class="sql-keyword">FOR UPDATE</span>;\n<span class="sql-comment">-- ⏳ HANGING! Waiting for Tx A to COMMIT...</span>`,
+                    txBMem: "Waiting for lock...",
+                    dbQty: 1, dbVer: 5,
+                    dbLock: "X-LOCKED (Tx A)", dbLockColor: "amber",
+                    dbHolder: "Tx A holds lock | Tx B waiting in queue",
+                    dbLog: "BLOCKED: Tx B requested X-Lock on row 99. Queued behind Tx A."
+                },
+                {
+                    title: "Tx A Updates Stock to 0 & Commits",
+                    time: "t = 25ms",
+                    desc: "Transaction A decrements quantity to 0 and runs COMMIT. This immediately releases the Exclusive Lock on row 99!",
+                    txAStatus: "COMMITTED ✓", txAColor: "emerald",
+                    txASql: `<span class="sql-keyword">UPDATE</span> Inventory\n<span class="sql-keyword">SET</span> quantity = quantity - <span class="sql-number">1</span>\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span>;\n\n<span class="sql-keyword">COMMIT</span>;\n<span class="sql-comment">-- ✅ Success! PS5 purchased by User A.</span>`,
+                    txAMem: "quantity = 0 (Committed)",
+                    txBStatus: "UNBLOCKING...", txBColor: "amber",
+                    txBSql: `<span class="sql-keyword">SELECT</span> quantity <span class="sql-keyword">FROM</span> Inventory\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span>\n<span class="sql-keyword">FOR UPDATE</span>;\n<span class="sql-comment">-- Lock released! Query now executing...</span>`,
+                    txBMem: "Acquiring lock...",
+                    dbQty: 0, dbVer: 5,
+                    dbLock: "TRANSFERRING -> Tx B", dbLockColor: "sky",
+                    dbHolder: "Tx A released lock -> Granted to Tx B",
+                    dbLog: "Tx A committed (quantity=0). Waking up queued Tx B."
+                },
+                {
+                    title: "Tx B Reads Fresh Quantity (0) & Aborts Safely",
+                    time: "t = 26ms",
+                    desc: "Tx B's SELECT finally returns the newly updated quantity (0). Application logic sees 0 in stock, rolls back, and prevents an oversell!",
+                    txAStatus: "COMPLETED ✓", txAColor: "emerald",
+                    txASql: `<span class="sql-comment">-- Transaction A finished cleanly.</span>\n<span class="sql-comment">-- User A gets the PlayStation 5!</span>`,
+                    txAMem: "Done",
+                    txBStatus: "OUT OF STOCK (SAFE)", txBColor: "sky",
+                    txBSql: `<span class="sql-comment">-- SELECT FOR UPDATE finally returns:</span>\n<span class="sql-comment">-- quantity = 0!</span>\n\n<span class="sql-comment">-- App checks: quantity (0) > 0 ✗</span>\n<span class="sql-keyword">ROLLBACK</span>;\n<span class="sql-comment">-- Sold out! Zero oversell occurred.</span>`,
+                    txBMem: "quantity = 0",
+                    dbQty: 0, dbVer: 5,
+                    dbLock: "UNLOCKED", dbLockColor: "emerald",
+                    dbHolder: "All locks released. Data integrity 100%.",
+                    dbLog: "Tx B rolled back cleanly after seeing quantity = 0."
+                }
+            ],
+            optimistic: [
+                {
+                    title: "Initial State: Stock = 1, Version = 5",
+                    time: "t = 0ms",
+                    desc: "In Optimistic Locking, we track a 'version' column (currently version = 5). No database locks are used during reads.",
+                    txAStatus: "READY", txAColor: "slate",
+                    txASql: `-- Transaction A (User A)\n-- Ready for non-blocking read...`,
+                    txAMem: "None",
+                    txBStatus: "READY", txBColor: "slate",
+                    txBSql: `-- Transaction B (User B)\n-- Ready for non-blocking read...`,
+                    txBMem: "None",
+                    dbQty: 1, dbVer: 5,
+                    dbLock: "NO LOCKS USED", dbLockColor: "emerald",
+                    dbHolder: "Optimistic mode: Locks never held on read",
+                    dbLog: "Row 99 at quantity = 1, version = 5."
+                },
+                {
+                    title: "Both Tx A & Tx B Read Simultaneously (Non-Blocking)",
+                    time: "t = 10ms",
+                    desc: "Both users run a standard SELECT at the exact same time. Neither blocks the other! Both store quantity = 1 and version = 5 in memory.",
+                    txAStatus: "READ (v5)", txAColor: "sky",
+                    txASql: `<span class="sql-comment">-- Non-blocking read (No FOR UPDATE)</span>\n<span class="sql-keyword">SELECT</span> quantity, version\n<span class="sql-keyword">FROM</span> Inventory\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span>;\n<span class="sql-comment">-- Returns: quantity = 1, version = 5</span>`,
+                    txAMem: "qty = 1, version = 5",
+                    txBStatus: "READ (v5)", txBColor: "sky",
+                    txBSql: `<span class="sql-comment">-- Non-blocking read (0ms wait!)</span>\n<span class="sql-keyword">SELECT</span> quantity, version\n<span class="sql-keyword">FROM</span> Inventory\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span>;\n<span class="sql-comment">-- Returns: quantity = 1, version = 5</span>`,
+                    txBMem: "qty = 1, version = 5",
+                    dbQty: 1, dbVer: 5,
+                    dbLock: "NON-BLOCKING", dbLockColor: "emerald",
+                    dbHolder: "2 concurrent readers, 0 locks held",
+                    dbLog: "Both Tx A and Tx B read version = 5 concurrently."
+                },
+                {
+                    title: "Tx A Writes First (Arrives 1ms Earlier)",
+                    time: "t = 20ms",
+                    desc: "Tx A updates the row with `WHERE product_id = 99 AND version = 5`. Since the DB is still at version 5, it succeeds and increments version to 6!",
+                    txAStatus: "UPDATE SUCCESS ✓", txAColor: "emerald",
+                    txASql: `<span class="sql-keyword">UPDATE</span> Inventory\n<span class="sql-keyword">SET</span> quantity = <span class="sql-number">0</span>,\n    version = version + <span class="sql-number">1</span> <span class="sql-comment">-- becomes 6</span>\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span>\n  <span class="sql-keyword">AND</span> version = <span class="sql-number">5</span>; <span class="sql-comment">-- Matches DB (5)!</span>\n\n<span class="sql-comment">-- Result: "1 row affected" ✅</span>`,
+                    txAMem: "Updated to v6!",
+                    txBStatus: "PREPARING WRITE", txBColor: "amber",
+                    txBSql: `<span class="sql-comment">-- App logic finished validation.</span>\n<span class="sql-comment">-- About to send UPDATE with version = 5...</span>`,
+                    txBMem: "qty = 1, version = 5 (Stale!)",
+                    dbQty: 0, dbVer: 6,
+                    dbLock: "VERSION BUMPED -> 6", dbLockColor: "emerald",
+                    dbHolder: "Row updated by Tx A to Version 6",
+                    dbLog: "Tx A matched version=5. Updated qty=0, version=6 (1 row affected)."
+                },
+                {
+                    title: "Tx B Attempts Write with Stale Version (v5) -> FAILS!",
+                    time: "t = 21ms",
+                    desc: "Tx B runs its UPDATE looking for `AND version = 5`. But the row is now at version 6! The query matches 0 rows and modifies nothing.",
+                    txAStatus: "COMPLETED ✓", txAColor: "emerald",
+                    txASql: `<span class="sql-comment">-- User A's checkout is complete.</span>`,
+                    txAMem: "Done",
+                    txBStatus: "0 ROWS AFFECTED ✗", txBColor: "rose",
+                    txBSql: `<span class="sql-keyword">UPDATE</span> Inventory\n<span class="sql-keyword">SET</span> quantity = <span class="sql-number">0</span>,\n    version = version + <span class="sql-number">1</span>\n<span class="sql-keyword">WHERE</span> product_id = <span class="sql-number">99</span>\n  <span class="sql-keyword">AND</span> version = <span class="sql-number">5</span>; <span class="sql-comment">-- DB is at 6! ✗</span>\n\n<span class="sql-comment">-- Result: "0 rows affected" 🚨</span>`,
+                    txBMem: "Conflict Detected!",
+                    dbQty: 0, dbVer: 6,
+                    dbLock: "CONFLICT DETECTED", dbLockColor: "rose",
+                    dbHolder: "Tx B rejected: Expected v5, found v6",
+                    dbLog: "WARN: Tx B UPDATE matched 0 rows (version mismatch: 5 != 6)."
+                },
+                {
+                    title: "Application Throws OptimisticLockException & Retries",
+                    time: "t = 22ms",
+                    desc: "Because `0 rows affected` was returned, the ORM throws `OptimisticLockException`. The app catches it, re-reads v6 (seeing qty=0), and informs User B it sold out.",
+                    txAStatus: "COMPLETED ✓", txAColor: "emerald",
+                    txASql: `<span class="sql-comment">-- User A gets the PlayStation 5!</span>`,
+                    txAMem: "Done",
+                    txBStatus: "EXCEPTION HANDLED", txBColor: "amber",
+                    txBSql: `<span class="sql-comment">-- Application Layer / ORM catches:</span>\n<span class="sql-keyword">throw new</span> OptimisticLockException();\n\n<span class="sql-comment">-- App re-reads fresh row (v6, qty=0)</span>\n<span class="sql-comment">-- Shows User B: "Sorry, item just sold out!"</span>`,
+                    txBMem: "Refreshed: qty = 0, v6",
+                    dbQty: 0, dbVer: 6,
+                    dbLock: "CONSISTENT (v6)", dbLockColor: "emerald",
+                    dbHolder: "Lost update prevented without DB locks!",
+                    dbLog: "Application handled OptimisticLockException gracefully."
+                }
+            ]
+        };
+
+        let currentSimMode = 'pessimistic';
+        let currentStepIdx = 0;
+        let autoPlayTimer = null;
+
+        function switchSimMode(mode) {
+            stopAutoPlay();
+            currentSimMode = mode;
+            currentStepIdx = 0;
+
+            const btnPess = document.getElementById('mode-pessimistic');
+            const btnOpt = document.getElementById('mode-optimistic');
+            const modeIndicator = document.getElementById('sim-mode-indicator');
+            const narrativeBox = document.getElementById('sim-narrative-box');
+
+            if (mode === 'pessimistic') {
+                btnPess.className = "px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 bg-amber-500 text-slate-950 shadow-md";
+                btnOpt.className = "px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-slate-400 hover:text-white";
+                modeIndicator.innerText = "Row-Level X-Lock";
+                modeIndicator.className = "text-amber-400 font-semibold";
+                narrativeBox.classList.remove('border-l-emerald-400');
+                narrativeBox.classList.add('border-l-amber-400');
+            } else {
+                btnOpt.className = "px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 bg-emerald-500 text-slate-950 shadow-md";
+                btnPess.className = "px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-slate-400 hover:text-white";
+                modeIndicator.innerText = "Version Column Check";
+                modeIndicator.className = "text-emerald-400 font-semibold";
+                narrativeBox.classList.remove('border-l-amber-400');
+                narrativeBox.classList.add('border-l-emerald-400');
+            }
+
+            renderSimStep();
+        }
+
+        function getBadgeStyle(color) {
+            const map = {
+                slate: "bg-slate-800 text-slate-300 border-slate-700",
+                amber: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+                emerald: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
+                rose: "bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse",
+                sky: "bg-sky-500/20 text-sky-300 border-sky-500/40"
+            };
+            return map[color] || map.slate;
+        }
+
+        function getCardBorderStyle(color) {
+            const map = {
+                slate: "border-slate-800",
+                amber: "border-amber-500/70 glow-amber",
+                emerald: "border-emerald-500/70 glow-emerald",
+                rose: "border-rose-500/80 glow-rose",
+                sky: "border-sky-500/70"
+            };
+            return map[color] || map.slate;
+        }
+
+        function renderSimStep() {
+            const steps = simSteps[currentSimMode];
+            const step = steps[currentStepIdx];
+
+            // Header Narrative
+            document.getElementById('sim-step-badge').innerText = `Step ${currentStepIdx + 1} of ${steps.length}`;
+            document.getElementById('sim-step-title').innerText = step.title;
+            document.getElementById('sim-step-desc').innerText = step.desc;
+            document.getElementById('sim-time-pill').innerText = step.time;
+
+            // Buttons state
+            document.getElementById('sim-prev-btn').disabled = (currentStepIdx === 0);
+            const nextBtn = document.getElementById('sim-next-btn');
+            if (currentStepIdx === steps.length - 1) {
+                nextBtn.innerHTML = `<span>Restart</span> <i class="fa-solid fa-rotate-right"></i>`;
+            } else {
+                nextBtn.innerHTML = `<span>Next Step</span> <i class="fa-solid fa-forward-step"></i>`;
+            }
+
+            // Step Dots
+            const dotsContainer = document.getElementById('sim-step-dots');
+            dotsContainer.innerHTML = '';
+            steps.forEach((_, idx) => {
+                const btn = document.createElement('button');
+                btn.onclick = () => { stopAutoPlay(); currentStepIdx = idx; renderSimStep(); };
+                btn.className = idx === currentStepIdx
+                    ? "w-8 h-2.5 rounded-full bg-sky-400 transition-all"
+                    : "w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-slate-500 transition-all";
+                btn.title = `Go to Step ${idx + 1}`;
+                dotsContainer.appendChild(btn);
+            });
+
+            // Transaction A
+            const txACard = document.getElementById('tx-a-card');
+            txACard.className = `lg:col-span-4 bg-slate-950/90 rounded-2xl p-5 border-2 flex flex-col justify-between transition-all duration-300 ${getCardBorderStyle(step.txAColor)}`;
+            const txAStatus = document.getElementById('tx-a-status');
+            txAStatus.className = `px-2.5 py-1 rounded-full text-xs font-mono font-semibold border ${getBadgeStyle(step.txAColor)}`;
+            txAStatus.innerText = step.txAStatus;
+            document.getElementById('tx-a-sql').innerHTML = step.txASql;
+            document.getElementById('tx-a-mem').innerText = step.txAMem;
+
+            // Transaction B
+            const txBCard = document.getElementById('tx-b-card');
+            txBCard.className = `lg:col-span-4 bg-slate-950/90 rounded-2xl p-5 border-2 flex flex-col justify-between transition-all duration-300 ${getCardBorderStyle(step.txBColor)}`;
+            const txBStatus = document.getElementById('tx-b-status');
+            txBStatus.className = `px-2.5 py-1 rounded-full text-xs font-mono font-semibold border ${getBadgeStyle(step.txBColor)}`;
+            txBStatus.innerText = step.txBStatus;
+            document.getElementById('tx-b-sql').innerHTML = step.txBSql;
+            document.getElementById('tx-b-mem').innerText = step.txBMem;
+
+            // Central DB Table
+            document.getElementById('db-col-qty').innerText = step.dbQty;
+            document.getElementById('db-col-ver').innerText = step.dbVer;
+            const versionCell = document.getElementById('db-version-cell');
+            versionCell.className = currentSimMode === 'optimistic'
+                ? "bg-emerald-950/30 p-3 rounded-lg border border-emerald-500/40 transition-all"
+                : "bg-slate-900 p-3 rounded-lg border border-slate-800 opacity-50 transition-all";
+
+            const dbLockBadge = document.getElementById('db-lock-badge');
+            dbLockBadge.className = `px-2.5 py-1 rounded-full text-xs font-mono font-bold border flex items-center gap-1.5 ${getBadgeStyle(step.dbLockColor)}`;
+            dbLockBadge.innerHTML = `<i class="fa-solid ${step.dbLockColor === 'amber' ? 'fa-lock' : (step.dbLockColor === 'rose' ? 'fa-triangle-exclamation' : 'fa-lock-open')}"></i> ${step.dbLock}`;
+
+            document.getElementById('db-holder-info').innerText = step.dbHolder;
+            document.getElementById('db-engine-log').innerText = step.dbLog;
+        }
+
+        function nextSimStep() {
+            const steps = simSteps[currentSimMode];
+            if (currentStepIdx < steps.length - 1) {
+                currentStepIdx++;
+            } else {
+                currentStepIdx = 0;
+            }
+            renderSimStep();
+        }
+
+        function prevSimStep() {
+            stopAutoPlay();
+            if (currentStepIdx > 0) {
+                currentStepIdx--;
+                renderSimStep();
+            }
+        }
+
+        function resetSim() {
+            stopAutoPlay();
+            currentStepIdx = 0;
+            renderSimStep();
+        }
+
+        function toggleAutoPlay() {
+            if (autoPlayTimer) {
+                stopAutoPlay();
+            } else {
+                document.getElementById('auto-play-icon').className = "fa-solid fa-pause";
+                document.getElementById('auto-play-text').innerText = "Pause";
+                autoPlayTimer = setInterval(() => {
+                    const steps = simSteps[currentSimMode];
+                    if (currentStepIdx < steps.length - 1) {
+                        currentStepIdx++;
+                        renderSimStep();
+                    } else {
+                        stopAutoPlay();
+                    }
+                }, 2400);
+            }
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayTimer) {
+                clearInterval(autoPlayTimer);
+                autoPlayTimer = null;
+            }
+            document.getElementById('auto-play-icon').className = "fa-solid fa-play";
+            document.getElementById('auto-play-text').innerText = "Auto-Play";
+        }
+
+        /* ==========================================
+         * 3. DEEP DIVE LOCK TYPE INSPECTOR
+         * ========================================== */
+        function showLockType(type) {
+            const btnShared = document.getElementById('btn-lock-shared');
+            const btnExcl = document.getElementById('btn-lock-exclusive');
+            const content = document.getElementById('lock-type-content');
+
+            if (type === 'shared') {
+                btnShared.className = "py-2 px-3 rounded-lg text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 transition";
+                btnExcl.className = "py-2 px-3 rounded-lg text-xs font-mono font-bold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition";
+                content.innerHTML = `
+                    <code class="text-sky-400 font-mono block bg-slate-900 p-2 rounded border border-slate-800">SELECT ... FOR SHARE;</code>
+                    <p><strong>Shared Lock (Read Lock / S-Lock):</strong> Multiple transactions can hold a shared lock simultaneously to read data, but <strong>no transaction can modify it</strong> until all shared locks are released.</p>
+                `;
+            } else {
+                btnExcl.className = "py-2 px-3 rounded-lg text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 transition";
+                btnShared.className = "py-2 px-3 rounded-lg text-xs font-mono font-bold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition";
+                content.innerHTML = `
+                    <code class="text-amber-400 font-mono block bg-slate-900 p-2 rounded border border-slate-800">SELECT ... FOR UPDATE;</code>
+                    <p><strong>Exclusive Lock (Write Lock / X-Lock):</strong> Only <strong>one transaction</strong> can hold this lock. Others cannot modify (or read with a lock) that row until the transaction commits or rolls back.</p>
+                `;
+            }
+        }
+
+        /* ==========================================
+         * 4. ARCHITECTURE DECISION ADVISOR
+         * ========================================== */
+        function setAdvisorPreset(contention, duration, retry) {
+            document.getElementById('slider-contention').value = contention;
+            document.getElementById('slider-duration').value = duration;
+            document.getElementById('slider-retry').value = retry;
+            updateAdvisor();
+        }
+
+        function updateAdvisor() {
+            const c = parseInt(document.getElementById('slider-contention').value, 10);
+            const d = parseInt(document.getElementById('slider-duration').value, 10);
+            const r = parseInt(document.getElementById('slider-retry').value, 10);
+
+            document.getElementById('val-contention').innerText = `${c}% (${c > 60 ? 'High' : (c < 35 ? 'Low' : 'Moderate')})`;
+            document.getElementById('val-duration').innerText = `${d}% (${d > 55 ? 'Human / HTTP' : 'Fast DB Transaction'})`;
+            document.getElementById('val-retry').innerText = `${r}% (${r > 60 ? 'Expensive' : 'Cheap'})`;
+
+            const card = document.getElementById('advisor-result-card');
+            const title = document.getElementById('advisor-title');
+            const reason = document.getElementById('advisor-reason');
+            const sql = document.getElementById('advisor-sql');
+            const badge = document.getElementById('advisor-badge');
+
+            // If human interaction spans HTTP requests (duration > 60), you CANNOT hold pessimistic DB locks
+            if (d > 60) {
+                card.className = "lg:col-span-5 bg-slate-950 rounded-2xl p-6 border-2 border-emerald-500/60 glow-emerald transition-all duration-300 flex flex-col justify-between h-full";
+                title.className = "text-2xl sm:text-3xl font-extrabold text-emerald-400 mb-3";
+                title.innerText = "Optimistic Locking";
+                badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300";
+                badge.innerText = "Mandatory for UI Flows";
+                reason.innerHTML = "Because transactions involve <strong>user interaction or stateless HTTP requests</strong>, you can never hold a database lock open (if a user walks away, that row is locked forever). Pass a <code class='text-emerald-300 font-mono'>version</code> number or HTTP <code class='text-emerald-300 font-mono'>ETag</code> to the client.";
+                sql.className = "text-emerald-400";
+                sql.innerText = "UPDATE table SET val = ?, version = version + 1 WHERE id = ? AND version = ?";
+                return;
+            }
+
+            const pessScore = (c * 0.6) + (r * 0.4);
+            if (pessScore >= 55) {
+                card.className = "lg:col-span-5 bg-slate-950 rounded-2xl p-6 border-2 border-amber-500/60 glow-amber transition-all duration-300 flex flex-col justify-between h-full";
+                title.className = "text-2xl sm:text-3xl font-extrabold text-amber-400 mb-3";
+                title.innerText = "Pessimistic Locking";
+                badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300";
+                badge.innerText = `${Math.min(99, Math.round(pessScore))}% Contention Fit`;
+                reason.innerHTML = "With <strong>high contention</strong> and <strong>expensive retry costs</strong>, Optimistic Locking would trigger a 'retry storm' (thundering herd) as 99% of transactions fail at commit. Serialize access safely at the DB level using <code class='text-amber-300 font-mono'>FOR UPDATE</code>.";
+                sql.className = "text-amber-400";
+                sql.innerText = "SELECT * FROM Inventory WHERE id = 99 FOR UPDATE;";
+            } else {
+                card.className = "lg:col-span-5 bg-slate-950 rounded-2xl p-6 border-2 border-emerald-500/60 glow-emerald transition-all duration-300 flex flex-col justify-between h-full";
+                title.className = "text-2xl sm:text-3xl font-extrabold text-emerald-400 mb-3";
+                title.innerText = "Optimistic Locking";
+                badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300";
+                badge.innerText = `${Math.min(99, Math.round(100 - pessScore))}% Throughput Fit`;
+                reason.innerHTML = "Conflicts are relatively rare and retries are cheap. Avoid the overhead and deadlock risks of database-level row locks. Use non-blocking reads and validate a <code class='text-emerald-300 font-mono'>version</code> column on write.";
+                sql.className = "text-emerald-400";
+                sql.innerText = "UPDATE Inventory SET qty = ?, version = version + 1 WHERE id = 99 AND version = ?;";
+            }
+        }
+
+        /* ==========================================
+         * 5. CLIPBOARD & INTERVIEW QUIZ
+         * ========================================== */
+        function copyPitch(elementId, btn) {
+            const text = document.getElementById(elementId).innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> <span class="text-emerald-400">Copied!</span>`;
+            setTimeout(() => { btn.innerHTML = originalHTML; }, 1800);
+        }
+
+        const quizQuestions = [
+            {
+                q: "Scenario 1: You are designing a Flash Sale checkout where 5,000 users try to buy the exact same limited-edition sneaker SKU within 2 seconds. Which strategy prevents overselling without causing a 'retry storm'?",
+                correct: "pessimistic",
+                explanation: "Correct! Under extreme contention (5,000 users hitting 1 row), Optimistic Locking would cause 4,999 transactions to fail and retry simultaneously (thundering herd). Pessimistic locking (or an atomic UPDATE) serializes access at the DB engine level."
+            },
+            {
+                q: "Scenario 2: Two company admins open a web dashboard to edit a rich-text Product Description. Admin A takes 10 minutes to rewrite the paragraph before clicking 'Save'. How do you prevent Admin B from silently overwriting Admin A's work?",
+                correct: "optimistic",
+                explanation: "Correct! You can never hold a Pessimistic database lock open while a human spends 10 minutes filling out a web form. Send `version = 1` (or an HTTP ETag) to the browser and check `WHERE version = 1` on submit."
+            },
+            {
+                q: "Scenario 3: You are building a database-backed background Job Queue where 20 worker threads pull pending tasks from a `jobs` table. If Worker 1 locks Job #101, Worker 2 shouldn't hang waiting—it should immediately grab Job #102. What SQL feature do you use?",
+                correct: "skip_locked",
+                explanation: "Spot on! `SELECT ... FOR UPDATE SKIP LOCKED` is a senior-level Pessimistic Locking nuance that lets worker threads bypass currently locked rows and grab the next available task immediately."
+            },
+            {
+                q: "Scenario 4: You are building a Core Banking Ledger transferring funds between two hot corporate accounts where deadlocks and lost updates cannot be tolerated, and retry computation is expensive.",
+                correct: "pessimistic",
+                explanation: "Correct! Core banking transfers on hot accounts use Pessimistic Locking (`SELECT ... FOR UPDATE` with strict lock ordering by account_id to prevent deadlocks) to guarantee strict ACID serializability."
+            }
+        ];
+
+        let currentQuizIdx = 0;
+
+        function renderQuiz() {
+            const item = quizQuestions[currentQuizIdx];
+            document.getElementById('quiz-idx').innerText = currentQuizIdx + 1;
+            document.getElementById('quiz-question').innerText = item.q;
+            document.getElementById('quiz-feedback').className = "hidden";
+        }
+
+        function submitQuizAnswer(choice) {
+            const item = quizQuestions[currentQuizIdx];
+            const fb = document.getElementById('quiz-feedback');
+            const fbText = document.getElementById('quiz-feedback-text');
+
+            if (choice === item.correct) {
+                fb.className = "p-4 rounded-xl border border-emerald-500/40 bg-emerald-950/30 text-emerald-200 text-sm leading-relaxed flex flex-col sm:flex-row sm:items-center justify-between gap-4";
+                fbText.innerHTML = `<strong class="text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> ${item.explanation}</strong>`;
+            } else {
+                fb.className = "p-4 rounded-xl border border-rose-500/40 bg-rose-950/30 text-rose-200 text-sm leading-relaxed flex flex-col sm:flex-row sm:items-center justify-between gap-4";
+                fbText.innerHTML = `<strong class="text-rose-400"><i class="fa-solid fa-circle-xmark mr-1"></i> Not quite!</strong> ${item.explanation}`;
+            }
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIdx = (currentQuizIdx + 1) % quizQuestions.length;
+            renderQuiz();
+        }
+
+        // Initialize on window load
+        window.onload = function() {
+            renderSimStep();
+            updateAdvisor();
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>

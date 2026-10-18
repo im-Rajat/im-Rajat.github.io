@@ -1,0 +1,52 @@
+site_name: Rajat's Notes
+site_url: https://im-rajat.github.io/Notes/
+
+theme:
+  name: material
+  features:
+    - navigation.tabs         # Adds a top navigation bar for better organization
+    - navigation.sections     # Groups items under bold headers on the left
+    - navigation.top          # Adds a "Back to top" button on long pages
+    - navigation.instant      # Prevents full page reloads
+    - navigation.indexes      # Allows folders to act as clickable pages
+    # - navigation.tracking     # Updates the URL hash as you scroll
+    - search.suggest          # Provides search suggestions as you type
+    - search.highlight        # Highlights search terms in the results
+    - content.code.copy       # Critical for your C++/Java notes
+    # - toc.integrate           # Shows the table of contents in the sidebar
+  
+  # Adds a Light/Dark mode toggle (Developers expect this)
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+docs_dir: 'docs'
+
+markdown_extensions:
+  - tables                    # Enables GitHub-style tables
+  - sane_lists                # Fixes common list formatting issues
+  - admonition                # Adds support for note/warning/info blocks
+  - attr_list                 # Allows you to resize images directly in markdown: ![img](file.png){ width="300" }
+  - md_in_html                # Allows markdown to work inside raw HTML tags
+  - pymdownx.details          # Creates collapsible dropdown sections
+  - pymdownx.superfences      # Required for complex code blocks
+  - pymdownx.inlinehilite     # Allows syntax highlighting on single inline words
+  - pymdownx.tasklist:        # Checkboxes for to-do lists
+      custom_checkbox: true
+  - pymdownx.highlight:       # The actual syntax highlighting engine
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.arithmatex:      # Renders complex math and Big-O notation
+      generic: true
+  - pymdownx.superfences:     # Custom code block for Mermaid diagrams
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
