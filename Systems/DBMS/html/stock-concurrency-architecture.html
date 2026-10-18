@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Concurrency Inventory Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #facc15, #fb923c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; 
+        }
+
+        .pulse-maggi {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(250, 204, 21, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(250, 204, 21, 0.6); }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <nav class="fixed w-full z-50 glass-panel border-b-0 rounded-none border-b border-slate-700 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-bolt text-yellow-400 text-xl"></i>
+                    <span class="font-bold text-xl tracking-tight">Q-Commerce System Design</span>
+                </div>
+                <div class="text-sm md:text-base flex items-center gap-4">
+                    <span class="hidden md:inline text-slate-400">Curated by <strong class="text-white">Rajat Kumar</strong></span>
+                    <a href="https://www.linkedin.com/in/imRajat/" target="_blank" class="text-slate-300 hover:text-blue-400 transition-colors">
+                        <i class="fa-brands fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="https://github.com/im-Rajat/" target="_blank" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <header class="text-center mb-16 animate-fade-in">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                The 9 PM <span class="gradient-text">Maggi Rush</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+                200,000 users add Maggi to their cart simultaneously. There are only 340 packets in the dark store. 
+                How do we prevent 199,660 broken hearts at checkout without crashing the app?
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div class="glass-panel p-8 animate-fade-in delay-100">
+                <h2 class="text-2xl font-bold mb-4 text-red-400"><i class="fa-solid fa-triangle-exclamation mr-2"></i> The Problem: The Thundering Herd</h2>
+                <ul class="space-y-4 text-slate-300">
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3"></i>
+                        <span><strong>Pessimistic Locking (Database):</strong> Locking a database row for 200,000 carts is too slow. The database will melt, resulting in 503 Gateway Timeouts.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-xmark text-red-500 mt-1 mr-3"></i>
+                        <span><strong>Optimistic Locking (Check at Checkout):</strong> Letting everyone add it to the cart, but checking stock only at payment. Result: 1.6+ Lakh users get an "Out of Stock" error <em>after</em> they spent time navigating. Terrible UX.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="glass-panel p-8 animate-fade-in delay-200">
+                <h2 class="text-2xl font-bold mb-4 text-emerald-400"><i class="fa-solid fa-check-double mr-2"></i> The Solution: Soft Allocation via Redis</h2>
+                <p class="text-slate-300 mb-4">
+                    We use a blazing-fast, single-threaded in-memory datastore (like <strong>Redis</strong>) to perform <em>Soft Allocation</em> (temporary reservations) at the exact moment a user clicks "Add to Cart".
+                </p>
+                <ul class="space-y-2 text-slate-300 list-disc list-inside">
+                    <li><strong>Extremely Fast:</strong> Redis handles 100k+ operations/sec.</li>
+                    <li><strong>Atomic:</strong> No two users can grab the exact same packet.</li>
+                    <li><strong>Time-Bound:</strong> Carts expire if users don't buy within X minutes.</li>
+                </ul>
+            </div>
+        </div>
+
+        <section class="mb-16 animate-fade-in delay-300">
+            <h3 class="text-3xl font-bold mb-8 text-center">How it works under the hood</h3>
+            
+            <div class="space-y-8">
+                <div class="glass-panel p-6 border-l-4 border-l-blue-500">
+                    <h4 class="text-xl font-bold mb-2 text-blue-400">1. The Redis Atomic Counter (DECR)</h4>
+                    <p class="text-slate-300 mb-4">
+                        Instead of reading from a SQL database, the app maintains an inventory counter in Redis. When 200,000 requests hit the server, it fires a Redis <code>DECR</code> (decrement) command for each. Because Redis is single-threaded, it queues these microsecond operations one by one perfectly.
+                    </p>
+                    <div class="bg-slate-900 p-4 rounded-lg code-font text-sm text-green-300 overflow-x-auto">
+                        <span class="text-slate-500"># Initial stock setup</span><br>
+                        SET dark_store_101:maggi_stock 340<br><br>
+                        <span class="text-slate-500"># When user clicks 'Add to Cart'</span><br>
+                        DECR dark_store_101:maggi_stock
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 border-l-4 border-l-yellow-500">
+                    <h4 class="text-xl font-bold mb-2 text-yellow-400">2. Lua Scripting (Preventing Negative Stock)</h4>
+                    <p class="text-slate-300 mb-4">
+                        A simple <code>DECR</code> might take the stock into negatives. To prevent this atomically, we use a small Lua script executed by Redis. If the stock is &gt; 0, it decrements. If it's 0, it returns an error instantly. The cart page receives this and says "Out of Stock" <em>before</em> the item enters the cart.
+                    </p>
+                    <div class="bg-slate-900 p-4 rounded-lg code-font text-sm text-yellow-200 overflow-x-auto">
+                        local stock = tonumber(redis.call('GET', KEYS[1]))<br>
+                        if stock > 0 then<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;redis.call('DECR', KEYS[1])<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return 1 <span class="text-slate-500">-- Success: Add to cart</span><br>
+                        else<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return 0 <span class="text-slate-500">-- Fail: Reject add to cart</span><br>
+                        end
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 border-l-4 border-l-emerald-500">
+                    <h4 class="text-xl font-bold mb-2 text-emerald-400">3. Cart Expiry / TTL (Time-To-Live)</h4>
+                    <p class="text-slate-300">
+                        What if a user adds to cart and closes the app? We don't want those 340 packets locked forever.
+                        We reserve the stock with a TTL (e.g., 10 minutes). A background worker (or Redis Keyspace Notification) listens for cart expirations. If a cart expires without payment, the worker executes an <code>INCR</code> to return the item to the available pool. Only successful payments write the final deduction to the persistent SQL database.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h3 class="text-3xl font-bold mb-8 text-center">Interactive Simulation</h3>
+            <div class="glass-panel p-6 lg:p-10 pulse-maggi">
+                
+                <div class="flex flex-wrap justify-center gap-6 mb-10">
+                    <div class="bg-slate-800 rounded-lg p-4 text-center min-w-[150px]">
+                        <div class="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-1">Available Stock</div>
+                        <div class="text-3xl font-bold text-yellow-400" id="stat-stock">340</div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-4 text-center min-w-[150px]">
+                        <div class="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-1">Concurrent Traffic</div>
+                        <div class="text-3xl font-bold text-blue-400" id="stat-traffic">200,000</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                    <button onclick="runSimulation('traditional')" id="btn-trad" class="px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-red-500/30">
+                        <i class="fa-solid fa-server mr-2"></i> Simulate Traditional (Optimistic)
+                    </button>
+                    <button onclick="runSimulation('modern')" id="btn-mod" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-emerald-500/30">
+                        <i class="fa-solid fa-bolt mr-2"></i> Simulate Modern (Redis)
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-50 transition-opacity duration-500" id="sim-dashboard">
+                    
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 text-center">
+                        <div class="text-slate-400 mb-2 font-medium">Successfully Added to Cart</div>
+                        <div class="text-4xl font-bold text-white mb-2" id="res-added">0</div>
+                        <div class="text-sm text-slate-500 h-10" id="desc-added">Waiting for simulation...</div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 text-center">
+                        <div class="text-slate-400 mb-2 font-medium">Successful Checkouts</div>
+                        <div class="text-4xl font-bold text-emerald-400 mb-2" id="res-checkout">0</div>
+                        <div class="text-sm text-slate-500 h-10" id="desc-checkout">Waiting for simulation...</div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 text-center">
+                        <div class="text-slate-400 mb-2 font-medium">Frustrated Users (Failed at Checkout)</div>
+                        <div class="text-4xl font-bold text-red-500 mb-2" id="res-frust">0</div>
+                        <div class="text-sm text-slate-500 h-10" id="desc-frust">Waiting for simulation...</div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800 py-8 text-center text-slate-500 text-sm">
+        <p>Curated with ❤️ by Rajat Kumar for System Design interviews.</p>
+        <p class="mt-2">
+            <a href="https://www.linkedin.com/in/imRajat/" target="_blank" class="hover:text-white mx-2"><i class="fa-brands fa-linkedin mr-1"></i> LinkedIn</a>
+            |
+            <a href="https://github.com/im-Rajat/" target="_blank" class="hover:text-white mx-2"><i class="fa-brands fa-github mr-1"></i> GitHub</a>
+        </p>
+    </footer>
+
+    <script>
+        let isSimulating = false;
+        
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Animation logic to make numbers tick up visually
+        function animateValue(obj, start, end, duration, prefix = "", suffix = "") {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                // Ease out cubic
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const currentVal = Math.floor(easeProgress * (end - start) + start);
+                obj.innerHTML = prefix + formatNumber(currentVal) + suffix;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerHTML = prefix + formatNumber(end) + suffix;
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function runSimulation(type) {
+            if (isSimulating) return;
+            isSimulating = true;
+
+            const totalUsers = 200000;
+            const actualStock = 340;
+
+            // UI Resets
+            document.getElementById('sim-dashboard').classList.remove('opacity-50');
+            document.getElementById('btn-trad').disabled = true;
+            document.getElementById('btn-mod').disabled = true;
+            document.getElementById('btn-trad').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('btn-mod').classList.add('opacity-50', 'cursor-not-allowed');
+
+            const elAdded = document.getElementById('res-added');
+            const elCheckout = document.getElementById('res-checkout');
+            const elFrust = document.getElementById('res-frust');
+
+            const descAdded = document.getElementById('desc-added');
+            const descCheckout = document.getElementById('desc-checkout');
+            const descFrust = document.getElementById('desc-frust');
+
+            // Reset text
+            elAdded.innerText = "0";
+            elCheckout.innerText = "0";
+            elFrust.innerText = "0";
+
+            let targetAdded = 0;
+            let targetCheckout = 0;
+            let targetFrust = 0;
+
+            if (type === 'traditional') {
+                // Optimistic Locking: Everyone adds, only stock amount checks out, rest fail AT checkout
+                targetAdded = totalUsers;
+                targetCheckout = actualStock;
+                targetFrust = totalUsers - actualStock;
+
+                descAdded.innerHTML = "<span class='text-red-400'>App says 'In Stock' for all 2 Lakh users.</span>";
+                descCheckout.innerHTML = "Only 340 proceed to payment.";
+                descFrust.innerHTML = "<span class='text-red-400 font-bold'>Disaster: 199,660 users get error during payment!</span>";
+                
+                elFrust.classList.replace('text-emerald-400', 'text-red-500');
+
+            } else {
+                // Modern Redis approach: Soft allocation limits cart additions instantly
+                targetAdded = actualStock;
+                targetCheckout = actualStock;
+                targetFrust = 0;
+
+                descAdded.innerHTML = "<span class='text-emerald-400'>Redis blocks cart addition for user #341 instantly.</span>";
+                descCheckout.innerHTML = "All 340 reserved carts checkout smoothly.";
+                descFrust.innerHTML = "<span class='text-emerald-400 font-bold'>Perfect UX: 0 errors at checkout. Users saw 'Out of Stock' immediately on the product page.</span>";
+                
+                elFrust.classList.replace('text-red-500', 'text-emerald-400');
+            }
+
+            const animationDuration = 2500;
+
+            animateValue(elAdded, 0, targetAdded, animationDuration);
+            
+            setTimeout(() => {
+                animateValue(elCheckout, 0, targetCheckout, 1500);
+            }, animationDuration * 0.5);
+
+            setTimeout(() => {
+                animateValue(elFrust, 0, targetFrust, 2000);
+            }, animationDuration * 0.8);
+
+            // Re-enable buttons after animation
+            setTimeout(() => {
+                isSimulating = false;
+                document.getElementById('btn-trad').disabled = false;
+                document.getElementById('btn-mod').disabled = false;
+                document.getElementById('btn-trad').classList.remove('opacity-50', 'cursor-not-allowed');
+                document.getElementById('btn-mod').classList.remove('opacity-50', 'cursor-not-allowed');
+            }, animationDuration + 2200);
+        }
+    </script>
+</body>
+</html>

@@ -8,6 +8,7 @@
 - [Indexing](https://im-rajat.github.io/Notes/Systems/DBMS/html/Indexing.html)
 - [Concurrency Control and Database Locking Guide](https://im-rajat.github.io/Notes/Systems/DBMS/html/concurrency-db-locking-guide.html)
 - [Shared Lock vs Exclusive Lock](https://im-rajat.github.io/Notes/Systems/DBMS/html/Shared-vs-Exclusive-Locks.html)
+- [Stock Concurrency Architecture](https://im-rajat.github.io/Notes/Systems/DBMS/html/stock-concurrency-architecture.html)
 - [Conflict Serializability](https://im-rajat.github.io/Notes/Systems/DBMS/html/Conflict-Serializability.html)
 - [Concurrency Control Protocols](https://im-rajat.github.io/Notes/Systems/DBMS/html/Concurrency-Control-Protocols.html)
 
