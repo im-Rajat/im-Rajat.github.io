@@ -70,9 +70,6 @@ plugins:
         'Interviews/Interview-Questions/System-Design/README.md': 'Software-Design/System-Design/README.md'
         'Interviews/Interview-Questions/C-CPP/README.md': 'Programming/README.md'
 
-hooks:
-  - hooks/html_redirects.py   # Redirects for moved .html explainers (mkdocs-redirects only handles .md)
-
 markdown_extensions:
   - tables                    # Enables GitHub-style tables
   - sane_lists                # Fixes common list formatting issues
