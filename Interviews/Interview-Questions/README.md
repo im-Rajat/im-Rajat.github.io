@@ -2,6 +2,8 @@
 
 ## System Design
 
+> **See also:** [System Design concept notes](../../Software-Design/System-Design/README.md), including System Design for Beginners.
+
 - [Difference between REST API and Web services?](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/System-Design/html/restapi-vs-webservices.html)
 - [Forward Proxy vs Reverse Proxy](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/System-Design/html/proxy-explainer.html)
 - [Server Side Load Balancing](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/System-Design/html/Server-Side-Load-Balancing.html)
