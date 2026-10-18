@@ -38,5 +38,10 @@ Welcome to my personal notes repository. Select a topic below to browse the note
 * **[PDF Collection](https://im-rajat.github.io/Notes/PDF/)**
     * Downloadable PDFs for Arduino, Azure IoT, AWS, MQTT, and more.
 
+## 🛠️ Tools & Utilities
+
+* **[Useful Websites](https://im-rajat.github.io/Notes/Websites/)**
+    * Curated list of useful websites, tools and extensions.
+
 ---
 *Note: This site is hosted on GitHub Pages.*
