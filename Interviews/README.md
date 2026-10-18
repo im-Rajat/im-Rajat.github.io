@@ -19,4 +19,4 @@ Interview prep. Questions and explainers live with their topic notes; this page 
 
 ## Company Interviews
 
-- **[Company Interviews](Company-Interviews/README.md)**: Questions and solutions from past interviews.
+- **[Company Interviews](Company-Interviews/)**: Questions and solutions from past interviews.
