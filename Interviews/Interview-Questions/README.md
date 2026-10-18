@@ -26,6 +26,8 @@
 
 ## [Operating Systems](Operating-Systems/README.md)
 
+> **See also:** [Linux notes](../../Systems/Linux/README.md) in Systems.
+
 - [Process vs Thread](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/Operating-Systems/html/Process-vs-Thread.html)
 - [Mutex vs Semaphore](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/Operating-Systems/html/Mutex-vs-Semaphore.html)
 - [Main Memory vs Secondary Memory](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/Operating-Systems/html/Main-vs-Secondary-Memory.html)
@@ -38,6 +40,8 @@
 - [Paging: The "Unit" of Management](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/Operating-Systems/#3-paging-the-unit-of-management)
 
 ## Computer Networks
+
+> **See also:** [Ethical Hacking notes](../../Systems/Ethical-Hacking/README.md) in Systems.
 
 - [TCP vs UDP](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/Computer-Networks/html/TCP-vs-UDP.html)
 - [What happens when you type google.com?](https://im-rajat.github.io/Notes/Interviews/Interview-Questions/Computer-Networks/html/What-happens-when-you-type-google.com.html)

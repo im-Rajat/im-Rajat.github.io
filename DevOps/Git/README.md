@@ -1,6 +1,6 @@
 # Git
 
-Interactive version: [Git & GitHub Notes](https://im-rajat.github.io/Notes/DevOps-and-Tools/Git/html/git-notes.html)
+Interactive version: [Git & GitHub Notes](https://im-rajat.github.io/Notes/DevOps/Git/html/git-notes.html)
 
 - Git is a version control system.
 - Git helps us to keep track of code changes.
