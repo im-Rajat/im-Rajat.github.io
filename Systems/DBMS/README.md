@@ -12,7 +12,7 @@
 
 ## Questions:
 
-- [When multiple users try to modify the exact same record at the exact same millisecond, how do you prevent lost updates and corrupted data without tanking database performance?](https://im-rajat.github.io/Notes/Systems/DBMS/html/concurrency-db-locking-guide.html)
+- [When multiple users try to modify the exact same record at the exact same millisecond, how do you prevent lost updates and corrupted data without tanking database performance?](https://im-rajat.github.io/Notes/Systems/DBMS/html/db-concurrency-and-locking.html)
 - [2,00,000 users add Maggi to their cart simultaneously. There are only 340 packets in the dark store. How do we prevent 1,99,660 broken hearts at checkout without crashing the app?](https://im-rajat.github.io/Notes/Systems/DBMS/html/stock-concurrency-architecture.html)
 
 > **See also:** [SQL](../../Programming/SQL/README.md) notes in their own repository.
