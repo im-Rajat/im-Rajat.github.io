@@ -3,24 +3,24 @@
 Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resources/Websites/html/web-resource-hub.html)
 
 ### Important/Financial :
-- Purchasing Power Parity Calculator to compare Money/Salary of 2 Countries	-	<https://www.chrislross.com/PPPConverter>
+- Purchasing Power Parity Calculator to compare Money/Salary of 2 Countries → <https://www.chrislross.com/PPPConverter>
 - Analyse Stock Market	- 	<https://intradayscreener.com/app>
 - Analyse Stock Market for Intraday	- 	<https://intradayscreener.com/app/price-action-scanner-intraday>
 - Track Price History	- 	<https://pricehistoryapp.com>
-- Check how many sim cards are issued on your Aadhaar card     -    <https://tafcop.dgtelecom.gov.in>
+- Check how many sim cards are issued on your Aadhaar card     -    <https://sancharsaathi.gov.in/>
 - MuscleWiki : Exercise in Gym     -    <https://musclewiki.com>
 - For fitness     -    <https://darebee.com>
 - Direct links to delete your account from web services     -    <https://justdeleteme.xyz>
 - Open any website without vpn     -    <https://proxyium.com>
 - Find company of any sms receive without number     -    <https://smsheader.trai.gov.in>
 - CEIR: Block/Unblock Stolen/Lost Mobile     -    <https://www.ceir.gov.in/Home/index.jsp>
+- Lodge Grievance related to service delivery → https://pgportal.gov.in/Signin
 - myScheme: Search all Government Schemes     -    <https://www.myscheme.gov.in>
-- TabletWise: Learn About Medicines and Diseases     -    <https://www.tabletwise.net>
 - FaceCheck: Find People Online by Photo     -    <https://facecheck.id>
-- Citizen-centric initiative of Department of Telecommunications    -    <https://sancharsaathi.gov.in/>
 - Instruction to delete your account on a site    -    <https://www.accountkiller.com>
 - Deep Identity Search usign email    -    <https://behindtheemail.com/>
 - Check if your email address is in a data breach    -    <https://haveibeenpwned.com/>
+- List all subdomains associated with a primary domain → https://crt.name/v1/search?apex=[domain-name-here]
 
 <hr>
 
@@ -38,22 +38,21 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 
 ### Movies | Live TV (Sports) :
 - Online Free Netflix    -    <https://netmirror.app/> | <https://net20.cc/>
-- Search these website names Google (Bcz these sites URLs keep changing with time) - Bollyflix, showbox media, desiremovies, moviebox, VegaMovies, MyFlixer, soap2day
+- Search these website names Google (Bcz these sites URLs keep changing with time) - Bollyflix, showbox media, desiremovies, moviebox, VegaMovies, MyFlixer, soap2day, YTS Torrent
 - 90s TV Feeling    -    <https://www.myretrotvs.com/>
 - HD Streamz: Android Application for Live TV, Sports
-- Get link of tv channels, then paste it on any m3u player    -    <https://github.com/iptv-org/iptv>
 - SmartTubeNext: Adfree YouTube for Android TV    -     <https://github.com/yuliskov/SmartTubeNext#Installation>
-- Mhdtvworld: Live TV
-- YTS Torrent or Watch Online    -    <https://en.yts-official.mx/>
-- Watch cricket online    -    <https://crichdi.com/>
 
 <hr>
 
 ### Education :
+
+- Useful Git Repositories    →    <https://github.com/im-Rajat?tab=stars>
 - You can access all Medium articles for free    -    <https://freedium-mirror.cfd/>
+- CheatSheets: Quick Reference Cheat Sheets    -    <https://cheatsheets.zip/>
 - Learn algorithms and data structures visually    -    <https://algomaster.io/>
+- SWE180: DSA, CS fundamentals, system design, projects, resume    -    <https://www.swe180.com/>
 - Online Editor (VSCode)    -    https://vscode.dev/
-- Useful Git Repositories    -    <https://github.com/im-Rajat?tab=stars>
 - Transform your handwriting or calligraphy into a font!    -    <https://www.calligraphr.com/en/>
 - Play coding games    -    <https://www.codingame.com/>
 - Create a new website with AI    -    <https://10web.io/>
@@ -68,7 +67,7 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 - Problem Solver    -    <https://www.wolframalpha.com>
 - Projects + Source code    -    <https://www.kashipara.com>
 - Learn Programming Languages    -    <https://exercism.org>
-- Different Tools + Plagiarism Checker    -    <https://www.prepostseo.com>
+- Empowering 150+ Free Online Tools   -    <https://www.prepostseo.com>
 - Roadmap for Developers    -    <https://roadmap.sh>
 - Simple Wikipedia    -    <https://simple.wikipedia.org/wiki/Main_Page>
 - Library    -    <https://libgen.li>
@@ -78,7 +77,6 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 - PDF Drive: Search and download PDF files    -    <https://www.pdfdrive.com>
 - CodeConverter: Convert code between languages    -    <https://www.codeconvert.ai/free-converter>
 - FlowCV: Online Resume/CV Builder    -    <https://flowcv.com>
-- CheatSheets: Quick Reference Cheat Sheets    -    <https://cheatsheets.zip/>
 - Git Profile Generator    -    <https://profile-readme-generator.com/>
 
 <hr>
@@ -111,6 +109,7 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 - Adobe Express: Animate from audio     -    <https://new.express.adobe.com/home/tools/animate-from-audio>
 - Free photos & videos    -    <https://www.pexels.com/>
 - Free Medical Certificate    -    <https://medicalcertificategenerator.com/>
+- Transfer your Spotify playlists to YouTube Music → https://wemor.vercel.app/
 
 <hr>
 
@@ -164,10 +163,11 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 
 <hr>
 
-### Android Applications :
+### Android/IOS Applications :
 - EspacioAPK: Mod APKs    -    <https://espacioapk.com>
 - Double Side Camera    -    <https://play.google.com/store/apps/details?id=com.bagestudio.doublesidecamera&hl=en_IN&gl=US>
 - TravelBoast   -    ```Create distance travelling animated video```
+- PC games on your iPhone    -    <https://playport.dev/>
 
 <hr>
 
@@ -178,6 +178,7 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 - Download New Games: Search dodi repack on Google    -    <https://dodi-repacks.site>
 - Download Old Games    -    <https://oldgamesdownload.com>
 - Playtesting Mobile Games    -    <https://www.playtestcloud.com>
+- Online Cricket07    -    <https://cricket07.dhaiwat.com>
 
 <hr>
 

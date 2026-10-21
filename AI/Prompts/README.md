@@ -92,3 +92,8 @@ Keep the person and car realistic and sharp.
 Golden hour lighting, ultra realistic, travel Perfect lined with rare.
 Keep the original colour of the image. Don't change colours of original image.
 ```
+
+#### The Vintage Photo Transformer: Upscale to 4K
+```
+Ultra-realistic recreation of an old vintage photo, keeping the same original face (99% likeness, no alteration). Transform into a modern high-quality digital portrait with vibrant updated colors, smooth realistic skin textures, and natural lighting. The outfit and background should be upgraded into a clean, modern aesthetic while preserving the authenticity of the original pose and expression.
+```
