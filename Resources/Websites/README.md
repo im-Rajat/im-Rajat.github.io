@@ -3,7 +3,7 @@
 Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resources/Websites/html/web-resource-hub.html)
 
 ### Important/Financial :
-- Purchasing Power Parity Calculator to compare Money/Salary of 2 Countries → <https://www.chrislross.com/PPPConverter>
+- Purchasing Power Parity Calculator to compare Money/Salary of 2 Countries    →    <https://www.chrislross.com/PPPConverter>
 - Analyse Stock Market	- 	<https://intradayscreener.com/app>
 - Analyse Stock Market for Intraday	- 	<https://intradayscreener.com/app/price-action-scanner-intraday>
 - Track Price History	- 	<https://pricehistoryapp.com>
@@ -20,7 +20,8 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 - Instruction to delete your account on a site    -    <https://www.accountkiller.com>
 - Deep Identity Search usign email    -    <https://behindtheemail.com/>
 - Check if your email address is in a data breach    -    <https://haveibeenpwned.com/>
-- List all subdomains associated with a primary domain → https://crt.name/v1/search?apex=[domain-name-here]
+- List all subdomains associated with a primary domain    →    https://crt.name/v1/search?apex=[domain-name-here]
+- How much X/twitter account have original content    -    <https://original.unfair.so/> | <https://x.com/i/under_the_hood>
 
 <hr>
 
@@ -38,7 +39,7 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 
 ### Movies | Live TV (Sports) :
 - Online Free Netflix    -    <https://netmirror.app/> | <https://net20.cc/>
-- Search these website names Google (Bcz these sites URLs keep changing with time) - Bollyflix, showbox media, desiremovies, moviebox, VegaMovies, MyFlixer, soap2day, YTS Torrent
+- Search these website names Google (Bcz these sites URLs keep changing with time) - Bollyflix, showbox media, desiremovies, moviebox, VegaMovies, MyFlixer, soap2day, YTS Torrent, pvrplay.in framextv.cc
 - 90s TV Feeling    -    <https://www.myretrotvs.com/>
 - HD Streamz: Android Application for Live TV, Sports
 - SmartTubeNext: Adfree YouTube for Android TV    -     <https://github.com/yuliskov/SmartTubeNext#Installation>
@@ -82,18 +83,14 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 <hr>
 
 ### Softwares :
-- Search and download anything    -    <https://filepursuit.com>
-- Get free software without any redirect    -    <https://ask4pc.net>
 - FileCR: Download software/apps    -    <https://filecr.com>
 - Google index search: Provide Links    -    <https://lumpysoft.com>
 - Find serial numbers    -    <https://smartserials.com>
 - Online File Converter    -    <https://cloudconvert.com>
-- Online PDF editor and more    -    <https://www.sejda.com>
-- Tools for PDF, Image, Video    -    <https://tinywow.com>
+- Tools for PDF, Image, Video    -    <https://www.sejda.com> | https://tools.pdf24.org/en/ | <https://tinywow.com>
 - Provide links to different sites    -    <https://github.com/Igglybuff/awesome-piracy>
 - Find public files in Google Drive    -    <https://www.dedigger.com>
-- Provide different tools and website links    -    <https://www.uneed.best>
-- PNG to PDF Converter    -    <https://tools.pdf24.org/en/png-to-pdf>
+- Provide different tools and website links    -    <https://www.uneed.best>>
 
 <hr>
 
@@ -109,12 +106,13 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 - Adobe Express: Animate from audio     -    <https://new.express.adobe.com/home/tools/animate-from-audio>
 - Free photos & videos    -    <https://www.pexels.com/>
 - Free Medical Certificate    -    <https://medicalcertificategenerator.com/>
-- Transfer your Spotify playlists to YouTube Music → https://wemor.vercel.app/
+- Transfer your Spotify playlists to YouTube Music    →    https://wemor.vercel.app/
 
 <hr>
 
 ### AI/Interactive :
 - Lachief: All AI Tools     -    <https://lachief.io>
+- Discover prompts that still look photographed    -    <https://www.prompy.site/>
 - Create your Perfect Sound Environment to Work and Relax     -    <https://www.noisli.com>
 - BuildAI.Space: Trip Planner     -    <https://www.buildai.space/app/dae3da25-888e-448f-b15c-5a20ca4ca961>
 - Text to Voice to any Character/Cartoon     -    <https://fakeyou.com>
@@ -168,17 +166,20 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 - Double Side Camera    -    <https://play.google.com/store/apps/details?id=com.bagestudio.doublesidecamera&hl=en_IN&gl=US>
 - TravelBoast   -    ```Create distance travelling animated video```
 - PC games on your iPhone    -    <https://playport.dev/>
+- Live TV & movies    -    https://gptrtv.site/
 
 <hr>
 
 ### Games :
 - Online Gaming    -    <https://poki.com>
 - Play vice city online    -    <https://quenq.com/>
-- Download any Game for Free    -    <https://repack-games.com>
+- Play online games    -    https://bitrunlog.com/>
+- Online Cricket07    -    <https://cricket07.dhaiwat.com>
+- Play NFS Most wanted online    -    https://nfsmwonline.com/
+- Playtesting Mobile Games    -    <https://www.playtestcloud.com>
 - Download New Games: Search dodi repack on Google    -    <https://dodi-repacks.site>
 - Download Old Games    -    <https://oldgamesdownload.com>
-- Playtesting Mobile Games    -    <https://www.playtestcloud.com>
-- Online Cricket07    -    <https://cricket07.dhaiwat.com>
+- Download any game    -    https://repack-games.com/
 
 <hr>
 

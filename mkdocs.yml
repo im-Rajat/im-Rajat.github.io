@@ -28,6 +28,11 @@ theme:
 
 docs_dir: 'docs'
 
+# Prompt Library sources: build.py bundles them into prompts.json, so they shouldn't become pages
+exclude_docs: |
+  AI/Prompts/Library/prompts/
+  AI/Prompts/Library/build.py
+
 plugins:
   - search                    # Must be listed explicitly once a plugins section exists
   - redirects:                # Keeps old URLs working after folders moved into categories

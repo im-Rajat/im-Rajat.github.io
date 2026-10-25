@@ -41,7 +41,10 @@ jobs:
         run: |
           mkdir docs
           rsync -av --exclude='docs' --exclude='.git' --exclude='.github' --exclude='mkdocs.yml' ./ docs/
-          
+
+      # Bundle the Prompt Library's markdown files into the prompts.json its page loads
+      - run: python docs/AI/Prompts/Library/build.py
+
       # Build the static HTML files into the default 'site/' folder
       - run: mkdocs build
       

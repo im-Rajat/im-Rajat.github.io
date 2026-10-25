@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prompt Library · Rajat Kumar</title>
+  <meta name="description" content="A curated, searchable library of copy-ready AI prompts for work, learning, images and everyday life.">
+  <script>try { const t = localStorage.getItem('prompt-library-theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="topbar">
+        <a class="back" href="../../../">← Rajat's Notes</a>
+        <button id="theme" class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        </button>
+      </div>
+      <h1>Prompt Library</h1>
+      <p class="lede">Copy-ready prompts for work, learning, images and everyday life. Open one, fill in the <mark class="ph">[blanks]</mark>, copy, and paste into any AI assistant.</p>
+      <p class="byline">Curated by <a href="https://www.linkedin.com/in/imRajat/" target="_blank" rel="noopener">Rajat Kumar</a> · <a href="https://github.com/im-Rajat/" target="_blank" rel="noopener">GitHub</a></p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="controls">
+      <label class="search">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"/></svg>
+        <input id="q" type="search" placeholder="Search prompts, tags…" aria-label="Search prompts" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <div id="chips" class="chips" role="group" aria-label="Filter by category"></div>
+    </div>
+    <p id="status" class="status" aria-live="polite">Loading prompts…</p>
+    <section id="grid" class="grid"></section>
+  </main>
+
+  <footer class="wrap foot">
+    <span>Prompts live as markdown files in <a href="https://github.com/im-Rajat/Notes/tree/main/AI/Prompts/Library/prompts" target="_blank" rel="noopener">im-Rajat/Notes</a>.</span>
+    <a href="admin/">Admin</a>
+  </footer>
+
+  <dialog id="dlg" aria-labelledby="dlg-title">
+    <div class="dlg">
+      <div class="dlg-head">
+        <div>
+          <div id="dlg-cat"></div>
+          <h2 id="dlg-title"></h2>
+          <p id="dlg-desc" class="desc"></p>
+        </div>
+        <button id="dlg-close" class="icon-btn" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="dlg-body">
+        <div id="dlg-fields" class="fields"></div>
+        <pre id="dlg-prompt" class="prompt-full"></pre>
+        <div id="dlg-tags" class="tags"></div>
+      </div>
+      <div class="dlg-foot">
+        <button id="dlg-link" class="btn ghost" type="button">Copy link</button>
+        <button id="dlg-reset" class="btn ghost" type="button">Clear blanks</button>
+        <button id="dlg-copy" class="btn primary" type="button">Copy prompt</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" popover="manual" role="status"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
