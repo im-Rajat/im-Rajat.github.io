@@ -6,7 +6,291 @@
   <title>Prompt Library · Rajat Kumar</title>
   <meta name="description" content="A curated, searchable library of copy-ready AI prompts for work, learning, images and everyday life.">
   <script>try { const t = localStorage.getItem('prompt-library-theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-2: #f1f3f6;
+      --text: #16181d;
+      --muted: #5b6070;
+      --border: #e2e5eb;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --accent-text: #ffffff;
+      --accent-soft: #eef0ff;
+      --ph-bg: #fff1c2;
+      --ph-text: #7a4d00;
+      --fill-bg: #d9f5e3;
+      --fill-text: #0f5a2c;
+      --badge-s: 75%;
+      --badge-l: 94%;
+      --badge-text-l: 32%;
+      --shadow: 0 1px 2px rgb(16 24 40 / .04), 0 2px 8px rgb(16 24 40 / .06);
+      --shadow-hover: 0 4px 10px rgb(16 24 40 / .06), 0 14px 32px rgb(16 24 40 / .10);
+      --shadow-lg: 0 24px 64px rgb(16 24 40 / .25);
+      --radius: 14px;
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+      color-scheme: light;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0e1014;
+        --surface: #161920;
+        --surface-2: #1d212a;
+        --text: #e8eaf0;
+        --muted: #9aa0b0;
+        --border: #2a2f3a;
+        --accent: #8b8cf8;
+        --accent-hover: #a5a6ff;
+        --accent-text: #0e1014;
+        --accent-soft: #23254a;
+        --ph-bg: #3d3214;
+        --ph-text: #ffd772;
+        --fill-bg: #143524;
+        --fill-text: #8ff0b4;
+        --badge-s: 35%;
+        --badge-l: 22%;
+        --badge-text-l: 80%;
+        --shadow: 0 1px 2px rgb(0 0 0 / .3);
+        --shadow-hover: 0 10px 30px rgb(0 0 0 / .45);
+        --shadow-lg: 0 24px 64px rgb(0 0 0 / .6);
+        color-scheme: dark;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0e1014;
+      --surface: #161920;
+      --surface-2: #1d212a;
+      --text: #e8eaf0;
+      --muted: #9aa0b0;
+      --border: #2a2f3a;
+      --accent: #8b8cf8;
+      --accent-hover: #a5a6ff;
+      --accent-text: #0e1014;
+      --accent-soft: #23254a;
+      --ph-bg: #3d3214;
+      --ph-text: #ffd772;
+      --fill-bg: #143524;
+      --fill-text: #8ff0b4;
+      --badge-s: 35%;
+      --badge-l: 22%;
+      --badge-text-l: 80%;
+      --shadow: 0 1px 2px rgb(0 0 0 / .3);
+      --shadow-hover: 0 10px 30px rgb(0 0 0 / .45);
+      --shadow-lg: 0 24px 64px rgb(0 0 0 / .6);
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.55 var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    button { font: inherit; color: inherit; }
+
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 16px; }
+
+    /* Header */
+    .hero {
+      padding: 20px 0 32px;
+      background:
+        radial-gradient(900px 280px at 10% -10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
+        radial-gradient(700px 240px at 95% 0%, color-mix(in srgb, hsl(330 80% 60%) 10%, transparent), transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+    .back { color: var(--muted); font-size: 14px; }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(30px, 5vw, 44px); line-height: 1.1; letter-spacing: -0.02em; }
+    .lede { margin: 0; max-width: 640px; color: var(--muted); font-size: 17px; }
+    .byline { margin: 14px 0 0; font-size: 14px; color: var(--muted); }
+
+    /* Search + filters */
+    .controls {
+      position: sticky; top: 0; z-index: 5;
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+      padding: 16px 0 12px;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+    }
+    .search {
+      flex: 1 1 280px;
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 12px;
+      height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--muted);
+    }
+    .search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+    .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--text); font: inherit; }
+    kbd {
+      font: 12px var(--mono); color: var(--muted);
+      padding: 1px 6px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-2);
+    }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      height: 36px; padding: 0 12px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .chip:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+    .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+    .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: hsl(var(--h) 70% 55%); }
+    .chip .count { font-size: 12px; opacity: .7; font-variant-numeric: tabular-nums; }
+
+    .status { margin: 4px 0 16px; color: var(--muted); font-size: 14px; }
+
+    /* Cards */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 16px; padding-bottom: 32px; }
+
+    .card {
+      display: flex; flex-direction: column; gap: 10px;
+      padding: 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: box-shadow .2s, transform .2s, border-color .2s;
+      animation: rise .3s ease both;
+    }
+    .card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); border-color: color-mix(in srgb, hsl(var(--h) 70% 55%) 35%, var(--border)); }
+    @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+    @media (prefers-reduced-motion: reduce) { .card { animation: none; transition: none; } .card:hover { transform: none; } }
+
+    .card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .badge {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      font-size: 12px; font-weight: 600; letter-spacing: .02em;
+      background: hsl(var(--h) var(--badge-s) var(--badge-l));
+      color: hsl(var(--h) 60% var(--badge-text-l));
+    }
+    .hint { font-size: 12px; color: var(--muted); }
+
+    .card h3 { margin: 0; font-size: 17px; line-height: 1.35; }
+    .title-btn { padding: 0; border: 0; background: none; text-align: left; font-weight: 650; cursor: pointer; }
+    .title-btn:hover { color: var(--accent); }
+    .desc { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .preview {
+      /* bottom spacing is a border, not padding, so the clamped-off 7th line can't peek through */
+      margin: 0; padding: 12px 12px 0; border-bottom: 12px solid var(--surface-2);
+      background: var(--surface-2); border-radius: 10px;
+      font: 13px/1.55 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere;
+      display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden;
+      cursor: pointer;
+    }
+
+    .card-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      padding: 1px 8px; border: 0; border-radius: 6px;
+      background: var(--surface-2); color: var(--muted); font-size: 12px; cursor: pointer;
+    }
+    .tag:hover { color: var(--accent); background: var(--accent-soft); }
+    .actions { display: flex; gap: 6px; margin-left: auto; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      height: 38px; padding: 0 14px;
+      border-radius: 10px; border: 1px solid transparent;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .btn.sm { height: 32px; padding: 0 12px; font-size: 13px; }
+    .btn.primary { background: var(--accent); color: var(--accent-text); }
+    .btn.primary:hover { background: var(--accent-hover); }
+    .btn.ghost { background: transparent; border-color: var(--border); }
+    .btn.ghost:hover { background: var(--surface-2); }
+    .icon-btn {
+      display: inline-grid; place-items: center; flex: none;
+      width: 36px; height: 36px; padding: 0;
+      border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--muted); cursor: pointer;
+    }
+    .icon-btn:hover { color: var(--text); }
+
+    /* Placeholders */
+    mark.ph { background: var(--ph-bg); color: var(--ph-text); border-radius: 4px; padding: 0 2px; }
+    .filled { background: var(--fill-bg); color: var(--fill-text); border-radius: 4px; padding: 0 2px; }
+
+    /* Empty state */
+    .empty { grid-column: 1 / -1; padding: 48px 16px; text-align: center; color: var(--muted); border: 1px dashed var(--border); border-radius: var(--radius); }
+    .empty strong { display: block; color: var(--text); font-size: 17px; margin-bottom: 4px; }
+    .empty p { margin: 0; }
+
+    /* Dialog */
+    dialog {
+      width: min(780px, calc(100% - 32px));
+      max-height: calc(100dvh - 48px);
+      padding: 0;
+      border: 1px solid var(--border); border-radius: 18px;
+      background: var(--surface); color: var(--text);
+      box-shadow: var(--shadow-lg);
+    }
+    dialog::backdrop { background: rgb(8 10 16 / .55); backdrop-filter: blur(3px); }
+    dialog[open] { animation: pop .18s ease; }
+    @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.985); } }
+
+    .dlg { display: flex; flex-direction: column; max-height: calc(100dvh - 50px); }
+    .dlg-head { display: flex; justify-content: space-between; gap: 16px; padding: 20px 20px 12px; }
+    .dlg-head h2 { margin: 8px 0 4px; font-size: 21px; line-height: 1.3; }
+    .dlg-body { overflow: auto; padding: 0 20px 4px; display: flex; flex-direction: column; gap: 14px; }
+    .dlg-foot { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; padding: 14px 20px 18px; border-top: 1px solid var(--border); }
+
+    .fields { padding: 14px; background: var(--accent-soft); border-radius: 12px; }
+    .fields-title { margin: 0 0 10px; font-size: 13px; font-weight: 600; }
+    .fields-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 10px; }
+    .field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+    .field input {
+      height: 36px; padding: 0 10px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--surface); color: var(--text); font: 14px var(--sans);
+    }
+    .field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+
+    .prompt-full {
+      margin: 0; padding: 16px;
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px;
+      font: 14px/1.65 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed; inset: auto 0 24px; margin: 0 auto; width: max-content; max-width: calc(100% - 32px);
+      padding: 10px 16px; border: 0; border-radius: 10px;
+      background: var(--text); color: var(--bg); font-size: 14px; font-weight: 600;
+      box-shadow: var(--shadow-lg);
+    }
+    @supports not selector(:popover-open) {
+      .toast:not(.show) { display: none; }
+    }
+
+    /* Footer */
+    .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-top: 20px; padding-bottom: 32px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+    .foot a { color: var(--muted); text-decoration: underline; }
+
+    @media (max-width: 560px) {
+      .dlg-foot .btn { flex: 1 1 auto; }
+      kbd { display: none; }
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
@@ -67,6 +351,274 @@
 
   <div id="toast" class="toast" popover="manual" role="status"></div>
 
-  <script src="app.js"></script>
+  <script>
+    // Prompt Library: renders prompts.json (made by build.py) as a searchable, filterable list.
+    (() => {
+      'use strict';
+
+      // Known categories. A prompt with any other category still shows, in a neutral colour.
+      const CATEGORIES = {
+        personal: { label: 'Personal', hue: 265 },
+        work: { label: 'Work', hue: 215 },
+        learning: { label: 'Learning', hue: 150 },
+        image: { label: 'Image', hue: 330 },
+      };
+      // A [fill-in] blank, but not one right after a slash, which is URL syntax like loremflickr.com/800/600/[keyword]
+      const PLACEHOLDER = /(?<!\/)\[([^\[\]\n]{1,80})\]/g;
+      const THEME_KEY = 'prompt-library-theme';
+
+      const $ = (sel) => document.querySelector(sel);
+      const grid = $('#grid'), chips = $('#chips'), search = $('#q'), status = $('#status');
+      const dlg = $('#dlg'), toast = $('#toast');
+
+      const state = { prompts: [], category: 'all', query: '', current: null, values: {} };
+      const chipEls = new Map();
+
+      function h(tag, attrs, ...children) {
+        const node = document.createElement(tag);
+        for (const [key, value] of Object.entries(attrs || {})) {
+          if (value == null || value === false) continue;
+          if (key === 'class') node.className = value;
+          else if (key === 'style') node.style.cssText = value;
+          else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+          else node.setAttribute(key, value === true ? '' : value);
+        }
+        for (const child of children.flat()) if (child != null && child !== false) node.append(child);
+        return node;
+      }
+
+      function catInfo(key) {
+        return CATEGORIES[key] || { label: key ? key[0].toUpperCase() + key.slice(1) : 'Other', hue: 35 };
+      }
+
+      const badge = (key) => h('span', { class: 'badge', style: `--h:${catInfo(key).hue}` }, catInfo(key).label);
+
+      // ---- placeholders ----
+
+      function placeholders(text) {
+        return [...new Set([...text.matchAll(PLACEHOLDER)].map((m) => m[1].trim()))];
+      }
+
+      function fill(text, values) {
+        return text.replace(PLACEHOLDER, (whole, name) => values[name.trim()]?.trim() || whole);
+      }
+
+      // The prompt as DOM nodes, with blanks highlighted and filled values marked.
+      function renderPrompt(text, values) {
+        const out = [];
+        let last = 0;
+        for (const m of text.matchAll(PLACEHOLDER)) {
+          out.push(text.slice(last, m.index));
+          const value = values[m[1].trim()]?.trim();
+          out.push(value ? h('span', { class: 'filled' }, value) : h('mark', { class: 'ph' }, m[0]));
+          last = m.index + m[0].length;
+        }
+        out.push(text.slice(last));
+        return out;
+      }
+
+      // ---- list ----
+
+      function haystack(p) {
+        return [p.title, p.description, p.prompt, catInfo(p.category).label, ...p.tags].join('\n').toLowerCase();
+      }
+
+      function buildChips() {
+        const keys = [...new Set([...Object.keys(CATEGORIES), ...state.prompts.map((p) => p.category)])]
+          .filter((key) => state.prompts.some((p) => p.category === key));
+        for (const key of ['all', ...keys]) {
+          const count = h('span', { class: 'count' });
+          const chip = h('button', {
+            type: 'button',
+            class: 'chip',
+            style: key === 'all' ? null : `--h:${catInfo(key).hue}`,
+            onclick: () => { state.category = key; render(); },
+          }, key === 'all' ? null : h('span', { class: 'dot' }), key === 'all' ? 'All' : catInfo(key).label, count);
+          chipEls.set(key, { chip, count });
+          chips.append(chip);
+        }
+      }
+
+      function card(p) {
+        const blanks = placeholders(p.prompt).length;
+        const open = () => openPrompt(p);
+        return h('article', { class: 'card', style: `--h:${catInfo(p.category).hue}` },
+          h('div', { class: 'card-top' },
+            badge(p.category),
+            blanks ? h('span', { class: 'hint' }, `${blanks} blank${blanks > 1 ? 's' : ''} to fill`) : null),
+          h('h3', {}, h('button', { type: 'button', class: 'title-btn', onclick: open }, p.title)),
+          p.description ? h('p', { class: 'desc' }, p.description) : null,
+          h('pre', { class: 'preview', onclick: open }, renderPrompt(p.prompt, {})),
+          h('div', { class: 'card-foot' },
+            h('div', { class: 'tags' }, p.tags.map((t) => h('button', { type: 'button', class: 'tag', onclick: () => setQuery(t) }, `#${t}`))),
+            h('div', { class: 'actions' },
+              h('button', { type: 'button', class: 'btn ghost sm', onclick: open }, 'Open'),
+              h('button', { type: 'button', class: 'btn primary sm', onclick: () => copy(p.prompt, 'Prompt copied') }, 'Copy'))));
+      }
+
+      function render() {
+        const terms = state.query.toLowerCase().split(/\s+/).filter(Boolean);
+        const matched = state.prompts.filter((p) => terms.every((t) => p._hay.includes(t)));
+        const shown = matched.filter((p) => state.category === 'all' || p.category === state.category);
+
+        for (const [key, { chip, count }] of chipEls) {
+          chip.setAttribute('aria-pressed', String(key === state.category));
+          count.textContent = key === 'all' ? matched.length : matched.filter((p) => p.category === key).length;
+        }
+
+        const where = state.category === 'all' ? '' : ` in ${catInfo(state.category).label}`;
+        const what = state.query.trim() ? ` matching “${state.query.trim()}”` : '';
+        status.textContent = `${shown.length} prompt${shown.length === 1 ? '' : 's'}${where}${what}`;
+
+        grid.replaceChildren(...(shown.length ? shown.map(card) : [
+          h('div', { class: 'empty' }, h('strong', {}, 'No prompts found'), h('p', {}, 'Try another search or category.')),
+        ]));
+      }
+
+      function setQuery(q) {
+        search.value = q;
+        state.query = q;
+        if (dlg.open) dlg.close();
+        render();
+        search.focus();
+      }
+
+      // ---- detail dialog ----
+
+      function field(name, i) {
+        const id = `blank-${i}`;
+        const options = name.includes('/') ? name.split('/').map((s) => s.trim()).filter(Boolean) : [];
+        return h('label', { class: 'field' },
+          h('span', {}, name),
+          h('input', {
+            id,
+            type: 'text',
+            autocomplete: 'off',
+            placeholder: options.length ? options.join(' · ') : name,
+            list: options.length ? `${id}-options` : null,
+            oninput: (e) => { state.values[name] = e.target.value; updatePreview(); },
+          }),
+          options.length ? h('datalist', { id: `${id}-options` }, options.map((o) => h('option', { value: o }))) : null);
+      }
+
+      function updatePreview() {
+        $('#dlg-prompt').replaceChildren(...renderPrompt(state.current.prompt, state.values));
+      }
+
+      function openPrompt(p) {
+        state.current = p;
+        state.values = {};
+        $('#dlg-cat').replaceChildren(badge(p.category));
+        $('#dlg-title').textContent = p.title;
+        const desc = $('#dlg-desc');
+        desc.textContent = p.description;
+        desc.hidden = !p.description;
+
+        const names = placeholders(p.prompt);
+        const fields = $('#dlg-fields');
+        fields.hidden = !names.length;
+        fields.replaceChildren(...(names.length ? [
+          h('p', { class: 'fields-title' }, 'Fill in the blanks (optional). Empty ones stay as they are.'),
+          h('div', { class: 'fields-grid' }, names.map(field)),
+        ] : []));
+        $('#dlg-reset').hidden = !names.length;
+        $('#dlg-tags').replaceChildren(...p.tags.map((t) => h('button', { type: 'button', class: 'tag', onclick: () => setQuery(t) }, `#${t}`)));
+
+        updatePreview();
+        if (location.hash !== `#${p.id}`) history.replaceState(null, '', `#${p.id}`);
+        if (!dlg.open) dlg.showModal();
+        $('.dlg-body').scrollTop = 0;
+      }
+
+      function openFromHash() {
+        const id = decodeURIComponent(location.hash.slice(1));
+        const p = id && state.prompts.find((x) => x.id === id);
+        if (p) openPrompt(p);
+      }
+
+      dlg.addEventListener('close', () => {
+        state.current = null;
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      });
+      dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+      $('#dlg-close').addEventListener('click', () => dlg.close());
+      $('#dlg-copy').addEventListener('click', () => copy(fill(state.current.prompt, state.values), 'Prompt copied'));
+      $('#dlg-link').addEventListener('click', () => copy(location.href, 'Link copied'));
+      $('#dlg-reset').addEventListener('click', () => {
+        state.values = {};
+        for (const input of $('#dlg-fields').querySelectorAll('input')) input.value = '';
+        updatePreview();
+      });
+
+      // ---- clipboard + toast ----
+
+      async function copy(text, message) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          // Older browsers / non-https: fall back to a hidden textarea (inside the dialog when it's open, since the page behind is inert)
+          const ta = h('textarea', { style: 'position:fixed;opacity:0' });
+          ta.value = text;
+          (dlg.open ? dlg : document.body).append(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+        }
+        showToast(message);
+      }
+
+      let toastTimer;
+      function showToast(message) {
+        toast.textContent = message;
+        clearTimeout(toastTimer);
+        if (toast.showPopover) {
+          if (toast.matches(':popover-open')) toast.hidePopover();
+          toast.showPopover(); // re-show so it stacks above an open dialog
+        } else {
+          toast.classList.add('show');
+        }
+        toastTimer = setTimeout(() => (toast.hidePopover ? toast.hidePopover() : toast.classList.remove('show')), 1800);
+      }
+
+      // ---- search, keyboard, theme ----
+
+      search.addEventListener('input', () => { state.query = search.value; render(); });
+
+      document.addEventListener('keydown', (e) => {
+        const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName);
+        if (e.key === '/' && !typing && !dlg.open) {
+          e.preventDefault();
+          search.focus();
+        }
+      });
+
+      window.addEventListener('hashchange', openFromHash);
+
+      $('#theme').addEventListener('click', () => {
+        const root = document.documentElement;
+        const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        root.dataset.theme = dark ? 'light' : 'dark';
+        try { localStorage.setItem(THEME_KEY, root.dataset.theme); } catch {}
+      });
+
+      // ---- load ----
+
+      fetch('prompts.json', { cache: 'no-cache' })
+        .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+        .then((data) => {
+          state.prompts = data.prompts.map((p) => ({ ...p, tags: p.tags || [], _hay: haystack({ ...p, tags: p.tags || [] }) }));
+          buildChips();
+          render();
+          openFromHash();
+        })
+        .catch((err) => {
+          console.error(err);
+          status.textContent = '';
+          grid.replaceChildren(h('div', { class: 'empty' },
+            h('strong', {}, 'Couldn’t load prompts.json'),
+            h('p', {}, 'Run build.py to create it, then open this page through a local server (python -m http.server), not as a file.')));
+        });
+    })();
+  </script>
 </body>
 </html>
