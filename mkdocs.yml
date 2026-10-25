@@ -28,10 +28,12 @@ theme:
 
 docs_dir: 'docs'
 
-# Prompt Library sources: build.py bundles them into prompts.json, so they shouldn't become pages
+# Prompt Library sources: build.py bundles them into prompts.json, so they shouldn't become pages.
+# AI/Prompts/*.md is excluded too, so a README there can never replace the library's index.html.
 exclude_docs: |
-  AI/Prompts/Library/prompts/
-  AI/Prompts/Library/build.py
+  AI/Prompts/*.md
+  AI/Prompts/categories/
+  AI/Prompts/build.py
 
 plugins:
   - search                    # Must be listed explicitly once a plugins section exists
@@ -74,6 +76,8 @@ plugins:
         'Interviews/Interview-Questions/DBMS/README.md': 'Systems/DBMS/README.md'
         'Interviews/Interview-Questions/System-Design/README.md': 'Software-Design/System-Design/README.md'
         'Interviews/Interview-Questions/C-CPP/README.md': 'Programming/README.md'
+        'AI/Prompts/Personal-Prompts.md': 'https://im-rajat.github.io/Notes/AI/Prompts/'
+        'AI/Prompts/Library/index.md': 'https://im-rajat.github.io/Notes/AI/Prompts/'
 
 markdown_extensions:
   - tables                    # Enables GitHub-style tables

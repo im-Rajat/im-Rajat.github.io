@@ -31,7 +31,7 @@ Welcome to my personal notes repository. Browse the site at **<https://im-rajat.
 ## 🤖 [AI](AI/README.md)
 
 * **[Generative AI for Beginners](AI/Courses/Generative-AI-for-Beginners.md)**: Course notes on fundamentals, tools, and prompts.
-* **[Prompts](AI/Prompts/README.md)**: Reusable prompts for work and image enhancement.
+* **[Prompts](https://im-rajat.github.io/Notes/AI/Prompts/)**: Searchable prompt library for work, learning, images and personal use.
 * **[Computer Vision](AI/Computer-Vision/README.md)**: Lives in its own repository.
 
 ## 🎯 [Interviews](Interviews/README.md)

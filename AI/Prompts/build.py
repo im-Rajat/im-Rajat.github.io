@@ -1,6 +1,6 @@
 """Bundle the Prompt Library's markdown files into prompts.json for the website.
 
-Every file in prompts/ is one category, named after the file (work.md -> "work").
+Every file in categories/ is one category, named after the file (work.md -> "work").
 To add a category, add a file. Inside a file, each prompt looks like this:
 
     ## Prompt title
@@ -26,7 +26,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SOURCE = HERE / "prompts"
+SOURCE = HERE / "categories"
 CATEGORY_ORDER = ["personal", "work", "learning", "image"]  # any other files follow, A-Z
 FENCE = re.compile(r"^(`{3,}|~{3,})")
 TAGS = re.compile(r"^#[\w-]+(\s+#[\w-]+)*$")
