@@ -28,12 +28,15 @@ theme:
 
 docs_dir: 'docs'
 
-# Prompt Library sources: build.py bundles them into prompts.json, so they shouldn't become pages.
-# AI/Prompts/*.md is excluded too, so a README there can never replace the library's index.html.
+# Sources for the two generated pages: each build.py turns them into the JSON its index.html loads,
+# so they shouldn't become pages. Excluding the folder's *.md also stops a README there from
+# replacing that folder's index.html.
 exclude_docs: |
   AI/Prompts/*.md
   AI/Prompts/categories/
   AI/Prompts/build.py
+  Resources/Websites/*.md
+  Resources/Websites/build.py
 
 plugins:
   - search                    # Must be listed explicitly once a plugins section exists
@@ -69,7 +72,7 @@ plugins:
         'Share-Market/README.md': 'Wealth-and-Wisdom/Share-Market/README.md'
         'Personal-Notes/Life-Concepts-of-a-Programmer.md': 'Wealth-and-Wisdom/Life-Concepts-of-a-Programmer.md'
         'PDF/README.md': 'Resources/PDF/README.md'
-        'Websites/README.md': 'Resources/Websites/README.md'
+        'Websites/README.md': 'https://im-rajat.github.io/Notes/Resources/Websites/'
         'Interviews/Interview-Questions/README.md': 'Interviews/README.md'
         'Interviews/Interview-Questions/Operating-Systems/README.md': 'Systems/Operating-Systems/README.md'
         'Interviews/Interview-Questions/Computer-Networks/README.md': 'Systems/Computer-Networks/README.md'

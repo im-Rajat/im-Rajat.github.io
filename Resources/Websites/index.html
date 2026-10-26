@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Useful Websites · Rajat Kumar</title>
+  <meta name="description" content="A hand-picked directory of useful websites, tools, apps, extensions and tricks.">
+  <script>try { const t = localStorage.getItem('websites-theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+  <style>
+    :root {
+      --bg: #f5f7f9;
+      --surface: #ffffff;
+      --surface-2: #eef2f5;
+      --text: #121a21;
+      --muted: #56636f;
+      --border: #dfe5ea;
+      --border-strong: #c5cfd8;
+      --accent: #0e7490;
+      --accent-hover: #155e75;
+      --accent-text: #ffffff;
+      --accent-soft: #e3f4f8;
+      --tip-bg: #fffbea;
+      --tip-border: #f1dfa0;
+      --shadow: 0 1px 2px rgb(16 24 40 / .04);
+      --shadow-hover: 0 6px 20px rgb(16 24 40 / .09);
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+      --avatar-l: 45%;
+      color-scheme: light;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0b1016;
+        --surface: #121a22;
+        --surface-2: #19232d;
+        --text: #e6edf3;
+        --muted: #93a1ad;
+        --border: #24313d;
+        --border-strong: #33424f;
+        --accent: #22d3ee;
+        --accent-hover: #67e8f9;
+        --accent-text: #0b1016;
+        --accent-soft: #0e2a33;
+        --tip-bg: #1d1a0f;
+        --tip-border: #4a3f19;
+        --shadow: 0 1px 2px rgb(0 0 0 / .3);
+        --shadow-hover: 0 8px 26px rgb(0 0 0 / .45);
+        --avatar-l: 38%;
+        color-scheme: dark;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0b1016;
+      --surface: #121a22;
+      --surface-2: #19232d;
+      --text: #e6edf3;
+      --muted: #93a1ad;
+      --border: #24313d;
+      --border-strong: #33424f;
+      --accent: #22d3ee;
+      --accent-hover: #67e8f9;
+      --accent-text: #0b1016;
+      --accent-soft: #0e2a33;
+      --tip-bg: #1d1a0f;
+      --tip-border: #4a3f19;
+      --shadow: 0 1px 2px rgb(0 0 0 / .3);
+      --shadow-hover: 0 8px 26px rgb(0 0 0 / .45);
+      --avatar-l: 38%;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.5 var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 16px; }
+
+    /* Header */
+    .hero {
+      padding: 20px 0 30px;
+      background:
+        radial-gradient(800px 260px at 8% -20%, color-mix(in srgb, #22d3ee 18%, transparent), transparent 70%),
+        radial-gradient(700px 240px at 92% 0%, color-mix(in srgb, #818cf8 16%, transparent), transparent 70%);
+    }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+    .back { color: var(--muted); font-size: 14px; }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(30px, 5vw, 44px); line-height: 1.1; letter-spacing: -0.02em; }
+    .lede { margin: 0; max-width: 620px; color: var(--muted); font-size: 17px; }
+    .stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .stat {
+      padding: 4px 12px; border-radius: 999px;
+      background: var(--surface); border: 1px solid var(--border);
+      font-size: 13px; color: var(--muted);
+    }
+    .stat b { color: var(--text); font-variant-numeric: tabular-nums; }
+    .byline { margin: 14px 0 0; font-size: 14px; color: var(--muted); }
+
+    .icon-btn {
+      display: inline-grid; place-items: center; flex: none;
+      width: 36px; height: 36px; padding: 0;
+      border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--muted); cursor: pointer;
+    }
+    .icon-btn:hover { color: var(--text); }
+
+    /* Sticky search */
+    .toolbar {
+      position: sticky; top: 0; z-index: 10;
+      padding: 12px 0;
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .toolbar .wrap { display: flex; align-items: center; gap: 16px; }
+    .search {
+      flex: 0 1 620px;
+      display: flex; align-items: center; gap: 8px;
+      height: 44px; padding: 0 12px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      color: var(--muted);
+    }
+    .search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+    .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--text); font: inherit; }
+    kbd { font: 12px var(--mono); color: var(--muted); padding: 1px 6px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-2); }
+    .status { margin: 0; color: var(--muted); font-size: 14px; }
+
+    /* Layout */
+    .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; padding-top: 24px; }
+
+    .nav { position: sticky; top: 88px; max-height: calc(100vh - 104px); overflow-y: auto; display: flex; flex-direction: column; gap: 2px; padding-bottom: 16px; }
+    .nav-title { margin: 0 10px 8px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    .nav a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 10px; border-radius: 8px;
+      color: var(--muted); font-size: 14px; text-decoration: none;
+    }
+    .nav a:hover { background: var(--surface-2); color: var(--text); }
+    .nav a[aria-current="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+    .nav a.none { opacity: .4; }
+    .nav .n { margin-left: auto; font-size: 12px; font-variant-numeric: tabular-nums; }
+
+    /* Sections */
+    .cat { margin-bottom: 40px; scroll-margin-top: 84px; }
+    .cat h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; font-size: 20px; letter-spacing: -0.01em; }
+    .cat h2 .count {
+      font-size: 12px; font-weight: 600; color: var(--muted);
+      padding: 1px 8px; border-radius: 999px; background: var(--surface-2);
+    }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 12px; }
+
+    /* Site card: the title link stretches over the whole card */
+    .site {
+      position: relative;
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: border-color .15s, box-shadow .15s, transform .15s;
+    }
+    .site:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+    .site:focus-within { border-color: var(--accent); }
+    @media (prefers-reduced-motion: reduce) { .site, .site:hover { transition: none; transform: none; } }
+
+    .fav-box {
+      flex: none; width: 40px; height: 40px;
+      display: grid; place-items: center;
+      border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .fav-box img { width: 22px; height: 22px; }
+    .fav-box.letter { border: 0; background: hsl(var(--h) 55% var(--avatar-l)); color: #fff; font-weight: 700; font-size: 17px; }
+
+    .site-body { min-width: 0; flex: 1; }
+    .site h3 { margin: 0; font-size: 15px; line-height: 1.35; overflow-wrap: anywhere; }
+    .site-link { color: var(--text); font-weight: 600; }
+    .site-link:hover { text-decoration: none; }
+    .site-link::after { content: ""; position: absolute; inset: 0; border-radius: 12px; }
+    .site:hover .site-link { color: var(--accent); }
+    .site-desc {
+      margin: 3px 0 0; font-size: 13px; color: var(--muted);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .site-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+    .domain { overflow-wrap: anywhere; }
+    .domain::after { content: " ↗"; }
+    .alt {
+      position: relative; z-index: 1;
+      padding: 1px 7px; border-radius: 6px;
+      background: var(--surface-2); color: var(--muted);
+    }
+    .alt:hover { color: var(--accent); text-decoration: none; }
+
+    /* Tip card */
+    .tip {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px;
+      background: var(--tip-bg); border: 1px dashed var(--tip-border); border-radius: 12px;
+    }
+    .tip-icon { flex: none; width: 40px; height: 40px; display: grid; place-items: center; font-size: 20px; }
+    .tip-text { flex: 1; min-width: 0; margin: 0; font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .copy {
+      flex: none; height: 30px; padding: 0 10px;
+      border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface);
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .copy:hover { border-color: var(--accent); color: var(--accent); }
+
+    code {
+      font: 12.5px var(--mono);
+      padding: 1px 5px; border-radius: 5px;
+      background: var(--surface-2); border: 1px solid var(--border);
+    }
+
+    .empty { padding: 48px 16px; text-align: center; color: var(--muted); border: 1px dashed var(--border); border-radius: 12px; }
+    .empty strong { display: block; color: var(--text); font-size: 17px; margin-bottom: 4px; }
+    .empty p { margin: 0; }
+
+    .toast {
+      position: fixed; inset: auto 0 24px; margin: 0 auto; width: max-content; max-width: calc(100% - 32px);
+      padding: 10px 16px; border: 0; border-radius: 10px;
+      background: var(--text); color: var(--bg); font-size: 14px; font-weight: 600;
+    }
+    @supports not selector(:popover-open) {
+      .toast:not(.show) { display: none; }
+    }
+
+    .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-top: 20px; padding-bottom: 32px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+    .foot a { color: var(--muted); text-decoration: underline; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-top: 16px; }
+      .nav { position: static; flex-direction: row; overflow-x: auto; max-height: none; gap: 8px; padding-bottom: 4px; scrollbar-width: none; }
+      .nav-title { display: none; }
+      .nav a { flex: none; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); padding: 6px 12px; }
+      .toolbar .status { display: none; }
+      kbd { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="topbar">
+        <a class="back" href="../../">← Rajat's Notes</a>
+        <button id="theme" class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        </button>
+      </div>
+      <h1>Useful Websites</h1>
+      <p class="lede">A hand-picked directory of websites, tools, apps, extensions and tricks I actually use.</p>
+      <div id="stats" class="stats"></div>
+      <p class="byline">Curated by <a href="https://www.linkedin.com/in/imRajat/" target="_blank" rel="noopener">Rajat Kumar</a> · <a href="https://github.com/im-Rajat/" target="_blank" rel="noopener">GitHub</a></p>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="wrap">
+      <label class="search">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"/></svg>
+        <input id="q" type="search" placeholder="Search websites, tools, tricks…" aria-label="Search websites" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <p id="status" class="status" aria-live="polite">Loading…</p>
+    </div>
+  </div>
+
+  <div class="wrap layout">
+    <aside>
+      <nav id="nav" class="nav" aria-label="Categories"><p class="nav-title">Categories</p></nav>
+    </aside>
+    <main id="main"></main>
+  </div>
+
+  <footer class="wrap foot">
+    <span>Generated from <a href="https://github.com/im-Rajat/Notes/blob/main/Resources/Websites/README.md" target="_blank" rel="noopener">README.md</a> on every update.</span>
+    <span>Links go to third-party sites. Use them at your own discretion.</span>
+  </footer>
+
+  <div id="toast" class="toast" popover="manual" role="status"></div>
+
+  <script>
+    // Useful Websites: renders websites.json (made by build.py from README.md) as a searchable directory.
+    (() => {
+      'use strict';
+
+      // Emoji per category, picked by keyword so new categories still get one (or 🔗).
+      const ICONS = [
+        [/financ|money|important/, '💰'], [/storage|transfer|cloud/, '☁️'], [/movie|tv|stream/, '🎬'],
+        [/educat|learn|study/, '📚'], [/software/, '💾'], [/photo|video|image/, '📷'], [/\bai\b|interactive/, '🤖'],
+        [/extension/, '🧩'], [/windows/, '🪟'], [/android|ios|mobile/, '📱'], [/game/, '🎮'],
+        [/social/, '💬'], [/trick|tip/, '💡'],
+      ];
+      const THEME_KEY = 'websites-theme';
+
+      const $ = (sel) => document.querySelector(sel);
+      const main = $('#main'), nav = $('#nav'), search = $('#q'), status = $('#status'), toast = $('#toast');
+      const state = { sections: [], query: '' };
+      const navLinks = new Map();
+      let spy;
+
+      function h(tag, attrs, ...children) {
+        const node = document.createElement(tag);
+        for (const [key, value] of Object.entries(attrs || {})) {
+          if (value == null || value === false) continue;
+          if (key === 'class') node.className = value;
+          else if (key === 'style') node.style.cssText = value;
+          else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+          else node.setAttribute(key, value === true ? '' : value);
+        }
+        for (const child of children.flat()) if (child != null && child !== false) node.append(child);
+        return node;
+      }
+
+      const iconFor = (name) => (ICONS.find(([re]) => re.test(name.toLowerCase())) || [, '🔗'])[1];
+
+      function host(url) {
+        try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; }
+      }
+
+      function hue(text) {
+        let n = 0;
+        for (const ch of text) n = (n * 31 + ch.charCodeAt(0)) % 360;
+        return n;
+      }
+
+      // `code` spans become <code>
+      function rich(text) {
+        const out = [];
+        let last = 0;
+        for (const m of text.matchAll(/`([^`]+)`/g)) {
+          out.push(text.slice(last, m.index), h('code', {}, m[1]));
+          last = m.index + m[0].length;
+        }
+        out.push(text.slice(last));
+        return out;
+      }
+
+      function favicon(url) {
+        const name = host(url);
+        const box = h('span', { class: 'fav-box', 'aria-hidden': 'true' });
+        const letter = () => {
+          box.classList.add('letter');
+          box.style.setProperty('--h', hue(name));
+          box.replaceChildren((name.match(/[a-z0-9]/i) || ['?'])[0].toUpperCase());
+        };
+        box.append(h('img', { src: `https://icons.duckduckgo.com/ip3/${name}.ico`, alt: '', loading: 'lazy', width: 22, height: 22, onerror: letter }));
+        return box;
+      }
+
+      function siteCard(item) {
+        const [first, ...more] = item.links;
+        return h('article', { class: 'site' },
+          favicon(first),
+          h('div', { class: 'site-body' },
+            h('h3', {}, h('a', { class: 'site-link', href: first, target: '_blank', rel: 'noopener noreferrer' }, rich(item.title || host(first)))),
+            item.desc ? h('p', { class: 'site-desc', title: item.desc }, rich(item.desc)) : null,
+            h('div', { class: 'site-meta' },
+              h('span', { class: 'domain' }, host(first)),
+              more.map((url) => h('a', { class: 'alt', href: url, target: '_blank', rel: 'noopener noreferrer', title: url }, `+ ${host(url)}`)))));
+      }
+
+      function tipCard(item) {
+        const code = [...item.desc.matchAll(/`([^`]+)`/g)].map((m) => m[1]);
+        return h('article', { class: 'tip' },
+          h('span', { class: 'tip-icon', 'aria-hidden': 'true' }, '💡'),
+          h('p', { class: 'tip-text' }, rich(item.desc)),
+          code.length ? h('button', { type: 'button', class: 'copy', onclick: () => copy(code.join('\n')) }, 'Copy') : null);
+      }
+
+      function buildNav() {
+        for (const s of state.sections) {
+          const count = h('span', { class: 'n' });
+          const link = h('a', { href: `#${s.id}` }, h('span', { 'aria-hidden': 'true' }, iconFor(s.name)), s.name, count);
+          navLinks.set(s.id, { link, count });
+          nav.append(link);
+        }
+      }
+
+      function render() {
+        const terms = state.query.toLowerCase().split(/\s+/).filter(Boolean);
+        let shown = 0;
+        const blocks = [];
+        for (const s of state.sections) {
+          const items = s.items.filter((i) => terms.every((t) => i._hay.includes(t)));
+          const { link, count } = navLinks.get(s.id);
+          count.textContent = items.length;
+          link.classList.toggle('none', !items.length);
+          if (!items.length) continue;
+          shown += items.length;
+          blocks.push(h('section', { class: 'cat', id: s.id },
+            h('h2', {}, h('span', { 'aria-hidden': 'true' }, iconFor(s.name)), s.name, h('span', { class: 'count' }, String(items.length))),
+            h('div', { class: 'cards' }, items.map((i) => (i.links.length ? siteCard(i) : tipCard(i))))));
+        }
+        main.replaceChildren(...(blocks.length ? blocks : [
+          h('div', { class: 'empty' }, h('strong', {}, 'Nothing found'), h('p', {}, 'Try a different word, e.g. pdf, ai, storage.')),
+        ]));
+        status.textContent = terms.length ? `${shown} result${shown === 1 ? '' : 's'}` : `${shown} resources`;
+        watchSections();
+      }
+
+      // Highlight the category in view in the sidebar
+      function watchSections() {
+        spy?.disconnect();
+        spy = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            for (const [id, { link }] of navLinks) link.setAttribute('aria-current', String(id === e.target.id));
+          }
+        }, { rootMargin: '-20% 0px -70% 0px' });
+        main.querySelectorAll('.cat').forEach((el) => spy.observe(el));
+      }
+
+      async function copy(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = h('textarea', { style: 'position:fixed;opacity:0' });
+          ta.value = text;
+          document.body.append(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+        }
+        toast.textContent = 'Copied';
+        if (toast.showPopover) toast.showPopover(); else toast.classList.add('show');
+        clearTimeout(copy.timer);
+        copy.timer = setTimeout(() => (toast.hidePopover ? toast.hidePopover() : toast.classList.remove('show')), 1500);
+      }
+
+      search.addEventListener('input', () => { state.query = search.value; render(); });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) {
+          e.preventDefault();
+          search.focus();
+        }
+      });
+
+      $('#theme').addEventListener('click', () => {
+        const root = document.documentElement;
+        const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        root.dataset.theme = dark ? 'light' : 'dark';
+        try { localStorage.setItem(THEME_KEY, root.dataset.theme); } catch {}
+      });
+
+      fetch('websites.json', { cache: 'no-cache' })
+        .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+        .then((data) => {
+          state.sections = data.sections.map((s) => ({
+            ...s,
+            items: s.items.map((i) => ({ ...i, _hay: [s.name, i.title, i.desc, ...i.links].join('\n').toLowerCase() })),
+          }));
+          const total = state.sections.reduce((n, s) => n + s.items.length, 0);
+          const tips = state.sections.reduce((n, s) => n + s.items.filter((i) => !i.links.length).length, 0);
+          $('#stats').replaceChildren(
+            h('span', { class: 'stat' }, h('b', {}, String(total - tips)), ' websites'),
+            h('span', { class: 'stat' }, h('b', {}, String(tips)), ' tips'),
+            h('span', { class: 'stat' }, h('b', {}, String(state.sections.length)), ' categories'));
+          buildNav();
+          render();
+          if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+        })
+        .catch((err) => {
+          console.error(err);
+          status.textContent = '';
+          main.replaceChildren(h('div', { class: 'empty' },
+            h('strong', {}, 'Couldn’t load websites.json'),
+            h('p', {}, 'Run build.py to create it, then open this page through a local server (python -m http.server), not as a file.')));
+        });
+    })();
+  </script>
+</body>
+</html>

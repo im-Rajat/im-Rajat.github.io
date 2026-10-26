@@ -39,7 +39,7 @@ Interactive version: [Web Resource Hub](https://im-rajat.github.io/Notes/Resourc
 
 ### Movies | Live TV (Sports) :
 - Online Free Netflix    -    <https://netmirror.app/> | <https://net20.cc/>
-- Search these website names Google (Bcz these sites URLs keep changing with time) - Bollyflix, showbox media, desiremovies, moviebox, VegaMovies, MyFlixer, soap2day, YTS Torrent, pvrplay.in framextv.cc
+- Search these website names Google (Bcz these sites URLs keep changing with time) - Bollyflix, showbox media, desiremovies, moviebox, VegaMovies, MyFlixer, soap2day, YTS, Torrent, pvrplay.in framextv.cc
 - 90s TV Feeling    -    <https://www.myretrotvs.com/>
 - HD Streamz: Android Application for Live TV, Sports
 - SmartTubeNext: Adfree YouTube for Android TV    -     <https://github.com/yuliskov/SmartTubeNext#Installation>
