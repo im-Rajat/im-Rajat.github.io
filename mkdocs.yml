@@ -73,6 +73,8 @@ plugins:
         'Personal-Notes/Life-Concepts-of-a-Programmer.md': 'Wealth-and-Wisdom/Life-Concepts-of-a-Programmer.md'
         'PDF/README.md': 'Resources/PDF/README.md'
         'Websites/README.md': 'https://im-rajat.github.io/Notes/Resources/Websites/'
+        # Old static hub page (folder deleted). The plugin warns "not a valid markdown file" for this one but still writes the redirect.
+        'Resources/Websites/html/web-resource-hub.html': 'https://im-rajat.github.io/Notes/Resources/Websites/'
         'Interviews/Interview-Questions/README.md': 'Interviews/README.md'
         'Interviews/Interview-Questions/Operating-Systems/README.md': 'Systems/Operating-Systems/README.md'
         'Interviews/Interview-Questions/Computer-Networks/README.md': 'Systems/Computer-Networks/README.md'

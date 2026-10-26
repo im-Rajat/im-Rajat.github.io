@@ -19,8 +19,9 @@
       --accent-hover: #155e75;
       --accent-text: #ffffff;
       --accent-soft: #e3f4f8;
-      --tip-bg: #fffbea;
-      --tip-border: #f1dfa0;
+      --tip-title: #b45309;
+      --code-bg: #f1f5f9;
+      --code-text: #047857;
       --shadow: 0 1px 2px rgb(16 24 40 / .04);
       --shadow-hover: 0 6px 20px rgb(16 24 40 / .09);
       --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
@@ -42,8 +43,9 @@
         --accent-hover: #67e8f9;
         --accent-text: #0b1016;
         --accent-soft: #0e2a33;
-        --tip-bg: #1d1a0f;
-        --tip-border: #4a3f19;
+        --tip-title: #fbbf24;
+        --code-bg: rgb(0 0 0 / .35);
+        --code-text: #4ade80;
         --shadow: 0 1px 2px rgb(0 0 0 / .3);
         --shadow-hover: 0 8px 26px rgb(0 0 0 / .45);
         --avatar-l: 38%;
@@ -63,8 +65,9 @@
       --accent-hover: #67e8f9;
       --accent-text: #0b1016;
       --accent-soft: #0e2a33;
-      --tip-bg: #1d1a0f;
-      --tip-border: #4a3f19;
+      --tip-title: #fbbf24;
+      --code-bg: rgb(0 0 0 / .35);
+      --code-text: #4ade80;
       --shadow: 0 1px 2px rgb(0 0 0 / .3);
       --shadow-hover: 0 8px 26px rgb(0 0 0 / .45);
       --avatar-l: 38%;
@@ -204,20 +207,36 @@
     }
     .alt:hover { color: var(--accent); text-decoration: none; }
 
-    /* Tip card */
+    /* Tip card: title, short description, then one copyable box per `code` part */
     .tip {
-      display: flex; gap: 12px; align-items: flex-start;
-      padding: 14px;
-      background: var(--tip-bg); border: 1px dashed var(--tip-border); border-radius: 12px;
+      display: flex; flex-direction: column; gap: 6px;
+      padding: 18px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: border-color .15s, box-shadow .15s;
     }
-    .tip-icon { flex: none; width: 40px; height: 40px; display: grid; place-items: center; font-size: 20px; }
-    .tip-text { flex: 1; min-width: 0; margin: 0; font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .tip:hover { border-color: color-mix(in srgb, var(--tip-title) 40%, var(--border)); box-shadow: var(--shadow-hover); }
+    .tip-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .tip h3 { margin: 0; font-size: 17px; line-height: 1.35; color: var(--tip-title); overflow-wrap: anywhere; }
+    .tip-icon { flex: none; color: var(--muted); }
+    .tip-desc { margin: 0; font-size: 14px; color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere; }
+    .tip-codes { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 10px; }
+    .code-box {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 10px 8px 10px 12px;
+      background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    }
+    .code-box code {
+      flex: 1; min-width: 0; padding: 0; border: 0; background: none;
+      color: var(--code-text); font-size: 12.5px; line-height: 1.55; overflow-wrap: anywhere; white-space: pre-wrap;
+    }
+    .code-label { color: var(--muted); font-family: var(--sans); }
     .copy {
-      flex: none; height: 30px; padding: 0 10px;
-      border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface);
-      font-size: 12px; font-weight: 600; cursor: pointer;
+      flex: none; display: grid; place-items: center;
+      width: 26px; height: 26px; padding: 0;
+      border: 0; border-radius: 6px; background: none; color: var(--muted); cursor: pointer;
     }
-    .copy:hover { border-color: var(--accent); color: var(--accent); }
+    .copy:hover { color: var(--text); background: color-mix(in srgb, var(--text) 10%, transparent); }
 
     code {
       font: 12.5px var(--mono);
@@ -373,12 +392,104 @@
               more.map((url) => h('a', { class: 'alt', href: url, target: '_blank', rel: 'noopener noreferrer', title: url }, `+ ${host(url)}`)))));
       }
 
+      const BULB = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>';
+      const COPY = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M9 9h10v12H9zM5 15V3h10"/></svg>';
+      const svg = (markup) => { const t = document.createElement('template'); t.innerHTML = markup; return t.content.firstChild; };
+
+      // ---- tips: find the copyable parts in plain README text ----
+      // A word is code-like if it has URL/command characters or a dot inside it (dns.adguard.com, has:attachment,
+      // COPY/B, 94.140.14.14, a@b.com, x=y). A sentence colon ("Trick:") or parentheses alone don't count.
+      const CODE_WORD = /[:=\/\\{}<>@&_~|]|\w\.\w/;
+      const JOIN_WORD = /^(\+|=|->|→|&|\|)$/; // kept inside a run: COPY/B A.JPG + B.RAR, a@x = b@x
+      const QUOTES = /^["'“”‘’]+|["'“”‘’,;.]+$/g;
+
+      // One line of text -> [{ code: bool, text }]. `backticks` are always code.
+      function segments(line) {
+        const out = [];
+        const add = (code, text) => {
+          const last = out[out.length - 1];
+          if (last && !last.code && !code) last.text += text;
+          else out.push({ code, text });
+        };
+        for (const part of line.split(/(`[^`]+`)/)) {
+          if (/^`[^`]+`$/.test(part)) { add(true, part.slice(1, -1)); continue; }
+          const words = part.split(/(\s+)/).filter(Boolean);
+          const kind = words.map((w) => (!w.trim() ? 'space' : CODE_WORD.test(w.replace(/[:,;.]+$/, '')) ? 'code' : JOIN_WORD.test(w) ? 'join' : 'text'));
+          const nextKind = (i) => kind.slice(i + 1).find((k) => k !== 'space');
+          // A joiner right after code, and followed by more code, belongs to the code
+          kind.forEach((k, i) => {
+            const prev = kind.slice(0, i).filter((x) => x !== 'space').pop();
+            if (k === 'join' && prev === 'code' && nextKind(i) === 'code') kind[i] = 'code';
+          });
+          let run = [];
+          const flush = () => {
+            // Several plain domains in a row are separate things to copy; anything else (a command, a query) stays together
+            if (run.length > 1 && run.every((w) => /^[\w-]+(\.[\w-]+)+[,;]?$/.test(w))) run.forEach((w) => add(true, w.replace(QUOTES, '')));
+            else if (run.length) add(true, run.join(' ').replace(QUOTES, ''));
+            run = [];
+          };
+          words.forEach((w, i) => {
+            if (kind[i] === 'code') return run.push(w);
+            if (kind[i] === 'space' && run.length && nextKind(i) === 'code') return; // space inside a code run
+            flush();
+            add(false, w);
+          });
+          flush();
+        }
+        return out.filter((s) => s.text.trim());
+      }
+
+      const prose = (segs) => segs.filter((s) => !s.code).map((s) => s.text).join('').replace(/\s{2,}/g, ' ').trim();
+      const clean = (s) => s.replace(/^[\s•]+/, '').replace(/[\s:,.\-–—]+$/, '').replace(/^\((.*)\)$/, '$1').trim();
+      const hasCode = (text) => segments(text).some((s) => s.code);
+
+      // "Title: rest", else "Title - rest", else "Long title, rest", else the whole line is the title
+      function splitHead(line) {
+        const colon = line.match(/^(.{1,60}?)\s*:\s+(.+)$/);
+        if (colon && !hasCode(colon[1])) return [colon[1], colon[2]];
+        const dash = line.match(/^(.{1,90}?)\s+[-–—]\s+(.+)$/);
+        if (dash && !hasCode(dash[1])) return [dash[1], dash[2]];
+        const comma = line.length > 60 && line.match(/^(.{20,60}?),\s+(.+)$/);
+        if (comma && !hasCode(comma[1])) return [comma[1], comma[2]];
+        return [line, ''];
+      }
+
+      // Description nodes. Code that starts the text, or ends it after a ":" / "-", lives only in its copy box
+      // ("Title: dns.adguard.com"). Code inside a sentence stays inline too, so the sentence still reads right.
+      function descNodes(segs) {
+        const parts = segs.map((s) => ({ ...s }));
+        while (parts[0]?.code) parts.shift();
+        while (parts.at(-1)?.code && (parts.length === 1 || /[:\-–—]\s*$/.test(parts.at(-2).text))) parts.pop();
+        if (!parts.length) return [];
+        if (!parts[0].code) parts[0].text = parts[0].text.replace(/^[\s•]+/, '');
+        if (!parts.at(-1).code) parts.at(-1).text = parts.at(-1).text.replace(/[\s:,.\-–—]+$/, '');
+        if (parts.length === 1) parts[0].text = parts[0].text.replace(/^\((.*)\)$/, '$1'); // "(Add this in URL)"
+        return parts.filter((s) => s.text).map((s) => (s.code ? h('code', {}, s.text) : s.text));
+      }
+
       function tipCard(item) {
-        const code = [...item.desc.matchAll(/`([^`]+)`/g)].map((m) => m[1]);
+        const [first, ...more] = item.desc.split('\n');
+        const [head, body] = splitHead(first);
+        const headSegs = segments(head), bodySegs = segments(body);
+        const title = clean(prose(headSegs));
+        const boxes = [...headSegs, ...bodySegs].filter((s) => s.code).map((s) => ({ code: s.text }));
+        const desc = descNodes(bodySegs);
+        const extra = [];
+        for (const line of more) {
+          const segs = segments(line);
+          const label = clean(prose(segs));
+          const codes = segs.filter((s) => s.code);
+          if (codes.length && label.length <= 24) codes.forEach((s) => boxes.push({ code: s.text, label }));
+          else { codes.forEach((s) => boxes.push({ code: s.text })); if (label) extra.push(label); }
+        }
+        const descText = desc.length || extra.length;
         return h('article', { class: 'tip' },
-          h('span', { class: 'tip-icon', 'aria-hidden': 'true' }, '💡'),
-          h('p', { class: 'tip-text' }, rich(item.desc)),
-          code.length ? h('button', { type: 'button', class: 'copy', onclick: () => copy(code.join('\n')) }, 'Copy') : null);
+          h('div', { class: 'tip-head' }, h('h3', {}, title ? title[0].toUpperCase() + title.slice(1) : ''), h('span', { class: 'tip-icon' }, svg(BULB))),
+          descText ? h('p', { class: 'tip-desc' }, desc, extra.length ? `${desc.length ? '\n' : ''}${extra.join('\n')}` : null) : null,
+          boxes.length ? h('div', { class: 'tip-codes' }, boxes.map(({ code, label }) =>
+            h('div', { class: 'code-box' },
+              h('code', {}, label ? h('span', { class: 'code-label' }, `${label}  `) : null, code),
+              h('button', { type: 'button', class: 'copy', title: 'Copy', 'aria-label': `Copy ${code}`, onclick: () => copy(code) }, svg(COPY))))) : null);
       }
 
       function buildNav() {
