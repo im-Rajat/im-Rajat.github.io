@@ -11,7 +11,7 @@
 - Endovision
 - ScryAnalytics
 - KeepTruckin
-- Synopsis
+- Synopsys
 - Oracle
 - Microsoft
 - Truminds Software Systems

@@ -6,11 +6,11 @@ SOLID principles are important design principles in OOP languages like Java, Pyt
 
 ### SOLID stands for:
 
-[S = Single Responsibility Principle](02_Single_Responsibility/README.md)  
-[O = Open/Closed Principle](03_Open_Close/README.md)  
-[L = Liskov Substitution Principle](04_Liskov_Substitution/README.md)  
-[I  = Interface Segregation Principle](05_Interface_Segregation/README.md)  
-[D = Dependency Inversion Principle](06_Dependency_Inversion/README.md)  
+[S = Single Responsibility Principle](02-Single-Responsibility/README.md)  
+[O = Open/Closed Principle](03-Open-Close/README.md)  
+[L = Liskov Substitution Principle](04-Liskov-Substitution/README.md)  
+[I  = Interface Segregation Principle](05-Interface-Segregation/README.md)  
+[D = Dependency Inversion Principle](06-Dependency-Inversion/README.md)  
 
 ### Explanation with Examples and Quiz:
 

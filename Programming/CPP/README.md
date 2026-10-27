@@ -1,6 +1,9 @@
-# [CPP](https://github.com/im-Rajat/CPP)
+# C++
 
-<https://im-rajat.github.io/CPP/>
+These notes live in a separate repository.
+
+- **Repository:** [im-Rajat/CPP](https://github.com/im-Rajat/CPP)
+- **Website:** [im-rajat.github.io/CPP](https://im-rajat.github.io/CPP/)
 
 ## Interactive Explainers
 

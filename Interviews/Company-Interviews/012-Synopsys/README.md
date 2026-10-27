@@ -1,4 +1,4 @@
-# Interview Questions - Synopsis
+# Interview Questions - Synopsys
 
 
 **Round 1** 
