@@ -12,6 +12,7 @@ Here is a detailed, jargon-free breakdown of the main types of mutual funds.
 **Timeframe:** Long-term only (5 to 7+ years). 
 
 **Sub-types of Equity Funds:**
+
 *   **Large-Cap Funds:** They only buy the biggest, most stable companies in India (like Reliance, HDFC, TCS). Think of these as giant cruise ships—they move slowly, but they don't sink easily in bad weather.
 *   **Mid-Cap Funds:** They buy medium-sized companies. These have more room to grow than large companies, but they are also riskier if the economy slows down.
 *   **Small-Cap Funds:** They buy small, emerging companies. Think of these as speedboats—they can go incredibly fast and give massive returns, but they bounce around violently in choppy waters. Highly risky.
@@ -25,6 +26,7 @@ Here is a detailed, jargon-free breakdown of the main types of mutual funds.
 **Timeframe:** Short-term (1 day to 3 years).
 
 **Sub-types of Debt Funds:**
+
 *   **Liquid Funds:** They lend money for a maximum of 91 days. This is the safest fund category in existence. It is basically an alternative to a bank savings account.
 *   **Short Duration Funds:** They lend money for 1 to 3 years. Good for goals like saving for a car downpayment.
 *   **Gilt Funds:** They only lend money to the Government of India. There is zero risk of the government defaulting, but the value can fluctuate slightly based on national interest rates.
@@ -37,6 +39,7 @@ Here is a detailed, jargon-free breakdown of the main types of mutual funds.
 **Timeframe:** Medium-term (3 to 5 years).
 
 **Sub-types of Hybrid Funds:**
+
 *   **Aggressive Hybrid:** Puts mostly in stocks (about 65-80%) and the rest in safe debt. If the market crashes, the debt portion acts like a parachute so you don't fall as fast as a pure equity fund.
 *   **Conservative Hybrid:** Puts mostly in debt (about 75-90%) and a tiny bit in stocks. Designed for people who hate risk but want returns slightly better than a Fixed Deposit.
 *   **Arbitrage Funds:** *(We talked about these!)* They buy a stock and immediately sell it in the futures market to lock in a tiny profit. They are basically debt funds in disguise, but they are classified as "equity" to give you a massive tax discount. Use them to park cash for 3 to 12 months.
