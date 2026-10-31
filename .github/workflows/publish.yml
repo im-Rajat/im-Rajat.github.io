@@ -36,20 +36,27 @@ jobs:
             
       - run: pip install mkdocs-material mkdocs-redirects
       
-      # Retaining our folder hack to keep the root directory clean
+      # Retaining our folder hack to keep the root directory clean.
+      # The portfolio, College-Projects and Resume are published at the site root, so they stay out of the notes build.
       - name: Hack to fix the folder structure dynamically
         run: |
           mkdir docs
-          rsync -av --exclude='docs' --exclude='.git' --exclude='.github' --exclude='mkdocs.yml' ./ docs/
+          rsync -av --exclude='docs' --exclude='.git' --exclude='.github' --exclude='mkdocs.yml' \
+            --exclude='/index.html' --exclude='/College-Projects' --exclude='/Resume' ./ docs/
 
       # Turn the markdown sources of the Prompt Library and Useful Websites pages into the JSON they load
       - run: |
           python docs/AI/Prompts/build.py
           python docs/Resources/Websites/build.py
 
-      # Build the static HTML files into the default 'site/' folder
-      - run: mkdocs build
-      
+      # The notes go under /Notes/ (site_url in mkdocs.yml), the root pages go at /
+      - run: mkdocs build --site-dir site/Notes
+
+      - name: Add the site-root pages
+        run: |
+          cp -r index.html College-Projects Resume site/
+          cp site/Notes/404.html site/404.html
+
       # Package the 'site/' folder into an artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -105,6 +105,7 @@ plugins:
         'Interviews/Interview-Questions/C-CPP/README.md': 'Programming/README.md'
         'AI/Prompts/Personal-Prompts.md': 'https://im-rajat.github.io/Notes/AI/Prompts/'
         'AI/Prompts/Library/index.md': 'https://im-rajat.github.io/Notes/AI/Prompts/'
+        'Resume/index.md': 'https://im-rajat.github.io/Resume/'
 
 markdown_extensions:
   - tables                    # Enables GitHub-style tables
