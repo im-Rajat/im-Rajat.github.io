@@ -50,6 +50,7 @@ Welcome to my personal notes repository. Browse the site at **<https://im-rajat.
 * **[PDF Collection](Resources/PDF/README.md)**: Downloadable PDFs for Arduino, Azure IoT, AWS, MQTT, and more.
 * **[Paths to Learn](Resources/PDF/Paths-to-Learn.pdf)**: Roadmaps and learning paths for various technologies.
 * **[Useful Websites](https://im-rajat.github.io/Notes/Resources/Websites/)**: Curated list of useful websites, tools, and extensions.
+* **[Resume Builder](https://im-rajat.github.io/Notes/Resume/)**: Free ATS-friendly resume builder with live preview and PDF export. Data stays in your browser.
 
 ---
 *This site is hosted on GitHub Pages.*

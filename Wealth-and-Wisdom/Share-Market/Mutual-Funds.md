@@ -7,6 +7,7 @@ Here is a detailed, jargon-free breakdown of the main types of mutual funds.
 ---
 
 ## 1. Equity Funds (The Wealth Builders)
+
 **What they do:** They take your money and buy shares (pieces of ownership) in publicly listed companies. 
 **Risk Level:** High. The stock market goes up and down every day, and these funds will crash when the market crashes.
 **Timeframe:** Long-term only (5 to 7+ years). 
@@ -22,6 +23,7 @@ Here is a detailed, jargon-free breakdown of the main types of mutual funds.
 ---
 
 ## 2. Debt Funds (The Capital Protectors)
+
 **What they do:** Instead of buying shares, they act like a bank. They take your money and lend it to the government or top-tier companies. In return, the fund earns regular interest, which is passed on to you.
 **Risk Level:** Low compared to equity, but not risk-free. Debt funds carry credit risk (a borrowing company can default) and interest-rate risk (rising rates can reduce the fund's value). Gilt Funds are especially sensitive to interest rate changes.
 **Timeframe:** Short-to-medium term (1 day to 3+ years, depending on sub-type).
@@ -35,6 +37,7 @@ Here is a detailed, jargon-free breakdown of the main types of mutual funds.
 ---
 
 ## 3. Hybrid Funds (The Middle Ground)
+
 **What they do:** These funds don't want to choose just one path. They buy a mixture of **both** stocks (for growth) and debt (for safety) in a single basket.
 **Risk Level:** Medium. 
 **Timeframe:** Medium-term (3 to 5 years).
@@ -48,6 +51,7 @@ Here is a detailed, jargon-free breakdown of the main types of mutual funds.
 ---
 
 ## 4. Index Funds (The Smart Autopilot)
+
 **What they do:** Most funds have highly paid managers trying to "guess" which stocks will do best. An Index Fund fires the manager and replaces them with a computer rule. It blindly copies a market index (like the Nifty 50, which is just the 50 biggest companies in India).
 **Risk Level:** High (same as Equity).
 **Timeframe:** Long-term (7+ years).
@@ -58,6 +62,7 @@ Because there is no highly paid manager, the fees (called the **Expense Ratio** 
 ---
 
 ## 🎯 Summary Rules for Beginners
+
 1. **Got money you need in less than 1 year?** Put it in a **Liquid Fund**. Treat it like a smarter savings account.
 2. **Got money you need in 1-3 years?** Put it in a **Short Duration Debt Fund** or an **Arbitrage Fund**.
 3. **Got money you need in 3-5 years?** Put it in an **Aggressive Hybrid Fund** - you get equity growth with a built-in safety cushion.

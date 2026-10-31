@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resume Builder · Rajat Kumar</title>
+  <meta name="description" content="Free ATS-friendly resume builder. Fill in the form, watch the live preview, and save it as a PDF. Your data stays in your browser.">
+  <script>try { const t = localStorage.getItem('resume-theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+  <style id="page-rule"></style>
+  <style>
+    :root {
+      --bg: #f5f7f9;
+      --surface: #ffffff;
+      --surface-2: #eef2f5;
+      --text: #121a21;
+      --muted: #56636f;
+      --border: #dfe5ea;
+      --border-strong: #c5cfd8;
+      --accent: #0e7490;
+      --accent-hover: #155e75;
+      --accent-text: #ffffff;
+      --accent-soft: #e3f4f8;
+      --danger: #dc2626;
+      --desk: #e4e9ee;
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      color-scheme: light;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0b1016;
+        --surface: #121a22;
+        --surface-2: #19232d;
+        --text: #e6edf3;
+        --muted: #93a1ad;
+        --border: #24313d;
+        --border-strong: #33424f;
+        --accent: #22d3ee;
+        --accent-hover: #67e8f9;
+        --accent-text: #0b1016;
+        --accent-soft: #0e2a33;
+        --danger: #f87171;
+        --desk: #070b10;
+        color-scheme: dark;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0b1016;
+      --surface: #121a22;
+      --surface-2: #19232d;
+      --text: #e6edf3;
+      --muted: #93a1ad;
+      --border: #24313d;
+      --border-strong: #33424f;
+      --accent: #22d3ee;
+      --accent-hover: #67e8f9;
+      --accent-text: #0b1016;
+      --accent-soft: #0e2a33;
+      --danger: #f87171;
+      --desk: #070b10;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--bg); color: var(--text); font: 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button, input, textarea, select { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+    .app { display: grid; grid-template-rows: auto 1fr; height: 100vh; height: 100dvh; }
+
+    /* Top bar */
+    .bar {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+      padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+    }
+    .brand { margin-right: auto; min-width: 0; }
+    .back { color: var(--muted); font-size: 13px; }
+    .brand h1 { margin: 0; font-size: 19px; line-height: 1.2; letter-spacing: -0.01em; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: 10px;
+      background: var(--surface); color: var(--text); font-size: 14px; white-space: nowrap; cursor: pointer;
+    }
+    .btn:hover { background: var(--surface-2); border-color: var(--border-strong); }
+    .btn svg { flex: none; color: var(--muted); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+    .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .btn.primary svg { color: currentColor; }
+    .icon-btn {
+      display: inline-grid; place-items: center; flex: none;
+      width: 36px; height: 36px; padding: 0;
+      border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--muted); cursor: pointer;
+    }
+    .icon-btn:hover { color: var(--text); }
+
+    .tabs { display: none; }
+
+    .main { display: grid; grid-template-columns: minmax(360px, 500px) 1fr; min-height: 0; }
+
+    /* Editor */
+    .editor { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding: 16px; border-right: 1px solid var(--border); }
+    .lede { margin: 0 2px 4px; color: var(--muted); font-size: 14px; }
+    .card { flex: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+    .card > summary {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 14px; font-weight: 650; list-style: none; cursor: pointer; border-radius: 12px;
+    }
+    .card > summary::-webkit-details-marker { display: none; }
+    .card > summary::after {
+      content: ""; width: 7px; height: 7px; margin: 0 4px 0 auto;
+      border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+      transform: rotate(-45deg); transition: transform .15s;
+    }
+    .card[open] > summary::after { transform: rotate(45deg); }
+    .card > summary:hover { background: var(--surface-2); }
+    .count { padding: 0 8px; border-radius: 999px; background: var(--surface-2); color: var(--muted); font-size: 12px; font-weight: 600; }
+    .tag { color: var(--muted); font-size: 12px; font-weight: 500; }
+    .card-body { display: flex; flex-direction: column; gap: 12px; padding: 4px 14px 14px; }
+    .sub { margin: 4px 0 -4px; font-size: 13px; font-weight: 650; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; color: var(--muted); font-size: 13px; }
+    .field.full { grid-column: 1 / -1; }
+    .field input, .field textarea, .field select, .row input, .sec-row input[type="text"] {
+      width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+      background: var(--bg); color: var(--text); font-size: 14px;
+    }
+    .field textarea { min-height: 60px; resize: vertical; line-height: 1.45; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    input::placeholder, textarea::placeholder { color: var(--muted); opacity: .6; }
+    .hint { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .item { border: 1px solid var(--border); border-radius: 10px; }
+    .item-head {
+      display: flex; align-items: center; gap: 2px;
+      padding: 4px 4px 4px 12px; background: var(--surface-2); border-bottom: 1px solid var(--border); border-radius: 10px 10px 0 0;
+    }
+    .item-title { min-width: 0; margin-right: auto; overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+    .item-body { padding: 12px; }
+    .row { display: flex; align-items: center; gap: 4px; }
+    .mini {
+      display: inline-grid; place-items: center; flex: none; width: 30px; height: 30px; padding: 0;
+      border: 0; border-radius: 6px; background: none; color: var(--muted); cursor: pointer;
+    }
+    .mini:hover { background: var(--surface); color: var(--text); }
+    .mini.danger:hover { color: var(--danger); }
+    .mini:disabled { opacity: .3; background: none; cursor: default; }
+    .add {
+      padding: 9px; border: 1px dashed var(--border-strong); border-radius: 10px;
+      background: none; color: var(--accent); font-weight: 600; cursor: pointer;
+    }
+    .add:hover { background: var(--accent-soft); }
+
+    .sec-list { display: flex; flex-direction: column; gap: 6px; }
+    .sec-row { display: flex; align-items: center; gap: 4px; }
+    .sec-row input[type="checkbox"] { width: 18px; height: 18px; margin: 0 6px 0 2px; accent-color: var(--accent); cursor: pointer; }
+    .sec-row.off input[type="text"] { opacity: .5; }
+    .tips { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+    .tips li + li { margin-top: 6px; }
+    .tips b { color: var(--text); font-weight: 600; }
+
+    /* Preview */
+    .preview { position: relative; overflow: auto; padding: 16px 16px 48px; background: var(--desk); }
+    .pv-meta { margin: 0 auto 10px; color: var(--muted); font-size: 13px; text-align: center; }
+    .stage { margin: 0 auto; }
+    .paper {
+      --pw: 210mm; --margin: 15mm; --fs: 10.5pt;
+      --font: Arial, Helvetica, "Liberation Sans", sans-serif;
+      position: relative; width: var(--pw); padding: var(--margin);
+      background: #fff; color: #111; box-shadow: 0 4px 24px rgb(0 0 0 / .18);
+      font-family: var(--font); font-size: var(--fs); line-height: 1.35;
+      transform-origin: top left; color-scheme: light;
+    }
+    .r-body { display: flow-root; }
+    .r-empty { margin: 40mm 0 0; color: #8a96a1; font-family: var(--sans); font-size: 14px; text-align: center; }
+    .r-name { margin: 0; font-size: 2.1em; font-weight: 700; line-height: 1.15; text-align: center; }
+    .r-title { margin: 2px 0 0; font-size: 1.12em; text-align: center; }
+    .r-contact { margin: 5px 0 0; font-size: .95em; text-align: center; }
+    .r-contact span { white-space: nowrap; } /* wrap only between items, so a URL never splits */
+    .paper a { color: inherit; text-decoration: none; }
+    .r-section { margin-top: 1.1em; }
+    .r-section h3 {
+      margin: 0 0 .45em; padding-bottom: 2px; border-bottom: 1px solid #111;
+      font-size: 1.08em; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      break-after: avoid;
+    }
+    .r-entry { break-inside: avoid; }
+    .r-entry + .r-entry { margin-top: .7em; }
+    .r-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .r-left { min-width: 0; overflow-wrap: anywhere; }
+    .r-right { flex: none; text-align: right; white-space: nowrap; }
+    .r-text { margin: .2em 0 0; white-space: pre-line; overflow-wrap: anywhere; }
+    .r-section > .r-text:first-of-type { margin-top: 0; }
+    .r-list { margin: .25em 0 0; padding-left: 1.25em; }
+    .r-list li { margin-top: .12em; padding-left: .15em; overflow-wrap: anywhere; }
+    .r-skill { margin: .15em 0 0; }
+    .guide { position: absolute; left: 0; right: 0; border-top: 1px dashed #e11d48; pointer-events: none; }
+    .guide span {
+      position: absolute; right: 6px; top: 0; transform: translateY(-100%);
+      padding: 0 4px; background: #fff; color: #e11d48; font: 600 10px/1.6 var(--sans);
+    }
+
+    .toast {
+      position: fixed; inset: auto 0 24px; z-index: 20; display: flex; align-items: center; gap: 12px;
+      width: max-content; max-width: calc(100% - 32px); margin: 0 auto; padding: 10px 12px 10px 16px;
+      border-radius: 10px; background: var(--text); color: var(--bg); font-size: 14px; font-weight: 600;
+      box-shadow: 0 8px 26px rgb(0 0 0 / .25);
+    }
+    .toast[hidden] { display: none; }
+    .toast button { padding: 4px 10px; border: 0; border-radius: 6px; background: var(--accent); color: var(--accent-text); font-weight: 700; cursor: pointer; }
+
+    @media (max-width: 900px) {
+      .app { grid-template-rows: auto auto 1fr; }
+      .main { grid-template-columns: 1fr; }
+      .editor { border-right: 0; }
+      .tabs { display: flex; gap: 4px; padding: 8px 16px; background: var(--surface); border-bottom: 1px solid var(--border); }
+      .tabs button { flex: 1; height: 34px; border: 1px solid var(--border); border-radius: 8px; background: none; color: var(--muted); font-weight: 600; cursor: pointer; }
+      .tabs button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+      .app[data-view="edit"] .preview, .app[data-view="preview"] .editor { display: none; }
+    }
+    @media (max-width: 600px) {
+      .btn:not(.primary) { width: 36px; padding: 0; }
+      .btn:not(.primary) .lbl { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    /* Only the resume itself goes to the printer; @page size and margins come from #page-rule. */
+    @media print {
+      html, body { background: #fff !important; }
+      .bar, .tabs, .editor, .pv-meta, .guide, .toast, .r-empty { display: none !important; }
+      .app, .main { display: block; height: auto; }
+      .preview { display: block !important; padding: 0; overflow: visible; background: none; }
+      .stage { width: auto !important; height: auto !important; margin: 0; overflow: visible; }
+      .paper { width: auto; min-height: 0 !important; padding: 0; box-shadow: none; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="app" data-view="edit">
+    <header class="bar">
+      <div class="brand">
+        <a class="back" href="../">← Rajat's Notes</a>
+        <h1>Resume Builder</h1>
+      </div>
+      <div class="actions">
+        <button id="sample" class="btn" type="button" data-icon="sparkle" title="Replace everything with an example resume"><span class="lbl">Sample</span></button>
+        <button id="clear" class="btn" type="button" data-icon="trash" title="Empty every field"><span class="lbl">Clear</span></button>
+        <button id="import" class="btn" type="button" data-icon="upload" title="Load a resume JSON file (this site's format or JSON Resume)"><span class="lbl">Import</span></button>
+        <button id="export" class="btn" type="button" data-icon="download" title="Save your data as a JSON file (Ctrl+S)"><span class="lbl">Export</span></button>
+        <button id="print" class="btn primary" type="button" data-icon="printer" title="Opens the print dialog: choose Save as PDF">Download PDF</button>
+        <button id="theme" class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        </button>
+        <input id="file" type="file" accept=".json,application/json" hidden>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="View">
+      <button type="button" data-view="edit" aria-pressed="true">Edit</button>
+      <button type="button" data-view="preview" aria-pressed="false">Preview</button>
+    </nav>
+
+    <div class="main">
+      <section id="editor" class="editor" aria-label="Resume details"></section>
+      <section id="preview" class="preview" aria-label="Resume preview">
+        <p id="meta" class="pv-meta" aria-live="polite"></p>
+        <div id="stage" class="stage"><article id="paper" class="paper"></article></div>
+      </section>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script>
+    // Resume Builder: a form on the left drives a print-ready, single-column resume on the right.
+    // Everything lives in localStorage; nothing is sent anywhere.
+    (() => {
+      'use strict';
+
+      const STORE_KEY = 'resume-builder-data';
+      const THEME_KEY = 'resume-theme';
+      const MM = 96 / 25.4; // CSS px per millimetre
+
+      const SECTIONS = {
+        summary: 'Summary', experience: 'Work Experience', projects: 'Projects', education: 'Education',
+        skills: 'Skills', certifications: 'Certifications', languages: 'Languages',
+      };
+      const FONTS = {
+        arial: ['Arial / Helvetica', 'Arial, Helvetica, "Liberation Sans", sans-serif'],
+        calibri: ['Calibri', 'Calibri, Carlito, "Segoe UI", Arial, sans-serif'],
+        georgia: ['Georgia', 'Georgia, "DejaVu Serif", serif'],
+        times: ['Times New Roman', '"Times New Roman", Times, "Liberation Serif", serif'],
+      };
+      const SIZES = { small: ['Small', '9.5pt'], normal: ['Normal', '10.5pt'], large: ['Large', '11.5pt'] };
+      // label, @page size, width mm, height mm
+      const PAPERS = { a4: ['A4', 'A4', 210, 297], letter: ['US Letter', 'letter', 215.9, 279.4] };
+      const MARGINS = { 10: ['Narrow'], 15: ['Normal'], 20: ['Wide'] };
+
+      // Repeatable sections: each item is a flat object of strings with these fields.
+      const LISTS = {
+        experience: {
+          noun: 'job', title: (i) => [i.role, i.company].filter((s) => s.trim()).join(' · '),
+          fields: [
+            { key: 'role', label: 'Position', ph: 'Software Engineer' },
+            { key: 'company', label: 'Company', ph: 'Acme Corp' },
+            { key: 'start', label: 'Start', ph: 'Jan 2022' },
+            { key: 'end', label: 'End', ph: 'Present' },
+            { key: 'location', label: 'Location', ph: 'Bengaluru, India · Remote', full: true },
+            { key: 'description', label: 'Description (optional)', type: 'area', rows: 2, ph: 'One line about the team or product.' },
+            { key: 'highlights', label: 'Key achievements', type: 'area', rows: 5, ph: 'Cut API latency 40% by adding a Redis cache', hint: 'One per line. Each line becomes a bullet point.' },
+          ],
+        },
+        projects: {
+          noun: 'project', title: (i) => i.name,
+          fields: [
+            { key: 'name', label: 'Project name', ph: 'Ledger Lite' },
+            { key: 'link', label: 'Link', ph: 'github.com/you/project' },
+            { key: 'start', label: 'Start', ph: '2023' },
+            { key: 'end', label: 'End', ph: 'Present' },
+            { key: 'description', label: 'Description (optional)', type: 'area', rows: 2, ph: 'What it is, in one line.' },
+            { key: 'highlights', label: 'Key achievements', type: 'area', rows: 4, ph: 'Handles 5K writes/second on a single VM', hint: 'One per line. Each line becomes a bullet point.' },
+          ],
+        },
+        education: {
+          noun: 'school', title: (i) => i.school || i.degree,
+          fields: [
+            { key: 'school', label: 'School / University', ph: 'University name' },
+            { key: 'degree', label: 'Degree', ph: 'B.Tech in Computer Science' },
+            { key: 'start', label: 'Start', ph: '2015' },
+            { key: 'end', label: 'End', ph: '2019' },
+            { key: 'location', label: 'Location', ph: 'Pune, India', full: true },
+            { key: 'details', label: 'Details (optional)', ph: 'CGPA 8.4/10 · Coursework: DBMS, OS, Networks', full: true },
+          ],
+        },
+        skills: {
+          noun: 'skill group', title: (i) => i.title || i.items,
+          fields: [
+            { key: 'title', label: 'Group name', ph: 'Programming', full: true },
+            { key: 'items', label: 'Skills', type: 'area', rows: 2, ph: 'Java, Go, Python, SQL', hint: 'Separate with commas.' },
+          ],
+        },
+        certifications: {
+          noun: 'certification', title: (i) => i.name,
+          fields: [
+            { key: 'name', label: 'Name', ph: 'AWS Certified Solutions Architect – Associate', full: true },
+            { key: 'issuer', label: 'Issuer', ph: 'Amazon Web Services' },
+            { key: 'date', label: 'Date', ph: '2023' },
+            { key: 'link', label: 'Credential link (optional)', ph: 'credly.com/badges/…', full: true },
+          ],
+        },
+      };
+
+      const PERSONAL = [
+        { key: 'name', label: 'Full name', ph: 'Your Name', ac: 'name' },
+        { key: 'title', label: 'Job title', ph: 'Software Engineer', ac: 'organization-title' },
+        { key: 'email', label: 'Email', ph: 'you@example.com', input: 'email', ac: 'email' },
+        { key: 'phone', label: 'Phone', ph: '+91 98765 43210', input: 'tel', ac: 'tel' },
+        { key: 'location', label: 'Location', ph: 'City, Country' },
+        { key: 'website', label: 'Website (optional)', ph: 'yourname.dev', input: 'url', ac: 'url' },
+      ];
+
+      const ICONS = {
+        up: 'm18 15-6-6-6 6',
+        down: 'm6 9 6 6 6-6',
+        trash: 'M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3',
+        upload: 'M12 15V4m-5 5 5-5 5 5M5 20h14',
+        download: 'M12 4v11m-5-5 5 5 5-5M5 20h14',
+        printer: 'M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z',
+        sparkle: 'M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z',
+      };
+
+      const blank = () => ({
+        version: 1,
+        personal: Object.fromEntries(PERSONAL.map((f) => [f.key, ''])),
+        links: [],
+        summary: '',
+        experience: [], projects: [], education: [], certifications: [],
+        skills: [{ title: 'Technical Skills', items: '' }, { title: 'Soft Skills', items: '' }],
+        languages: '',
+        layout: { order: Object.keys(SECTIONS), hidden: [], titles: {} },
+        settings: { font: 'arial', size: 'normal', paper: 'a4', margin: '15' },
+      });
+
+      const SAMPLE = {
+        personal: {
+          name: 'Aarav Mehta', title: 'Senior Software Engineer', email: 'aarav.mehta@example.com',
+          phone: '+91 98765 43210', location: 'Bengaluru, India', website: '',
+        },
+        links: ['linkedin.com/in/your-profile', 'github.com/your-username'],
+        summary: 'Backend engineer with 6 years of experience building high-traffic payment and booking systems in Java and Go. Led the move from a monolith to event-driven services handling 12K requests per second. Comfortable owning a service end to end: design, delivery, on-call and cost.',
+        experience: [
+          {
+            role: 'Senior Software Engineer', company: 'Northwind Payments', location: 'Bengaluru, India', start: 'Apr 2022', end: 'Present', description: '',
+            highlights: 'Split the checkout monolith into 9 Kafka-backed services, cutting p99 latency from 820 ms to 190 ms.\nDesigned idempotent retry handling that brought duplicate charges to zero across 40M monthly transactions.\nReduced AWS spend by 28% by right-sizing ECS tasks and moving cold data to S3 Glacier.\nMentored 4 engineers; two were promoted within a year.',
+          },
+          {
+            role: 'Software Engineer', company: 'Bluepeak Travel', location: 'Pune, India', start: 'Jul 2019', end: 'Mar 2022', description: '',
+            highlights: 'Built the seat-locking service for bus bookings on Redis, ending double bookings during flash sales.\nAdded contract tests to 30+ REST APIs, halving production incidents caused by releases.\nAutomated deployments with GitHub Actions and Docker, taking a release from 2 hours to 15 minutes.',
+          },
+        ],
+        projects: [
+          {
+            name: 'Ledger Lite', link: 'github.com/your-username/ledger-lite', start: '2023', end: 'Present',
+            description: 'Open-source double-entry bookkeeping API for small shops.',
+            highlights: 'Written in Go with PostgreSQL; 1.2K GitHub stars.\nHandles 5K writes per second on a single small VM in load tests.',
+          },
+        ],
+        education: [
+          {
+            school: 'City College of Engineering', degree: 'B.Tech in Computer Science', location: 'Pune, India', start: '2015', end: '2019',
+            details: 'CGPA 8.4/10 · Coursework: Data Structures, Operating Systems, Computer Networks, DBMS',
+          },
+        ],
+        skills: [
+          { title: 'Programming', items: 'Java, Go, Python, SQL, TypeScript' },
+          { title: 'Backend & Cloud', items: 'Spring Boot, Kafka, Redis, PostgreSQL, AWS (ECS, S3, Lambda), Docker, Kubernetes' },
+          { title: 'Practices', items: 'System design, REST and gRPC APIs, CI/CD, observability, code review' },
+        ],
+        certifications: [{ name: 'AWS Certified Solutions Architect – Associate', issuer: 'Amazon Web Services', date: '2023', link: '' }],
+        languages: 'English (fluent), Hindi (native)',
+      };
+
+      const $ = (sel) => document.querySelector(sel);
+      const app = $('#app'), editor = $('#editor'), pane = $('#preview'), stage = $('#stage'), paper = $('#paper');
+      const meta = $('#meta'), pageRule = $('#page-rule'), toastEl = $('#toast'), fileInput = $('#file');
+      const openCards = new Set(['personal']);
+      let state;
+
+      function h(tag, attrs, ...children) {
+        const node = document.createElement(tag);
+        for (const [key, value] of Object.entries(attrs || {})) {
+          if (value == null || value === false) continue;
+          if (key === 'class') node.className = value;
+          else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+          else node.setAttribute(key, value === true ? '' : value);
+        }
+        for (const child of children.flat(Infinity)) if (child != null && child !== false && child !== '') node.append(child);
+        return node;
+      }
+
+      function icon(name) {
+        const NS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(NS, 'svg');
+        for (const [k, v] of Object.entries({ viewBox: '0 0 24 24', width: 18, height: 18, fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' })) svg.setAttribute(k, v);
+        const path = document.createElementNS(NS, 'path');
+        path.setAttribute('d', ICONS[name]);
+        svg.append(path);
+        return svg;
+      }
+
+      // ---------- data ----------
+
+      const str = (v) => (v == null ? '' : Array.isArray(v) ? v.map(str).join('\n') : typeof v === 'object' ? '' : String(v));
+      const pick = (src, keys) => Object.fromEntries(keys.map((k) => [k, str(src?.[k])]));
+
+      // Coerces anything (saved state, an imported file) into the exact shape the app expects.
+      function normalize(raw) {
+        const out = blank();
+        if (!raw || typeof raw !== 'object') return out;
+        if (raw.basics) raw = fromJsonResume(raw);
+        out.personal = pick(raw.personal, Object.keys(out.personal));
+        if (Array.isArray(raw.links)) out.links = raw.links.map((l) => (typeof l === 'object' ? str(l?.url) : str(l)));
+        out.summary = str(raw.summary);
+        out.languages = Array.isArray(raw.languages) ? raw.languages.map(str).join(', ') : str(raw.languages);
+        for (const [key, def] of Object.entries(LISTS)) {
+          if (Array.isArray(raw[key])) out[key] = raw[key].filter((x) => x && typeof x === 'object').map((x) => pick(x, def.fields.map((f) => f.key)));
+        }
+        const layout = raw.layout || {};
+        if (Array.isArray(layout.order)) {
+          const known = [...new Set(layout.order.filter((k) => k in SECTIONS))];
+          out.layout.order = [...known, ...Object.keys(SECTIONS).filter((k) => !known.includes(k))];
+        }
+        if (Array.isArray(layout.hidden)) out.layout.hidden = layout.hidden.filter((k) => k in SECTIONS);
+        for (const k of Object.keys(SECTIONS)) if (typeof layout.titles?.[k] === 'string') out.layout.titles[k] = layout.titles[k];
+        const s = raw.settings || {};
+        if (s.font in FONTS) out.settings.font = s.font;
+        if (s.size in SIZES) out.settings.size = s.size;
+        if (s.paper in PAPERS) out.settings.paper = s.paper;
+        if (String(s.margin) in MARGINS) out.settings.margin = String(s.margin);
+        return out;
+      }
+
+      // https://jsonresume.org/schema, so resumes made elsewhere can be imported.
+      function fromJsonResume(r) {
+        const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const date = (d) => {
+          const m = /^(\d{4})(?:-(\d{1,2}))?/.exec(str(d));
+          return !m ? str(d) : m[2] ? `${MONTHS[+m[2] - 1] || ''} ${m[1]}`.trim() : m[1];
+        };
+        const span = (x) => ({ start: date(x.startDate), end: x.endDate ? date(x.endDate) : x.startDate ? 'Present' : '' });
+        const list = (v) => (Array.isArray(v) ? v.filter((x) => x && typeof x === 'object') : []);
+        const b = r.basics || {}, loc = b.location || {};
+        return {
+          personal: {
+            name: b.name, title: b.label, email: b.email, phone: b.phone, website: b.url,
+            location: [loc.city, loc.region, loc.countryCode].filter(Boolean).join(', '),
+          },
+          links: list(b.profiles).map((p) => p.url || [p.network, p.username].filter(Boolean).join(': ')).filter(Boolean),
+          summary: b.summary,
+          experience: list(r.work).map((w) => ({ role: w.position, company: w.name || w.company, location: w.location, ...span(w), description: w.summary || w.description, highlights: w.highlights })),
+          projects: list(r.projects).map((p) => ({ name: p.name, link: p.url, ...span(p), description: p.description, highlights: p.highlights })),
+          education: list(r.education).map((e) => ({
+            school: e.institution, degree: [e.studyType, e.area].filter(Boolean).join(' in '), location: '', ...span(e),
+            details: [e.score && `Score: ${e.score}`, Array.isArray(e.courses) && e.courses.length && `Coursework: ${e.courses.join(', ')}`].filter(Boolean).join(' · '),
+          })),
+          skills: list(r.skills).map((s) => ({ title: s.name, items: Array.isArray(s.keywords) ? s.keywords.join(', ') : '' })),
+          languages: list(r.languages).map((l) => (l.fluency ? `${l.language} (${l.fluency})` : l.language)).filter(Boolean).join(', '),
+          certifications: list(r.certificates).map((c) => ({ name: c.name, issuer: c.issuer, date: date(c.date), link: c.url })),
+        };
+      }
+
+      function load() {
+        try {
+          const saved = localStorage.getItem(STORE_KEY);
+          if (saved) return normalize(JSON.parse(saved));
+        } catch {}
+        return normalize(SAMPLE); // first visit: show what a finished resume looks like
+      }
+
+      let saveTimer, previewQueued = false;
+      function save() {
+        clearTimeout(saveTimer);
+        try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch {}
+      }
+
+      // Text edits: save soon, redraw the preview once per burst of events. The form itself is left alone so focus stays put.
+      function changed() {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(save, 300);
+        if (previewQueued) return;
+        previewQueued = true;
+        setTimeout(() => { previewQueued = false; renderPreview(); });
+      }
+
+      // Structural edits (add, remove, move, replace): rebuild the form too, optionally offering Undo.
+      function update(mutate, { focus, undo } = {}) {
+        const snapshot = undo && JSON.stringify(state);
+        mutate();
+        renderForm();
+        changed();
+        if (focus) {
+          const el = editor.querySelector(`[data-focus="${focus}"], [data-path="${focus}"]`);
+          (el && !el.disabled ? el : el?.parentElement.querySelector('button:not(:disabled)'))?.focus();
+        }
+        if (undo) showToast(undo, 'Undo', () => update(() => { state = normalize(JSON.parse(snapshot)); }));
+      }
+
+      const getPath = (path) => path.split('.').reduce((o, k) => o?.[k], state);
+      function setPath(path, value) {
+        const keys = path.split('.');
+        const last = keys.pop();
+        keys.reduce((o, k) => o[k], state)[last] = value;
+      }
+
+      // ---------- form ----------
+
+      function card(key, title, body, extra) {
+        const node = h('details', { class: 'card', open: openCards.has(key) },
+          h('summary', {}, title, extra), h('div', { class: 'card-body' }, body));
+        node.addEventListener('toggle', () => (node.open ? openCards.add(key) : openCards.delete(key)));
+        return node;
+      }
+
+      function mini(name, label, focus, onclick, opts = {}) {
+        return h('button', { type: 'button', class: opts.danger ? 'mini danger' : 'mini', 'aria-label': label, title: label, 'data-focus': focus, disabled: opts.disabled, onclick }, icon(name));
+      }
+
+      function field(path, def) {
+        const input = def.type === 'area'
+          ? h('textarea', { rows: def.rows || 3, 'data-path': path, placeholder: def.ph, spellcheck: 'true' })
+          : h('input', { type: def.input || 'text', 'data-path': path, placeholder: def.ph, autocomplete: def.ac || 'off' });
+        input.value = getPath(path) ?? '';
+        return h('label', { class: def.full || def.type === 'area' ? 'field full' : 'field' },
+          h('span', {}, def.label), input, def.hint && h('small', { class: 'hint' }, def.hint));
+      }
+
+      function select(path, options, label) {
+        const el = h('select', { 'data-path': path },
+          Object.entries(options).map(([value, [text]]) => h('option', { value }, text)));
+        el.value = getPath(path);
+        return h('label', { class: 'field' }, h('span', {}, label), el);
+      }
+
+      const sectionTitle = (k) => state.layout.titles[k]?.trim() || SECTIONS[k];
+      const hiddenTag = (k) => state.layout.hidden.includes(k) && h('span', { class: 'tag' }, 'hidden');
+
+      function move(arr, i, d) { [arr[i], arr[i + d]] = [arr[i + d], arr[i]]; }
+
+      function listCard(key) {
+        const def = LISTS[key], items = state[key];
+        const body = items.map((item, i) => h('div', { class: 'item', 'data-list': key, 'data-index': i },
+          h('div', { class: 'item-head' },
+            h('span', { class: 'item-title' }, def.title(item) || `New ${def.noun}`),
+            mini('up', `Move ${def.noun} up`, `${key}.${i}.up`, () => update(() => move(items, i, -1), { focus: `${key}.${i - 1}.up` }), { disabled: i === 0 }),
+            mini('down', `Move ${def.noun} down`, `${key}.${i}.down`, () => update(() => move(items, i, 1), { focus: `${key}.${i + 1}.down` }), { disabled: i === items.length - 1 }),
+            mini('trash', `Remove ${def.noun}`, null, () => update(() => items.splice(i, 1), { focus: `${key}.add`, undo: `Removed ${def.noun}` }), { danger: true })),
+          h('div', { class: 'item-body grid' }, def.fields.map((f) => field(`${key}.${i}.${f.key}`, f)))));
+        body.push(h('button', {
+          type: 'button', class: 'add', 'data-focus': `${key}.add`,
+          onclick: () => update(() => items.push(Object.fromEntries(def.fields.map((f) => [f.key, '']))), { focus: `${key}.${items.length}.${def.fields[0].key}` }),
+        }, `+ Add ${def.noun}`));
+        return card(key, SECTIONS[key], body, [items.length ? h('span', { class: 'count' }, String(items.length)) : null, hiddenTag(key)]);
+      }
+
+      const FORMS = {
+        summary: () => card('summary', SECTIONS.summary,
+          [field('summary', { label: 'Professional summary', type: 'area', rows: 5, ph: '2–3 lines: who you are, years of experience, and what you do best.' })], hiddenTag('summary')),
+        languages: () => card('languages', SECTIONS.languages,
+          [field('languages', { label: 'Languages you speak', ph: 'English (fluent), Hindi (native)', hint: 'Separate with commas.', full: true })], hiddenTag('languages')),
+      };
+      for (const key of Object.keys(LISTS)) FORMS[key] = () => listCard(key);
+
+      function personalCard() {
+        const links = state.links.map((_, i) => h('div', { class: 'row' },
+          h('input', { type: 'url', 'data-path': `links.${i}`, placeholder: 'linkedin.com/in/your-profile', 'aria-label': `Link ${i + 1}`, value: state.links[i] }),
+          mini('trash', 'Remove link', null, () => update(() => state.links.splice(i, 1), { focus: 'links.add' }), { danger: true })));
+        return card('personal', 'Personal details', [
+          h('div', { class: 'grid' }, PERSONAL.map((f) => field(`personal.${f.key}`, f))),
+          h('p', { class: 'sub' }, 'Profile links'),
+          h('p', { class: 'hint' }, 'LinkedIn, GitHub, portfolio. They print as plain text so ATS software can read them.'),
+          links,
+          h('button', { type: 'button', class: 'add', 'data-focus': 'links.add', onclick: () => update(() => state.links.push(''), { focus: `links.${state.links.length}` }) }, '+ Add link'),
+        ]);
+      }
+
+      function layoutCard() {
+        const order = state.layout.order;
+        const rows = order.map((k, i) => {
+          const off = state.layout.hidden.includes(k);
+          const title = h('input', { type: 'text', 'data-path': `layout.titles.${k}`, placeholder: SECTIONS[k], 'aria-label': `Heading for ${SECTIONS[k]}` });
+          title.value = state.layout.titles[k] || '';
+          return h('div', { class: off ? 'sec-row off' : 'sec-row' },
+            h('input', {
+              type: 'checkbox', checked: !off, 'aria-label': `Show ${SECTIONS[k]}`, title: 'Show in resume',
+              onchange: (e) => update(() => {
+                state.layout.hidden = e.target.checked ? state.layout.hidden.filter((x) => x !== k) : [...state.layout.hidden, k];
+              }, { focus: `sec.${k}` }),
+              'data-focus': `sec.${k}`,
+            }),
+            title,
+            mini('up', `Move ${SECTIONS[k]} up`, `sec.${i}.up`, () => update(() => move(order, i, -1), { focus: `sec.${i - 1}.up` }), { disabled: i === 0 }),
+            mini('down', `Move ${SECTIONS[k]} down`, `sec.${i}.down`, () => update(() => move(order, i, 1), { focus: `sec.${i + 1}.down` }), { disabled: i === order.length - 1 }));
+        });
+        return card('layout', 'Layout & style', [
+          h('div', { class: 'grid' },
+            select('settings.font', FONTS, 'Font'),
+            select('settings.size', SIZES, 'Text size'),
+            select('settings.paper', PAPERS, 'Paper'),
+            select('settings.margin', MARGINS, 'Margins')),
+          h('p', { class: 'sub' }, 'Sections'),
+          h('p', { class: 'hint' }, 'Untick to hide, type to rename, arrows to reorder.'),
+          h('div', { class: 'sec-list' }, rows),
+        ]);
+      }
+
+      function tipsCard() {
+        const tip = (b, rest) => h('li', {}, h('b', {}, b), ' ', rest);
+        return card('tips', 'ATS tips', [h('ul', { class: 'tips' },
+          tip('Mirror the job post.', 'Reuse its exact keywords in your skills and achievements; ATS filters match words, not meaning.'),
+          tip('Lead with results.', 'Start each bullet with a verb and add a number: "Cut build time 40% by…".'),
+          tip('Keep standard headings.', 'Parsers look for Experience, Education and Skills. Rename sections sparingly.'),
+          tip('Aim for one page.', 'Two at most. The dashed red line in the preview marks where a new page starts.'),
+          tip('Save as PDF.', 'In the print dialog pick "Save as PDF" and turn off "Headers and footers". The PDF keeps real, selectable text.'),
+          tip('Back it up.', 'Your data is saved in this browser only. Export a JSON file to keep a copy or move to another device.'))]);
+      }
+
+      function renderForm() {
+        editor.replaceChildren(
+          h('p', { class: 'lede' }, 'Fill in the sections and the preview updates as you type. When you are done, press ', h('b', {}, 'Download PDF'), '.'),
+          personalCard(),
+          ...state.layout.order.map((k) => FORMS[k]()),
+          layoutCard(),
+          tipsCard());
+      }
+
+      editor.addEventListener('input', (e) => {
+        const path = e.target.dataset.path;
+        if (!path) return;
+        setPath(path, e.target.value);
+        const item = e.target.closest('.item');
+        if (item) {
+          const { list, index } = item.dataset, def = LISTS[list];
+          item.querySelector('.item-title').textContent = def.title(state[list][index]) || `New ${def.noun}`;
+        }
+        changed();
+      });
+
+      // ---------- preview ----------
+
+      const clean = (s) => s.trim();
+      const bullets = (text) => text.split('\n').map((l) => l.replace(/^\s*[-•*▪◦·]\s*/, '').trim()).filter(Boolean);
+      const csv = (text) => text.split(/[,\n]/).map(clean).filter(Boolean).join(', ');
+      const filled = (o) => Object.values(o).some((v) => v.trim());
+      const range = (a, b) => [a, b].map(clean).filter(Boolean).join(' – ');
+      const pretty = (u) => u.trim().replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '');
+
+      // Only http(s) links become clickable; bare domains get https:// added.
+      function href(u) {
+        u = u.trim();
+        if (/^https?:\/\/\S+$/i.test(u)) return u;
+        if (/^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(u)) return `https://${u}`;
+        return null;
+      }
+      const link = (url, text) => (href(url) ? h('a', { href: href(url) }, text) : text);
+
+      function row(left, right) {
+        return h('div', { class: 'r-row' }, h('div', { class: 'r-left' }, left), right && h('div', { class: 'r-right' }, right));
+      }
+      const text = (t) => t.trim() && h('p', { class: 'r-text' }, t.trim());
+      const list = (t) => { const l = bullets(t); return l.length ? h('ul', { class: 'r-list' }, l.map((x) => h('li', {}, x))) : null; };
+
+      // Bold line over an italic line (e.g. Company / Location over Role / Dates); collapses to one line when half is missing.
+      function twoLine(top, topRight, bottom, bottomRight) {
+        [top, topRight, bottom, bottomRight] = [top, topRight, bottom, bottomRight].map(clean);
+        if (!top) return row(h('strong', {}, bottom), [topRight, bottomRight].filter(Boolean).join(' | '));
+        return [row(h('strong', {}, top), topRight), (bottom || bottomRight) && row(h('em', {}, bottom), bottomRight)];
+      }
+
+      function entries(key, render) {
+        const items = state[key].filter(filled);
+        return items.length ? items.map((e) => h('div', { class: 'r-entry' }, render(e))) : null;
+      }
+
+      const RENDER = {
+        summary: () => text(state.summary),
+        experience: () => entries('experience', (e) => [
+          twoLine(e.company, e.location, e.role, range(e.start, e.end)), text(e.description), list(e.highlights)]),
+        projects: () => entries('projects', (p) => [
+          row([h('strong', {}, p.name.trim()), p.link.trim() && [' | ', link(p.link, pretty(p.link))]], range(p.start, p.end)),
+          text(p.description), list(p.highlights)]),
+        education: () => entries('education', (e) => [
+          twoLine(e.school, e.location, e.degree, range(e.start, e.end)), text(e.details)]),
+        skills: () => {
+          const groups = state.skills.filter((g) => csv(g.items));
+          return groups.length ? groups.map((g) => h('p', { class: 'r-skill' }, g.title.trim() && h('strong', {}, `${g.title.trim()}: `), csv(g.items))) : null;
+        },
+        certifications: () => {
+          const certs = state.certifications.filter(filled);
+          return certs.length ? h('ul', { class: 'r-list' }, certs.map((c) => h('li', {},
+            c.name.trim() && (c.link.trim() ? link(c.link, c.name.trim()) : c.name.trim()),
+            c.issuer.trim() && ` — ${c.issuer.trim()}`, c.date.trim() && ` (${c.date.trim()})`))) : null;
+        },
+        languages: () => text(csv(state.languages)),
+      };
+
+      function renderPreview() {
+        const { personal: p, settings: s } = state;
+        const [, pageSize, width, height] = PAPERS[s.paper];
+        paper.style.setProperty('--pw', `${width}mm`);
+        paper.style.setProperty('--margin', `${s.margin}mm`);
+        paper.style.setProperty('--fs', SIZES[s.size][1]);
+        paper.style.setProperty('--font', FONTS[s.font][1]);
+        pageRule.textContent = `@page { size: ${pageSize}; margin: ${s.margin}mm; }`;
+
+        const contact = [
+          p.email.includes('@') ? h('a', { href: `mailto:${p.email.trim()}` }, p.email.trim()) : p.email.trim(),
+          p.phone.trim() && h('a', { href: `tel:${p.phone.replace(/[^\d+]/g, '')}` }, p.phone.trim()),
+          p.location.trim(),
+          p.website.trim() && link(p.website, pretty(p.website)),
+          ...state.links.filter(clean).map((u) => link(u, pretty(u))),
+        ].filter(Boolean);
+
+        const parts = [];
+        if (p.name.trim()) parts.push(h('h2', { class: 'r-name' }, p.name.trim()));
+        if (p.title.trim()) parts.push(h('p', { class: 'r-title' }, p.title.trim()));
+        if (contact.length) parts.push(h('p', { class: 'r-contact' }, contact.flatMap((c, i) => (i ? [' | ', h('span', {}, c)] : [h('span', {}, c)]))));
+        for (const k of state.layout.order) {
+          if (state.layout.hidden.includes(k)) continue;
+          const content = RENDER[k]();
+          if (content) parts.push(h('section', { class: 'r-section' }, h('h3', {}, sectionTitle(k)), content));
+        }
+
+        const body = h('div', { class: 'r-body' }, parts.length ? parts : h('p', { class: 'r-empty' }, 'Start typing on the left and your resume appears here.'));
+        paper.replaceChildren(body);
+
+        // Page-break guides. The browser also moves whole entries to the next page, so this is an estimate.
+        const margin = s.margin * MM, perPage = height * MM - 2 * margin;
+        const pages = Math.max(1, Math.ceil((body.offsetHeight - 1) / perPage));
+        for (let k = 1; k < pages; k++) {
+          paper.append(h('div', { class: 'guide', style: `top:${margin + k * perPage}px` }, h('span', {}, `Page ${k + 1}`)));
+        }
+        paper.style.minHeight = `${pages * height}mm`;
+        meta.textContent = `${PAPERS[s.paper][0]} · about ${pages} page${pages > 1 ? 's' : ''}`;
+        fit();
+      }
+
+      // Scale the real-size page down to fit the pane; layout and print stay at true size.
+      function fit() {
+        const avail = pane.clientWidth - 32;
+        if (avail <= 0) return;
+        const scale = Math.min(1, avail / paper.offsetWidth);
+        paper.style.transform = `scale(${scale})`;
+        stage.style.width = `${paper.offsetWidth * scale}px`;
+        stage.style.height = `${paper.offsetHeight * scale}px`;
+      }
+      new ResizeObserver(fit).observe(pane);
+
+      // ---------- toolbar ----------
+
+      function showToast(message, action, onAction) {
+        clearTimeout(showToast.timer);
+        const hide = () => { toastEl.hidden = true; };
+        toastEl.replaceChildren(h('span', {}, message),
+          action && h('button', { type: 'button', onclick: () => { hide(); onAction(); } }, action));
+        toastEl.hidden = false;
+        showToast.timer = setTimeout(hide, action ? 7000 : 2500);
+      }
+
+      function exportJson() {
+        save();
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+        const slug = state.personal.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        const a = h('a', { href: URL.createObjectURL(blob), download: `${slug || 'resume'}-resume.json` });
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        showToast('Exported JSON');
+      }
+
+      function importFile(file) {
+        file.text()
+          .then((raw) => {
+            const data = JSON.parse(raw);
+            if (!data || typeof data !== 'object' || Array.isArray(data) || !['personal', 'basics', 'experience', 'summary'].some((k) => k in data)) throw new Error('not a resume');
+            const next = normalize(data);
+            update(() => { state = next; }, { undo: `Imported ${file.name}` });
+          })
+          .catch(() => showToast('That file isn’t a resume JSON (this site’s export or JSON Resume).'));
+      }
+
+      for (const el of document.querySelectorAll('[data-icon]')) el.prepend(icon(el.dataset.icon));
+
+      $('#sample').addEventListener('click', () => update(() => { state = normalize({ ...SAMPLE, layout: state.layout, settings: state.settings }); }, { undo: 'Loaded the sample resume' }));
+      $('#clear').addEventListener('click', () => update(() => { state = normalize({ layout: state.layout, settings: state.settings }); }, { undo: 'Cleared all fields' }));
+      $('#import').addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', () => { if (fileInput.files[0]) importFile(fileInput.files[0]); fileInput.value = ''; });
+      $('#export').addEventListener('click', exportJson);
+      $('#print').addEventListener('click', () => print());
+
+      document.addEventListener('dragover', (e) => { if (e.dataTransfer.types.includes('Files')) e.preventDefault(); });
+      document.addEventListener('drop', (e) => {
+        if (!e.dataTransfer.files.length) return;
+        e.preventDefault();
+        importFile(e.dataTransfer.files[0]);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); exportJson(); }
+      });
+
+      // The PDF file name comes from the page title.
+      let pageTitle = document.title;
+      addEventListener('beforeprint', () => {
+        renderPreview();
+        pageTitle = document.title;
+        if (state.personal.name.trim()) document.title = `${state.personal.name.trim()} Resume`;
+      });
+      addEventListener('afterprint', () => { document.title = pageTitle; });
+      addEventListener('pagehide', save);
+
+      for (const tab of document.querySelectorAll('.tabs button')) {
+        tab.addEventListener('click', () => {
+          app.dataset.view = tab.dataset.view;
+          for (const t of document.querySelectorAll('.tabs button')) t.setAttribute('aria-pressed', String(t === tab));
+          if (tab.dataset.view === 'preview') renderPreview(); // page count can't be measured while hidden
+        });
+      }
+
+      $('#theme').addEventListener('click', () => {
+        const root = document.documentElement;
+        const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        root.dataset.theme = dark ? 'light' : 'dark';
+        try { localStorage.setItem(THEME_KEY, root.dataset.theme); } catch {}
+      });
+
+      state = load();
+      renderForm();
+      renderPreview();
+    })();
+  </script>
+</body>
+</html>

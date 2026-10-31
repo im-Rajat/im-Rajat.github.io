@@ -44,3 +44,9 @@ Include:
 
 If there are common misconceptions, address those too.
 ```
+
+## Learning with Infographic 
+
+```
+Make an infographic that explains how [insert your topic]
+```
