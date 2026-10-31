@@ -41,11 +41,11 @@ jobs:
       # Retaining our folder hack to keep the root directory clean.
       # docs/ is a git worktree (a second checkout sharing this repo's history) rather than a plain copy,
       # so the git-revision-date plugin can still look up each page's commits.
-      # The portfolio, College-Projects and Resume are published at the site root, so they stay out of the notes build.
+      # The portfolio and Resume are published at the site root, so they stay out of the notes build.
       - name: Hack to fix the folder structure dynamically
         run: |
           git worktree add --detach docs
-          rm -rf docs/.github docs/mkdocs.yml docs/index.html docs/College-Projects docs/Resume
+          rm -rf docs/.github docs/mkdocs.yml docs/index.html docs/Resume
 
       # Turn the markdown sources of the Prompt Library and Useful Websites pages into the JSON they load
       - run: |
@@ -57,7 +57,7 @@ jobs:
 
       - name: Add the site-root pages
         run: |
-          cp -r index.html College-Projects Resume site/
+          cp -r index.html Resume site/
           cp site/Notes/404.html site/404.html
 
       # Package the 'site/' folder into an artifact

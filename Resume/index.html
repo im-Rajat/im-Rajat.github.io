@@ -432,19 +432,20 @@
         experience: [
           {
             role: 'Associate Staff Engineer', company: 'Nagarro', start: 'Oct 2023', end: 'Present',
+            description: 'Same product since Jun 2022: a C++ payment platform for auto dealers, where I own product, migration, cloud and CI/CD work.',
             highlights: 'Design and develop C++20 microservices that calculate real-time lease, finance and cash deals for auto dealers, with location-based state, county and city taxes, lender rules, incentives and trade-ins, serving millions of high-concurrency requests.\nDrove the final phase of the Windows-to-Linux migration (CMake presets, shared Docker dev image): startup fell from 20 to 4 minutes with no CPU spikes.\nOwned the move of AWS ECS services to private networking, from ALB vs NLB proof of concept and design to Terraform for private load balancers and Route 53 failover.\nRetired the last Jenkins pipelines, moving builds, releases and scheduled jobs to GitHub Actions and ECS Fargate.\nFixed 122 integer-overflow (CWE-190) findings in one sprint and added security scanning to CI.',
           },
           {
             role: 'Senior Engineer', company: 'Nagarro', start: 'May 2022', end: 'Sep 2023',
-            highlights: 'Delivered C++ product features across the full life cycle in agile/scrum, and handled production issues and on-call.\nDecoupled Windows dependencies to make the code base Linux-compatible, the groundwork for the Linux migration.',
+            highlights: 'Joined the payment platform in Jun 2022 after wrapping up a healthcare firmware port.\nDelivered C++ features in agile/scrum, handled production issues and on-call, and decoupled Windows dependencies as groundwork for the Linux migration.',
           },
           {
             role: 'Engineer', company: 'Nagarro', start: 'Oct 2020', end: 'Apr 2022',
-            highlights: 'Unified the firmware of a handheld healthcare device and ported it from STM32L1 to STM32L0.\nBuilt a contactless entry system with thermal scanning, mask detection and encrypted QR codes (COVID).\nBuilt workflows and Python test automation for a virtual-consultation platform, and RF traffic logging in C/C++.',
+            highlights: 'Delivered firmware, computer-vision, backend and smart-home projects in C, C++ and Python, taking proofs of concept from first prototype to client demo.',
           },
           {
             role: 'Associate Engineer', company: 'Nagarro', start: 'Jun 2019', end: 'Sep 2020',
-            highlights: 'One of the founding developers of Nagarro\'s Embedded practice (Sigma – Practice ISV).\nExtended the open-source BACnet stack, ran BACnet servers in Docker on AWS EC2, and built IoT proofs of concept on Raspberry Pi, Arduino and Zigbee.',
+            highlights: 'One of the founding developers of Nagarro\'s Embedded practice (Sigma – Practice ISV).\nBuilt IoT and networking proofs of concept on Linux with BACnet, Modbus and Zigbee, debugging with Wireshark, GDB and tcpdump.',
           },
         ],
         projects: [
@@ -454,22 +455,40 @@
             highlights: 'ZIP-based container that stores images as raw bytes, de-duplicated by SHA-256, with integrity checks and byte-identical output.\nPython library and rk CLI (pack, check, render, share and more), an installable offline web editor and a VS Code extension.\nHardened readers: path-traversal and zip-bomb limits, magic-byte type sniffing and allowlist HTML sanitizing.',
           },
           {
+            name: 'Resume Builder (side project)', link: 'im-rajat.github.io/Resume',
+            description: 'A free, ATS-friendly resume builder that runs entirely in the browser.',
+            highlights: 'Live print-ready preview with two-column and single-column templates, PDF export, and JSON import/export including JSON Resume.\nNo server or sign-up: data stays in the browser\'s local storage.',
+          },
+          {
             name: 'Personal Knowledge Base', link: 'im-rajat.github.io/Notes',
             description: 'Public notes site built with MkDocs and GitHub Actions.',
-            highlights: 'Notes on C/C++, system design, operating systems, networks, DBMS and DevOps, with 40+ interactive explainers.\nAlso hosts a browser-only resume builder with PDF export, a prompt library and a curated tools list.',
+            highlights: 'Notes on C/C++, system design, operating systems, networks, DBMS and DevOps, with 40+ interactive explainers, a prompt library and a curated tools list.',
           },
           {
             name: 'Unified Firmware Architecture',
-            highlights: 'Merged 3 device firmware code bases into 1, building each variant with preprocessor flags.\nDeveloped and tested the HAL (Hardware Abstraction Layer) for several subsystems.\nPorted the firmware code base from STM32L1 to STM32L0.',
+            highlights: 'Merged 3 firmware code bases of a handheld healthcare device into 1, building each variant with preprocessor flags.\nDeveloped and tested the HAL for several subsystems and ported the firmware from STM32L1 to STM32L0.',
           },
           {
             name: 'Thermal Scanning & Mask Detection',
             description: 'Contactless office entry solution for the post-COVID workplace.',
-            highlights: 'Scanned temperature with a thermal camera, detected face masks and verified employees with individually encrypted QR codes.\nBuilt on Raspberry Pi, then moved to NVIDIA Jetson Nano for better performance.',
+            highlights: 'Scanned temperature with a thermal camera, detected face masks and verified employees with encrypted QR codes; moved from Raspberry Pi to NVIDIA Jetson Nano for performance.',
+          },
+          {
+            name: 'Virtual Consultation',
+            description: 'Multitenant system for virtual consultations with health providers over IVR and WhatsApp, for COVID, mental health and more.',
+            highlights: 'Built the workflow, actions and transitions on a RESTful state-machine service, plus Python scripts that provision workflows and test every state transition.',
+          },
+          {
+            name: 'RF Sniffer Functionality',
+            highlights: 'Added remote enable/disable of RF traffic logging to a smart-home controller, replacing the standalone RF sniffer tool, and served the captured logs over the network for root-cause analysis.',
           },
           {
             name: 'BACnet Servers in Docker Containers on the Cloud',
             highlights: 'Ran BACnet servers in Docker containers on cloud Linux hosts, created and terminated on demand, so physical hubs can be load-tested without hardware.\nAdded WritePropertyMultiple and Create/Delete Object services missing from the open-source BACnet Stack 0.8.6.',
+          },
+          {
+            name: 'Raspberry Pi – BACnet – Arduino Communication',
+            highlights: 'Controlled lights and switches on an Arduino from a PC: the PC talks to a Raspberry Pi over BACnet on Wi-Fi, and the Pi talks to the Arduino over Zigbee.',
           },
         ],
         education: [

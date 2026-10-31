@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rajat Kumar · Associate Staff Engineer · C++, Linux, AWS, Embedded</title>
-  <meta name="description" content="Rajat Kumar, Associate Staff Engineer with 7+ years building high-performance C++ systems, from embedded firmware and IoT to cloud services on Linux and AWS. Portfolio, notes and open-source projects.">
+  <meta name="description" content="Rajat Kumar, Associate Staff Engineer with 6+ years building high-performance C++ systems, from embedded firmware and IoT to cloud services on Linux and AWS. Portfolio, notes and open-source projects.">
   <link rel="canonical" href="https://im-rajat.github.io/">
   <meta name="theme-color" content="#080808">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23080808'/%3E%3Cpath d='M24 20 12 32l12 12M40 20l12 12-12 12' fill='none' stroke='%2347D7AC' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
@@ -106,7 +106,7 @@
     .burger .i-close { display: none; }
     .nav.open .burger .i-open { display: none; }
     .nav.open .burger .i-close { display: block; }
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       .burger { display: inline-flex; }
       .menu {
         display: none; position: absolute; top: var(--nav-h); left: 0; right: 0;
@@ -125,7 +125,7 @@
     .head.center { text-align: center; }
     .eyebrow { display: inline-flex; align-items: center; gap: 8px; font: 700 12px/1 var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--brand); margin-bottom: 14px; }
     .head h2 { font-size: clamp(28px, 4.2vw, 40px); line-height: 1.15; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
-    .head p { color: var(--muted); margin-top: 12px; max-width: 640px; }
+    .head p { color: var(--muted); margin-top: 12px; max-width: 680px; }
     .head.center p { margin-inline: auto; }
     .rule { height: 4px; width: 72px; background: var(--brand); border-radius: 4px; margin-top: 16px; }
     .head.center .rule { margin-inline: auto; }
@@ -139,6 +139,13 @@
     .tags { display: flex; flex-wrap: wrap; gap: 8px; }
     .tag { font: 12px/1 var(--mono); color: var(--brand); border: 1px solid var(--brand-line); padding: 6px 9px; border-radius: 6px; }
     .chip { font-size: 13px; color: var(--muted); background: var(--surface-2); border: 1px solid var(--line); padding: 6px 11px; border-radius: 8px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; }
+    .body { color: var(--muted); font-size: 17px; }
+    .split { display: grid; gap: 48px; align-items: center; }
+    @media (min-width: 960px) { .split { grid-template-columns: 1fr 1fr; gap: 64px; } }
+    .checks { display: grid; gap: 10px; margin: 24px 0 28px; font-size: 15px; color: var(--muted); }
+    .checks li { position: relative; padding-left: 26px; }
+    .checks .i { position: absolute; left: 0; top: 4px; color: var(--brand); width: 16px; height: 16px; }
 
     /* ---------- hero ---------- */
     .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: calc(var(--nav-h) + 48px) 0 72px; overflow: hidden; }
@@ -157,12 +164,11 @@
     .grad { background: linear-gradient(90deg, var(--brand), #22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .lead { font-size: clamp(17px, 2vw, 20px); color: var(--muted); max-width: 620px; margin-bottom: 32px; }
     .lead strong { color: var(--brand); font: 600 0.92em var(--mono); }
-    .actions { display: flex; flex-wrap: wrap; gap: 14px; }
     .socials { display: flex; gap: 10px; margin-top: 28px; }
     .socials a { width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line-strong); border-radius: 10px; color: var(--muted); transition: color 0.2s, border-color 0.2s; }
     .socials a:hover { color: var(--brand); border-color: var(--brand); }
 
-    .term { font: 14px/1.75 var(--mono); padding: 0; overflow: hidden; transform: rotate(2deg); transition: transform 0.5s, box-shadow 0.5s; }
+    .term { font: 14px/1.75 var(--mono); overflow: hidden; transform: rotate(2deg); transition: transform 0.5s, box-shadow 0.5s; }
     .term:hover { transform: rotate(0); box-shadow: 0 0 40px rgba(71, 215, 172, 0.15); }
     .term-bar { display: flex; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
     .term-bar i { width: 11px; height: 11px; border-radius: 50%; background: #3f3f46; }
@@ -174,12 +180,35 @@
     @keyframes blink { 50% { opacity: 0; } }
     @media (max-width: 899px) { .term { transform: none; } }
 
+    /* ---------- current project ---------- */
+    .proj { padding: clamp(24px, 4vw, 40px); margin-bottom: 20px; }
+    .proj-top { display: grid; gap: 28px; }
+    @media (min-width: 900px) { .proj-top { grid-template-columns: 1.4fr 1fr; gap: 48px; } }
+    .proj h3 { font-size: clamp(24px, 3vw, 30px); line-height: 1.2; color: #fff; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .facts-list { display: grid; gap: 14px; align-content: start; }
+    .facts-list div { display: grid; gap: 2px; padding-bottom: 14px; border-bottom: 1px dashed var(--line); }
+    .facts-list div:last-child { border-bottom: 0; padding-bottom: 0; }
+    .facts-list dt { font: 11px var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim); }
+    .facts-list dd { margin: 0; color: var(--text); font-size: 15px; }
+    .proj .tags { margin-top: 24px; }
+
+    .streams { display: grid; gap: 20px; }
+    @media (min-width: 640px) { .streams { grid-template-columns: repeat(2, 1fr); } .stream.wide { grid-column: span 2; } }
+    @media (min-width: 960px) { .streams { grid-template-columns: repeat(3, 1fr); } }
+    .stream { padding: 24px; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.3s, transform 0.3s; }
+    .stream:hover { border-color: var(--brand-line); transform: translateY(-3px); }
+    .stream-top { display: flex; align-items: center; gap: 12px; }
+    .num { font: 700 13px var(--mono); color: var(--brand); border: 1px solid var(--brand-line); border-radius: 8px; padding: 5px 8px; }
+    .stream-top .ic { margin-left: auto; color: var(--dim); }
+    .stream h4 { color: #fff; font-size: 18px; line-height: 1.3; }
+    .stream p { color: var(--muted); font-size: 14px; flex: 1; }
+    .stream .jump { color: var(--brand); font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+    .stream .jump:hover { text-decoration: underline; }
+    .stream .tags { gap: 6px; }
+
     /* ---------- spotlight ---------- */
-    .split { display: grid; gap: 48px; align-items: center; }
-    @media (min-width: 960px) { .split { grid-template-columns: 1fr 1fr; gap: 64px; } }
     .award { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(250, 204, 21, 0.08); border: 1px solid rgba(250, 204, 21, 0.3); color: var(--gold); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 20px; }
     .big { font-size: clamp(30px, 4.6vw, 46px); line-height: 1.12; font-weight: 800; color: #fff; letter-spacing: -0.025em; margin-bottom: 20px; }
-    .body { color: var(--muted); font-size: 17px; }
     .points { display: grid; gap: 18px; margin-top: 28px; }
     .point { display: flex; gap: 14px; }
     .point .ic { width: 40px; height: 40px; border-radius: 10px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; flex: none; }
@@ -187,7 +216,7 @@
     .point p { color: var(--muted); font-size: 14px; }
 
     .meter { padding: 28px; }
-    .meter-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; margin-bottom: 28px; border-bottom: 1px solid var(--line); font: 12px var(--mono); color: var(--dim); letter-spacing: 0.08em; }
+    .meter-top { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; align-items: center; padding-bottom: 16px; margin-bottom: 28px; border-bottom: 1px solid var(--line); font: 12px var(--mono); color: var(--dim); letter-spacing: 0.08em; }
     .row + .row { margin-top: 28px; }
     .row-label { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
     .track { height: 46px; background: var(--surface-2); border-radius: 10px; overflow: hidden; }
@@ -201,15 +230,15 @@
     .did li { display: flex; gap: 10px; }
     .did li::before { content: '›'; color: var(--brand); font-family: var(--mono); font-weight: 700; }
 
-    /* ---------- rkformat ---------- */
-    .feature { padding: clamp(24px, 4vw, 44px); position: relative; overflow: hidden; border-color: var(--brand-line); }
-    .feature::after { content: ''; position: absolute; width: 420px; height: 420px; right: -160px; top: -160px; border-radius: 50%; background: radial-gradient(rgba(71, 215, 172, 0.14), transparent 70%); pointer-events: none; }
+    /* ---------- side projects ---------- */
+    .feature { padding: clamp(24px, 4vw, 44px); position: relative; overflow: hidden; }
+    .feature + .feature { margin-top: 24px; }
+    .feature.glow { border-color: var(--brand-line); }
+    .feature.glow::after { content: ''; position: absolute; width: 420px; height: 420px; right: -160px; top: -160px; border-radius: 50%; background: radial-gradient(rgba(71, 215, 172, 0.14), transparent 70%); pointer-events: none; }
     .feature .split { position: relative; z-index: 1; }
     .feature h3 { font: 800 clamp(30px, 4vw, 42px)/1.1 var(--mono); color: #fff; letter-spacing: -0.03em; }
+    .feature h3.sans { font-family: var(--sans); letter-spacing: -0.025em; }
     .feature .tagline { font-size: 19px; color: var(--text); margin: 14px 0 16px; }
-    .checks { display: grid; gap: 10px; margin: 24px 0 28px; font-size: 15px; color: var(--muted); }
-    .checks li { position: relative; padding-left: 26px; }
-    .checks .i { position: absolute; left: 0; top: 4px; color: var(--brand); width: 16px; height: 16px; }
 
     .anatomy { font: 13px/1.5 var(--mono); }
     .file { border: 1px solid var(--line-strong); border-radius: 12px; background: var(--bg); overflow: hidden; }
@@ -222,7 +251,17 @@
     .entry.md b { color: var(--brand); }
     .entry.img { padding-left: 34px; }
     .entry.img b { color: #93c5fd; }
-    .note { color: var(--dim); font-size: 12px; margin-top: 12px; text-align: center; }
+    .note { color: var(--dim); font-size: 12px; margin-top: 12px; text-align: center; font-family: var(--mono); }
+
+    .paper { background: #fff; border-radius: 6px; padding: 26px 24px; max-width: 320px; aspect-ratio: 210 / 297; margin: 0 auto; transform: rotate(-2deg); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; gap: 9px; transition: transform 0.5s; }
+    .paper:hover { transform: rotate(0); }
+    .paper i { display: block; height: 6px; border-radius: 3px; background: #d4d4d8; }
+    .paper .nm { height: 14px; width: 55%; background: #18181b; margin: 0 auto; }
+    .paper .ti { width: 35%; margin: 0 auto 6px; background: #a1a1aa; }
+    .paper .cols { display: grid; grid-template-columns: 1.7fr 1fr; gap: 14px; flex: 1; }
+    .paper .cols div { display: flex; flex-direction: column; gap: 7px; }
+    .paper .h { height: 7px; width: 50%; background: #2e74b5; margin-top: 8px; }
+    .paper .s { width: 80%; } .paper .xs { width: 60%; }
 
     /* ---------- experience ---------- */
     .timeline { position: relative; display: grid; gap: 28px; max-width: 880px; margin: 0 auto; }
@@ -235,6 +274,8 @@
     .when { font: 13px var(--mono); color: var(--dim); }
     .job.now .when { color: var(--brand); }
     .org { color: var(--muted); font-size: 14px; margin: 2px 0 12px; }
+    .org a { color: var(--brand); }
+    .org a:hover { text-decoration: underline; }
     .job ul { display: grid; gap: 8px; color: var(--muted); font-size: 15px; }
     .job li { position: relative; padding-left: 18px; }
     .job li::before { content: ''; position: absolute; left: 0; top: 0.7em; width: 6px; height: 6px; border-radius: 2px; background: var(--brand-line); }
@@ -266,7 +307,6 @@
     .sub .i { color: var(--brand); }
     .group + .group { margin-top: 20px; }
     .group h4 { font: 700 12px var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim); margin-bottom: 10px; }
-    .group .tags { gap: 8px; }
     .facts { display: grid; gap: 22px; }
     .fact { display: flex; gap: 16px; }
     .fact .ic { width: 46px; height: 46px; border-radius: 12px; background: var(--surface-2); color: var(--brand); display: flex; align-items: center; justify-content: center; flex: none; }
@@ -279,8 +319,7 @@
     .res { padding: 22px; display: flex; gap: 16px; align-items: flex-start; transition: border-color 0.2s, transform 0.2s; }
     .res:hover { border-color: var(--brand); transform: translateY(-3px); }
     .res .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; flex: none; }
-    .res h3 { color: #fff; font-size: 17px; display: flex; align-items: center; gap: 6px; }
-    .res h3 .i { width: 14px; height: 14px; color: var(--dim); }
+    .res h3 { color: #fff; font-size: 17px; }
     .res p { color: var(--muted); font-size: 14px; margin-top: 4px; }
 
     /* ---------- contact ---------- */
@@ -296,6 +335,7 @@
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></symbol>
     <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 7l9 6 9-6"/></symbol>
     <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4M9 18c-4.51 2-5-2-7-2"/></symbol>
@@ -319,8 +359,12 @@
     <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M4 17l6-5-6-5M12 19h8"/></symbol>
     <symbol id="i-archive" viewBox="0 0 24 24"><path d="M3 4h18v4H3zM5 8v12h14V8M10 12h4"/></symbol>
     <symbol id="i-calc" viewBox="0 0 24 24"><path d="M5 2h14v20H5zM8 6h8v4H8zM8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></symbol>
+    <symbol id="i-linux" viewBox="0 0 24 24"><path d="M4 4h16v12H4zM8 20h8M12 16v4M8 9l2 2-2 2M12 13h4"/></symbol>
     <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 12h3l3-8 4 16 4-12 2 4h4"/></symbol>
     <symbol id="i-network" viewBox="0 0 24 24"><path d="M9 3h6v5H9zM3 16h6v5H3zM15 16h6v5h-6zM12 8v4M6 16v-2h12v2"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M7 2h10v20H7zM11 18h2"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><path d="M12 8c4.4 0 8-1.3 8-3s-3.6-3-8-3-8 1.3-8 3 3.6 3 8 3zM4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
   </svg>
 
@@ -334,8 +378,8 @@
         <svg class="i i-close"><use href="#i-close"/></svg>
       </button>
       <nav class="menu" id="menu" aria-label="Main">
-        <a href="#spotlight">Spotlight</a>
-        <a href="#rkformat">rkformat</a>
+        <a href="#work">Work</a>
+        <a href="#side-projects">Side Projects</a>
         <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
         <a href="#resources">Resources</a>
@@ -355,10 +399,10 @@
           <p class="lead">
             I build fast, reliable systems in <strong>C++</strong>: high-throughput services on
             <strong>Linux</strong> and <strong>AWS</strong> today, <strong>embedded firmware</strong> and IoT before that.
-            7+ years of turning legacy code into modern, measurable performance.
+            6+ years of turning legacy code into modern, measurable performance.
           </p>
           <div class="actions">
-            <a class="btn btn-primary" href="#spotlight">See my work <svg class="i"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn-primary" href="#work">See my work <svg class="i"><use href="#i-arrow"/></svg></a>
             <a class="btn btn-ghost" href="Notes/"><svg class="i"><use href="#i-book"/></svg> Read my notes</a>
           </div>
           <div class="socials">
@@ -372,13 +416,73 @@
           <div class="term-bar"><i></i><i></i><i></i></div>
           <div class="term-body">
             <div><span class="p">rajat:~$</span> whoami</div>
-            <div class="o">Associate Staff Engineer · 7+ yrs</div>
+            <div class="o">Associate Staff Engineer · 6+ yrs</div>
             <div><span class="p">rajat:~$</span> cat stack.txt</div>
             <div class="o">C++20 · Linux · AWS · Terraform<br>GitHub Actions · Docker · Python<br>STM32 · Jetson · Raspberry Pi</div>
             <div><span class="p">rajat:~$</span> ls ~/side-projects</div>
-            <div class="o">rkformat/</div>
+            <div class="o">rkformat/  resume-builder/</div>
             <div><span class="p">rajat:~$</span> <span class="caret"></span></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CURRENT PROJECT ================= -->
+    <section class="section alt" id="work">
+      <div class="wrap">
+        <div class="head">
+          <div class="eyebrow"><svg class="i"><use href="#i-layers"/></svg> Current project · Jun 2022 – Present</div>
+          <h2>One Platform. Five Kinds of Engineering.</h2>
+          <p>For the last four years I've worked on one product: a C++ platform that auto dealers use to price deals in real time. Over that time I've owned very different work on it, from business logic and an OS migration to cloud security and delivery pipelines.</p>
+        </div>
+
+        <div class="panel proj">
+          <div class="proj-top">
+            <div>
+              <h3>Real-Time Auto Finance Payment Platform</h3>
+              <p class="body">Scalable C++20 microservices that calculate lease, finance and cash payment deals while a customer is at the dealership. Every quote has to apply the right taxes, lender rules and deal options, and the platform handles millions of high-concurrency requests.</p>
+              <div class="tags">
+                <span class="tag">C++20</span><span class="tag">Python</span><span class="tag">Oracle</span><span class="tag">Linux</span><span class="tag">Docker</span><span class="tag">AWS ECS</span><span class="tag">Nginx</span><span class="tag">CMake</span><span class="tag">Ninja</span><span class="tag">Conan</span><span class="tag">GitHub Actions</span>
+              </div>
+            </div>
+            <dl class="facts-list">
+              <div><dt>Domain</dt><dd>Automotive retail &amp; financing</dd></div>
+              <div><dt>My role</dt><dd>Senior Engineer → Associate Staff Engineer; feature owner from spike and design to production</dd></div>
+              <div><dt>Team practice</dt><dd>Agile/scrum, production support and on-call</dd></div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="streams">
+          <article class="panel stream wide">
+            <div class="stream-top"><span class="num">01</span><h4>Product Engineering</h4><svg class="i i-lg ic"><use href="#i-calc"/></svg></div>
+            <p>Business logic for real-time deal pricing: custom tax computations based on both dealer and customer location, with jurisdiction-specific city, county and state rules; lender configurations per deal type; and complex scenarios like conditional incentives, trade-ins and down-payment variations. Tuned the services to cut deal turnaround time so dealers close faster.</p>
+            <div class="tags"><span class="tag">C++20</span><span class="tag">Oracle</span><span class="tag">Microservices</span></div>
+          </article>
+
+          <article class="panel stream">
+            <div class="stream-top"><span class="num">02</span><h4>Windows → Linux Migration</h4><svg class="i i-lg ic"><use href="#i-linux"/></svg></div>
+            <p>Moved the legacy Windows system to Linux: decoupled Windows dependencies, then drove the final phase that removed Windows-only code and builds for good.</p>
+            <a class="jump" href="#spotlight">20 min → 4 min startup <svg class="i"><use href="#i-down"/></svg></a>
+          </article>
+
+          <article class="panel stream">
+            <div class="stream-top"><span class="num">03</span><h4>Private Cloud Networking</h4><svg class="i i-lg ic"><use href="#i-shield"/></svg></div>
+            <p>Owned a security remediation end to end: prototyped ALB vs NLB, wrote the design and runbook, then built private load balancers, Route 53 failover and Lambda health checks in Terraform, with a public/private toggle for safe rollout. Validated in every pre-production environment across two regions.</p>
+            <div class="tags"><span class="tag">Terraform</span><span class="tag">Route 53</span><span class="tag">Lambda</span></div>
+          </article>
+
+          <article class="panel stream">
+            <div class="stream-top"><span class="num">04</span><h4>Jenkins → GitHub Actions</h4><svg class="i i-lg ic"><use href="#i-branch"/></svg></div>
+            <p>Retired the last Jenkins pipelines: builds, tagged releases and deploys on GitHub Actions, scheduled jobs on ECS Fargate with EventBridge Scheduler, plus multi-region deploys and PR automation that notifies reviewers on Slack.</p>
+            <div class="tags"><span class="tag">GitHub Actions</span><span class="tag">Fargate</span><span class="tag">EventBridge</span></div>
+          </article>
+
+          <article class="panel stream">
+            <div class="stream-top"><span class="num">05</span><h4>Security &amp; Reliability</h4><svg class="i i-lg ic"><use href="#i-code"/></svg></div>
+            <p>Fixed 122 integer-overflow (CWE-190) findings in a single sprint and added static security scanning to CI. Introduced clang-format, a Redis cache via redis-plus-plus and graceful shutdown on signals.</p>
+            <div class="tags"><span class="tag">SAST</span><span class="tag">Redis</span><span class="tag">clang-format</span></div>
+          </article>
         </div>
       </div>
     </section>
@@ -390,9 +494,9 @@
           <div class="award"><svg class="i"><use href="#i-award"/></svg> Cheer Board Award Winner</div>
           <h2 class="big">20 Minutes <span class="brand">→</span> 4 Minutes.<br>That's the Power of Modernization.</h2>
           <p class="body">
-            I was a core engineer on migrating a large, long-lived C++ platform from Windows to Linux, and drove its
-            final phase through to a seamless production rollout. It wasn't just about moving code; it was about
-            redefining how fast and how reliably the system runs.
+            The biggest win on the platform so far. I was a core engineer on migrating the long-lived C++ code base from
+            Windows to Linux, and drove its final phase through to a seamless production rollout. It wasn't just about
+            moving code; it was about redefining how fast and how reliably the system runs.
           </p>
           <div class="points">
             <div class="point">
@@ -430,13 +534,16 @@
       </div>
     </section>
 
-    <!-- ================= RKFORMAT ================= -->
-    <section class="section alt" id="rkformat">
+    <!-- ================= SIDE PROJECTS ================= -->
+    <section class="section alt" id="side-projects">
       <div class="wrap">
         <div class="head">
-          <div class="eyebrow"><svg class="i"><use href="#i-sparkle"/></svg> Featured side project</div>
+          <div class="eyebrow"><svg class="i"><use href="#i-sparkle"/></svg> Built in my own time</div>
+          <h2>Side Projects</h2>
+          <p>Free tools I built because I wanted them to exist. Both run entirely in the browser, with nothing to install and no data sent anywhere.</p>
         </div>
-        <div class="panel feature">
+
+        <div class="panel feature glow" id="rkformat">
           <div class="split">
             <div>
               <h3>rkformat <span class="brand">.rkf</span></h3>
@@ -472,6 +579,36 @@
             </div>
           </div>
         </div>
+
+        <div class="panel feature" id="resume-builder">
+          <div class="split">
+            <div>
+              <h3 class="sans">Resume Builder</h3>
+              <p class="tagline">A free, ATS-friendly resume builder. Your data never leaves your browser.</p>
+              <p class="body">Fill in the sections and watch a print-ready page update as you type, then download a PDF. No sign-up, no server, no tracking.</p>
+              <ul class="checks">
+                <li><svg class="i"><use href="#i-check"/></svg>Two-column or single-column templates with accent colours, fonts, A4 or US Letter, and margins</li>
+                <li><svg class="i"><use href="#i-check"/></svg>Reorder, rename, hide or move any section between columns, with undo</li>
+                <li><svg class="i"><use href="#i-check"/></svg>Import and export JSON, including the open JSON Resume format</li>
+                <li><svg class="i"><use href="#i-check"/></svg>Plain-text output that ATS software can read, plus built-in ATS tips</li>
+              </ul>
+              <div class="actions">
+                <a class="btn btn-primary" href="Resume/">Open the builder <svg class="i"><use href="#i-arrow"/></svg></a>
+              </div>
+            </div>
+
+            <div aria-hidden="true">
+              <div class="paper">
+                <i class="nm"></i><i class="ti"></i>
+                <div class="cols">
+                  <div><i class="h"></i><i></i><i></i><i class="s"></i><i class="h"></i><i></i><i class="s"></i><i></i><i class="xs"></i><i></i><i class="s"></i><i class="h"></i><i></i><i class="xs"></i></div>
+                  <div><i class="h"></i><i></i><i class="s"></i><i class="xs"></i><i class="h"></i><i></i><i class="s"></i><i class="h"></i><i class="xs"></i><i></i></div>
+                </div>
+              </div>
+              <p class="note">HTML · CSS · JavaScript · no build step</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -485,28 +622,27 @@
         <div class="timeline">
           <article class="job now">
             <div class="job-head"><h3>Associate Staff Engineer</h3><span class="when">Oct 2023 – Present</span></div>
-            <div class="org">Nagarro · C++ product engineering for an automotive retail platform</div>
+            <div class="org">Nagarro · <a href="#work">payment platform</a></div>
             <ul>
-              <li>Design and build C++20 microservices that calculate real-time lease, finance and cash payments, applying jurisdiction-specific taxes and lender rules.</li>
-              <li>Drove the Windows-to-Linux migration through its final phase: 75% faster startup and no CPU spikes on restart.</li>
-              <li>Own cloud and delivery work end to end: private AWS networking in Terraform, and moving CI/CD from Jenkins to GitHub Actions.</li>
+              <li>Own large pieces of the platform end to end, from spike and design doc to deployment in every environment.</li>
+              <li>Took on the Linux migration's final phase, private cloud networking and the move off Jenkins, alongside product features and production defects.</li>
+              <li>Share AWS, CI/CD and AI-assisted development practices with the team.</li>
             </ul>
           </article>
           <article class="job">
             <div class="job-head"><h3>Senior Engineer</h3><span class="when">May 2022 – Sep 2023</span></div>
             <div class="org">Nagarro</div>
             <ul>
-              <li>Joined a C++ product team, shipping features across the full life cycle in agile/scrum and handling production issues and on-call.</li>
-              <li>Started decoupling Windows dependencies to make the code base Linux-compatible, the groundwork for the Linux migration.</li>
+              <li>Wrapped up the healthcare firmware port, then joined the <a class="brand" href="#work">payment platform</a> in June 2022.</li>
+              <li>Delivered C++ features in agile/scrum and started decoupling Windows dependencies, the groundwork for the Linux migration.</li>
             </ul>
           </article>
           <article class="job">
             <div class="job-head"><h3>Engineer</h3><span class="when">Oct 2020 – Apr 2022</span></div>
             <div class="org">Nagarro</div>
             <ul>
-              <li>Unified the firmware of a handheld healthcare device and ported it from STM32L1 to STM32L0.</li>
-              <li>Built a COVID-era contactless entry system with thermal scanning, mask detection and encrypted QR codes.</li>
-              <li>Worked on a multitenant virtual-consultation platform (IVR and WhatsApp) and on RF traffic logging for smart-home devices.</li>
+              <li>Worked across firmware, computer vision, backend and smart-home projects in C, C++ and Python.</li>
+              <li>Took proofs of concept from first prototype to client demo.</li>
             </ul>
           </article>
           <article class="job">
@@ -514,96 +650,88 @@
             <div class="org">Nagarro</div>
             <ul>
               <li>One of the founding developers of Nagarro's Embedded practice (Sigma).</li>
-              <li>Extended the open-source BACnet stack and ran BACnet servers in Docker on AWS for hardware-free load testing.</li>
-              <li>Built IoT proofs of concept on Raspberry Pi, Arduino, Zigbee and Modbus, debugging with Wireshark and GDB on Linux.</li>
+              <li>Built IoT and networking proofs of concept on Linux, debugging with Wireshark, GDB and tcpdump.</li>
             </ul>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ================= PROJECTS ================= -->
+    <!-- ================= EARLIER PROJECTS ================= -->
     <section class="section alt" id="projects">
       <div class="wrap">
         <div class="bar">
           <div class="head">
-            <h2>Featured Projects</h2>
-            <p>Backend, cloud, firmware and IoT work, described without client details.</p>
+            <h2>Earlier Projects</h2>
+            <p>Firmware, IoT and backend work from my first years at Nagarro.</p>
           </div>
           <div class="filters" role="group" aria-label="Filter projects">
             <button type="button" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" data-filter="backend" aria-pressed="false">C++ Backend</button>
-            <button type="button" data-filter="cloud" aria-pressed="false">Cloud &amp; DevOps</button>
-            <button type="button" data-filter="embedded" aria-pressed="false">Embedded &amp; IoT</button>
+            <button type="button" data-filter="firmware" aria-pressed="false">Firmware</button>
+            <button type="button" data-filter="iot" aria-pressed="false">IoT</button>
+            <button type="button" data-filter="cloud" aria-pressed="false">Backend &amp; Cloud</button>
           </div>
         </div>
 
         <div class="grid" id="project-grid">
-          <article class="panel card" data-cat="backend">
-            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-calc"/></svg></div><span class="kind">C++ Backend</span></div>
-            <h3>Real-Time Payment Calculation Services</h3>
-            <p>C++20 microservices that let auto dealers price lease, finance and cash deals in real time, with city, county and state tax rules, lender configurations, incentives, trade-ins and down-payment variations. Tuned for millions of high-concurrency requests.</p>
-            <div class="tags"><span class="tag">C++20</span><span class="tag">Microservices</span><span class="tag">Oracle</span><span class="tag">Nginx</span></div>
-          </article>
-
-          <article class="panel card" data-cat="cloud">
-            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-shield"/></svg></div><span class="kind">Cloud &amp; Security</span></div>
-            <h3>Private Networking for Cloud Services</h3>
-            <p>Re-architected internet-facing container services for private networking as part of a security remediation. Prototyped ALB vs NLB, wrote the design and runbook, then built private load balancers, Route 53 failover and Lambda health checks in Terraform, with a public/private toggle for a safe rollout. Validated in every pre-production environment across two regions.</p>
-            <div class="tags"><span class="tag">AWS ECS</span><span class="tag">Terraform</span><span class="tag">Route 53</span><span class="tag">Lambda</span></div>
-          </article>
-
-          <article class="panel card" data-cat="cloud">
-            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-branch"/></svg></div><span class="kind">CI/CD</span></div>
-            <h3>Jenkins to GitHub Actions</h3>
-            <p>Retired the last Jenkins pipelines. Builds, tagged releases and deployments now run on GitHub Actions; scheduled jobs run on ECS Fargate with EventBridge Scheduler. Added multi-region deploys and PR automation that updates tickets and notifies reviewers on Slack.</p>
-            <div class="tags"><span class="tag">GitHub Actions</span><span class="tag">Fargate</span><span class="tag">EventBridge</span><span class="tag">Docker</span></div>
-          </article>
-
-          <article class="panel card" data-cat="backend">
-            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-code"/></svg></div><span class="kind">Code Quality</span></div>
-            <h3>Security &amp; Reliability Hardening</h3>
-            <p>Fixed 122 integer-overflow (CWE-190) findings in a single sprint and added static security scanning to CI. Introduced clang-format, a Redis cache via redis-plus-plus and graceful shutdown on signals for safer scaling.</p>
-            <div class="tags"><span class="tag">C++</span><span class="tag">SAST</span><span class="tag">Redis</span><span class="tag">clang-format</span></div>
-          </article>
-
-          <article class="panel card" data-cat="embedded">
+          <article class="panel card" data-cat="firmware">
             <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-cpu"/></svg></div><span class="kind">Firmware</span></div>
             <h3>Unified Firmware Architecture</h3>
-            <p>Merged three device firmware code bases into one modular repo, built per variant with preprocessor flags. Wrote the HAL for each subsystem and ported the firmware from STM32L1 to STM32L0 microcontrollers.</p>
+            <p>Merged three device firmware code bases for a handheld healthcare device into one modular repo, built per variant with preprocessor flags. Wrote the HAL for each subsystem and ported the firmware from STM32L1 to STM32L0 microcontrollers.</p>
             <div class="tags"><span class="tag">C</span><span class="tag">STM32</span><span class="tag">HAL</span></div>
           </article>
 
-          <article class="panel card" data-cat="embedded">
+          <article class="panel card" data-cat="iot">
             <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-wave"/></svg></div><span class="kind">IoT · Computer Vision</span></div>
             <h3>Thermal Scanning &amp; Mask Detection</h3>
             <p>Contactless office entry built for COVID: forehead temperature from a thermal camera, face-mask detection and employee checks with encrypted QR codes. Started on Raspberry Pi, moved to NVIDIA Jetson Nano for performance.</p>
             <div class="tags"><span class="tag">Python</span><span class="tag">OpenCV</span><span class="tag">Jetson Nano</span></div>
           </article>
 
-          <article class="panel card" data-cat="embedded cloud">
+          <article class="panel card" data-cat="cloud">
+            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-phone"/></svg></div><span class="kind">Backend</span></div>
+            <h3>Virtual Consultation Platform</h3>
+            <p>Multitenant system where people consult health providers over IVR and WhatsApp for COVID, mental health and more. Built the workflow, actions and transitions on a RESTful state-machine service, plus Python scripts that provision workflows and test every state transition.</p>
+            <div class="tags"><span class="tag">Python</span><span class="tag">Java</span><span class="tag">AWS</span><span class="tag">Kafka</span></div>
+          </article>
+
+          <article class="panel card" data-cat="firmware">
+            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-terminal"/></svg></div><span class="kind">Smart Home</span></div>
+            <h3>RF Traffic Logging</h3>
+            <p>Built a feature into a smart-home controller that replaced a standalone RF sniffer: RF traffic logging can be turned on and off remotely, and the logs are captured and served over the network for root-cause analysis.</p>
+            <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">Networking</span></div>
+          </article>
+
+          <article class="panel card" data-cat="iot cloud">
             <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-cloud"/></svg></div><span class="kind">IoT · Cloud</span></div>
             <h3>BACnet Servers on AWS</h3>
-            <p>Ran BACnet servers in Docker containers on EC2, created and destroyed on demand, so physical hubs can be load-tested without hardware. Added WritePropertyMultiple and Create/Delete Object services to the open-source stack.</p>
+            <p>Ran BACnet servers in Docker containers on EC2, created and destroyed on demand, so physical hubs can be load-tested without hardware. Added WritePropertyMultiple and Create/Delete Object services to the open-source BACnet stack.</p>
             <div class="tags"><span class="tag">Embedded C</span><span class="tag">Docker</span><span class="tag">AWS EC2</span><span class="tag">BACnet</span></div>
           </article>
 
-          <article class="panel card" data-cat="embedded">
+          <article class="panel card" data-cat="iot cloud">
+            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-db"/></svg></div><span class="kind">IoT · Cloud</span></div>
+            <h3>Cloud Backup for BACnet Devices</h3>
+            <p>A cloud-compatible BACnet client that mirrors a physical server's configuration to servers running on EC2, so a device can be restored if its configuration is ever lost.</p>
+            <div class="tags"><span class="tag">Embedded C</span><span class="tag">BACnet</span><span class="tag">UDP</span><span class="tag">AWS EC2</span></div>
+          </article>
+
+          <article class="panel card" data-cat="iot">
             <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-network"/></svg></div><span class="kind">Industrial IoT</span></div>
             <h3>Modbus ↔ BACnet Bridge</h3>
             <p>Bridged two industrial protocols on Linux, mapping BACnet read/write services to Modbus coils and holding registers so data survives a BACnet server restart.</p>
             <div class="tags"><span class="tag">C</span><span class="tag">Modbus</span><span class="tag">BACnet</span><span class="tag">SQLite</span></div>
           </article>
 
-          <article class="panel card" data-cat="embedded">
-            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-terminal"/></svg></div><span class="kind">Smart Home</span></div>
-            <h3>RF Traffic Logging</h3>
-            <p>Built a feature into a smart-home device that replaced a standalone RF sniffer: RF traffic logging can be turned on and off remotely, and the logs are captured and served over the network for root-cause analysis.</p>
-            <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">Networking</span></div>
+          <article class="panel card" data-cat="iot">
+            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-bulb"/></svg></div><span class="kind">Home Automation</span></div>
+            <h3>Raspberry Pi – BACnet – Arduino</h3>
+            <p>Controlled lights and switches on an Arduino from a PC: the PC talks BACnet over Wi-Fi to a Raspberry Pi, which drives the Arduino over Zigbee using XBee modules.</p>
+            <div class="tags"><span class="tag">C</span><span class="tag">BACnet</span><span class="tag">Zigbee</span><span class="tag">Raspberry Pi</span></div>
           </article>
         </div>
 
-        <p class="more">Looking for older work? <a href="College-Projects/">College projects <svg class="i"><use href="#i-arrow"/></svg></a></p>
+        <p class="more">Looking for older work? <a href="Notes/College-Projects/">College projects <svg class="i"><use href="#i-arrow"/></svg></a></p>
       </div>
     </section>
 
@@ -654,7 +782,7 @@
         <div class="head">
           <div class="eyebrow"><svg class="i"><use href="#i-book"/></svg> Learn with me</div>
           <h2>Notes &amp; Resources</h2>
-          <p>Everything I learn goes into public notes, and a few free tools I built along the way.</p>
+          <p>Everything I learn goes into public notes, free for anyone to use.</p>
         </div>
         <div class="grid">
           <a class="panel res" href="Notes/">
@@ -665,10 +793,6 @@
             <div class="ic"><svg class="i i-lg"><use href="#i-layers"/></svg></div>
             <div><h3>System Design Explainers</h3><p>Interactive walkthroughs: load balancing, CDNs, proxies, race conditions, seat booking and more.</p></div>
           </a>
-          <a class="panel res" href="Resume/">
-            <div class="ic"><svg class="i i-lg"><use href="#i-file"/></svg></div>
-            <div><h3>Resume Builder</h3><p>Free, ATS-friendly resume builder with live preview and PDF export. Your data stays in your browser.</p></div>
-          </a>
           <a class="panel res" href="Notes/Resources/Websites/">
             <div class="ic"><svg class="i i-lg"><use href="#i-globe"/></svg></div>
             <div><h3>Useful Websites</h3><p>A curated, searchable list of websites, tools and browser extensions I actually use.</p></div>
@@ -677,7 +801,7 @@
             <div class="ic"><svg class="i i-lg"><use href="#i-sparkle"/></svg></div>
             <div><h3>Prompt Library</h3><p>Searchable AI prompts for work, learning, images and everyday use, ready to copy.</p></div>
           </a>
-          <a class="panel res" href="College-Projects/">
+          <a class="panel res" href="Notes/College-Projects/">
             <div class="ic"><svg class="i i-lg"><use href="#i-archive"/></svg></div>
             <div><h3>College Projects</h3><p>ATLAS traffic-light enforcement, the ShoppingWagon store and a BPSK/QPSK radio on NI USRP.</p></div>
           </a>
@@ -701,7 +825,7 @@
             <a href="Notes/">Notes</a>
             <a href="Resume/">Resume Builder</a>
             <a href="rkformat/">rkformat</a>
-            <a href="College-Projects/">College Projects</a>
+            <a href="Notes/College-Projects/">College Projects</a>
           </nav>
         </footer>
       </div>
@@ -736,7 +860,7 @@
         meter.classList.add('in');
       }
 
-      // Projects: category filters
+      // Earlier projects: category filters
       const buttons = document.querySelectorAll('[data-filter]');
       const cards = document.querySelectorAll('#project-grid .card');
       buttons.forEach((btn) => btn.addEventListener('click', () => {

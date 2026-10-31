@@ -45,6 +45,10 @@ Welcome to my personal notes repository. Browse the site at **<https://im-rajat.
 * **[Share Market](Wealth-and-Wisdom/Share-Market/README.md)**: Trading vs. investing, intraday strategies, and financial notes.
 * **[Life Concepts of a Programmer](Wealth-and-Wisdom/Life-Concepts-of-a-Programmer.md)**: Life lessons told through OOP principles.
 
+## 🎓 [College Projects](College-Projects/README.md)
+
+* **[ATLAS](College-Projects/ATLAS/README.md)**, **[Shopping Wagon](College-Projects/ShoppingWagon/README.md)**, **[BPSK QPSK](College-Projects/BPSK-QPSK/README.md)**: Traffic-light enforcement, an e-commerce site, and a software-defined radio.
+
 ## 📚 [Resources](Resources/README.md)
 
 * **[PDF Collection](Resources/PDF/README.md)**: Downloadable PDFs for Arduino, Azure IoT, AWS, MQTT, and more.
