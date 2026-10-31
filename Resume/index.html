@@ -249,7 +249,7 @@
         <h1>Resume Builder</h1>
       </div>
       <div class="actions">
-        <button id="sample" class="btn" type="button" data-icon="sparkle" title="Replace everything with an example resume"><span class="lbl">Sample</span></button>
+        <button id="sample" class="btn" type="button" data-icon="sparkle" title="Replace everything with Rajat Kumar's resume as an example"><span class="lbl">Sample</span></button>
         <button id="clear" class="btn" type="button" data-icon="trash" title="Empty every field"><span class="lbl">Clear</span></button>
         <button id="import" class="btn" type="button" data-icon="upload" title="Load a resume JSON file (this site's format or JSON Resume)"><span class="lbl">Import</span></button>
         <button id="export" class="btn" type="button" data-icon="download" title="Save your data as a JSON file (Ctrl+S)"><span class="lbl">Export</span></button>
@@ -289,7 +289,7 @@
 
       const SECTIONS = {
         summary: 'Summary', experience: 'Work Experience', projects: 'Projects', education: 'Education',
-        skills: 'Skills', certifications: 'Certifications', languages: 'Languages',
+        skills: 'Skills', certifications: 'Certifications', awards: 'Awards & Achievements', languages: 'Languages',
       };
       const FONTS = {
         arial: ['Arial / Helvetica', 'Arial, Helvetica, "Liberation Sans", sans-serif'],
@@ -382,48 +382,89 @@
         summary: '',
         experience: [], projects: [], education: [], certifications: [],
         skills: [{ title: 'Technical Skills', items: '' }, { title: 'Soft Skills', items: '' }],
+        awards: '',
         languages: '',
         layout: { order: Object.keys(SECTIONS), hidden: [], titles: {} },
         settings: { font: 'arial', size: 'normal', paper: 'a4', margin: '15' },
       });
 
+      // Rajat's own resume doubles as the example every first-time visitor sees.
       const SAMPLE = {
         personal: {
-          name: 'Aarav Mehta', title: 'Senior Software Engineer', email: 'aarav.mehta@example.com',
-          phone: '+91 98765 43210', location: 'Bengaluru, India', website: '',
+          name: 'Rajat Kumar', title: 'Associate Staff Engineer', email: 'rajat15163@iiitd.ac.in',
+          phone: '+91 8285444609', location: '', website: '',
         },
-        links: ['linkedin.com/in/your-profile', 'github.com/your-username'],
-        summary: 'Backend engineer with 6 years of experience building high-traffic payment and booking systems in Java and Go. Led the move from a monolith to event-driven services handling 12K requests per second. Comfortable owning a service end to end: design, delivery, on-call and cost.',
+        links: ['linkedin.com/in/imRajat', 'github.com/im-Rajat'],
+        summary: 'Software engineer with 5+ years of experience in C, C++ and Python, focused on IoT, firmware and embedded systems. Involved in the full life cycle of feature development in agile/scrum teams. Strong problem solver who picks up new languages and technologies quickly.',
         experience: [
           {
-            role: 'Senior Software Engineer', company: 'Northwind Payments', location: 'Bengaluru, India', start: 'Apr 2022', end: 'Present', description: '',
-            highlights: 'Split the checkout monolith into 9 Kafka-backed services, cutting p99 latency from 820 ms to 190 ms.\nDesigned idempotent retry handling that brought duplicate charges to zero across 40M monthly transactions.\nReduced AWS spend by 28% by right-sizing ECS tasks and moving cold data to S3 Glacier.\nMentored 4 engineers; two were promoted within a year.',
+            role: 'Associate Staff Engineer', company: 'Nagarro', start: 'Oct 2023', end: 'Present',
+            highlights: 'Work on C, C++ and Python projects focused on IoT, firmware and embedded systems.\nInvolved in the full life cycle of feature development using agile/scrum.',
           },
           {
-            role: 'Software Engineer', company: 'Bluepeak Travel', location: 'Pune, India', start: 'Jul 2019', end: 'Mar 2022', description: '',
-            highlights: 'Built the seat-locking service for bus bookings on Redis, ending double bookings during flash sales.\nAdded contract tests to 30+ REST APIs, halving production incidents caused by releases.\nAutomated deployments with GitHub Actions and Docker, taking a release from 2 hours to 15 minutes.',
+            role: 'Senior Engineer', company: 'Nagarro', start: 'May 2022', end: 'Sep 2023',
+            highlights: 'End-to-end hardware and firmware development for a handheld healthcare device.\nBuilt several proofs of concept to client requirements and demoed them to the client.',
+          },
+          {
+            role: 'Engineer', company: 'Nagarro', start: 'Oct 2020', end: 'Apr 2022',
+            highlights: 'Developed a contactless entry system that checks temperature with a thermal camera, detects face masks and verifies employees with individually encrypted QR codes (COVID project).\nHelped build a multitenant system for virtual consultations with health providers over IVR and WhatsApp, covering COVID, mental health and more.\nAdded create/delete services to the BACnet stack and ran BACnet servers in Docker containers on AWS EC2 (Linux).',
+          },
+          {
+            role: 'Associate Engineer', company: 'Nagarro', start: 'Jun 2019', end: 'Sep 2020',
+            highlights: 'One of the founding developers of Nagarro\'s new Embedded category (Sigma – Practice ISV).\nWorked across embedded, networking, IoT and Linux kernel development.\nUsed Wireshark, GDB, tcpdump, Code::Blocks, Visual Studio, PyCharm and IntelliJ IDEA day to day.\nHands-on with IoT boards including NVIDIA Jetson Nano and Raspberry Pi 4.',
           },
         ],
         projects: [
           {
-            name: 'Ledger Lite', link: 'github.com/your-username/ledger-lite', start: '2023', end: 'Present',
-            description: 'Open-source double-entry bookkeeping API for small shops.',
-            highlights: 'Written in Go with PostgreSQL; 1.2K GitHub stars.\nHandles 5K writes per second on a single small VM in load tests.',
+            name: 'Firmware Development',
+            highlights: 'Merged 3 device firmware code bases into 1, building each variant with preprocessor flags.\nDeveloped and tested the HAL (Hardware Abstraction Layer) for several subsystems.\nPorted the firmware code base from STM32L1 to STM32L0.',
+          },
+          {
+            name: 'Virtual Consultation',
+            description: 'Multitenant system for virtual consultations with health providers over IVR and WhatsApp, for COVID, mental health and more.',
+            highlights: 'Worked on Statesman, the core RESTful state-machine module that moves each consultation through its workflow based on rules and health-provider responses.',
+          },
+          {
+            name: 'Thermal Scanning & Mask Detection',
+            description: 'Contactless office entry solution for the post-COVID workplace.',
+            highlights: 'Scanned temperature with a thermal camera, detected face masks and verified employees with individually encrypted QR codes.\nBuilt on Raspberry Pi, then moved to NVIDIA Jetson Nano for better performance.',
+          },
+          {
+            name: 'RF Sniffer Functionality',
+            highlights: 'Added remote enable/disable of RF network traffic logging to the processor device, replacing the standalone RF sniffer tool.\nCaptured those logs and served them over the network for remote analysis.\nAll traffic between the processor and RF devices is recorded, making issues easier to debug and root-cause.',
+          },
+          {
+            name: 'BACnet Servers in Docker Containers on the Cloud',
+            highlights: 'Ran BACnet servers in Docker containers on cloud Linux hosts, created and terminated on demand.\nA BACnet client can talk to both the cloud servers and physical BACnet servers.\nEases load testing of the physical hub and allows testing when the physical device isn\'t available.',
+          },
+          {
+            name: 'Add/Delete Services in the BACnet Stack',
+            highlights: 'Implemented services still missing from the open-source BACnet Stack 0.8.6.\nAdded WritePropertyMultiple and Create/Delete Object services.',
+          },
+          {
+            name: 'Raspberry Pi – BACnet – Arduino Communication',
+            highlights: 'Controlled lights and switches on an Arduino from a PC: the PC talks to a Raspberry Pi over BACnet on Wi-Fi, and the Pi talks to the Arduino over Zigbee.',
           },
         ],
         education: [
           {
-            school: 'City College of Engineering', degree: 'B.Tech in Computer Science', location: 'Pune, India', start: '2015', end: '2019',
-            details: 'CGPA 8.4/10 · Coursework: Data Structures, Operating Systems, Computer Networks, DBMS',
+            school: 'Indraprastha Institute of Information Technology', location: 'Delhi', degree: 'B.Tech in Electronics and Communication Engineering',
+            start: 'Aug 2015', end: 'May 2019',
+            details: 'Technical electives: Data Structures and Algorithms, Competitive Programming, Advanced Programming',
           },
+          { school: 'Kala Niketan International School', location: 'Delhi', degree: 'Class 12', start: '2014', end: '2015' },
+          { school: 'Kala Niketan International School', location: 'Delhi', degree: 'Class 10', start: '2012', end: '2013' },
         ],
         skills: [
-          { title: 'Programming', items: 'Java, Go, Python, SQL, TypeScript' },
-          { title: 'Backend & Cloud', items: 'Spring Boot, Kafka, Redis, PostgreSQL, AWS (ECS, S3, Lambda), Docker, Kubernetes' },
-          { title: 'Practices', items: 'System design, REST and gRPC APIs, CI/CD, observability, code review' },
+          { title: 'Programming', items: 'C, C++, Java' },
+          { title: 'Familiar with', items: 'Python, Django, Bash scripting' },
+          { title: 'Databases', items: 'SQL, SQLite' },
+          { title: 'Tools', items: 'Visual Studio Code, Visual Studio, IntelliJ IDEA, PyCharm, Git, Bitbucket, Jira, Postman, Wireshark' },
+          { title: 'Platforms & Protocols', items: 'Docker, AWS EC2, BACnet, Raspberry Pi, Jetson Nano' },
         ],
-        certifications: [{ name: 'AWS Certified Solutions Architect – Associate', issuer: 'Amazon Web Services', date: '2023', link: '' }],
-        languages: 'English (fluent), Hindi (native)',
+        certifications: [],
+        awards: 'Won the Engineering Excellence Award for outstanding contribution to client delivery.\nFeatured twice on the Cheer Board for excellent performance.',
+        languages: '',
       };
 
       const $ = (sel) => document.querySelector(sel);
@@ -467,6 +508,7 @@
         out.personal = pick(raw.personal, Object.keys(out.personal));
         if (Array.isArray(raw.links)) out.links = raw.links.map((l) => (typeof l === 'object' ? str(l?.url) : str(l)));
         out.summary = str(raw.summary);
+        out.awards = str(raw.awards);
         out.languages = Array.isArray(raw.languages) ? raw.languages.map(str).join(', ') : str(raw.languages);
         for (const [key, def] of Object.entries(LISTS)) {
           if (Array.isArray(raw[key])) out[key] = raw[key].filter((x) => x && typeof x === 'object').map((x) => pick(x, def.fields.map((f) => f.key)));
@@ -512,6 +554,7 @@
           skills: list(r.skills).map((s) => ({ title: s.name, items: Array.isArray(s.keywords) ? s.keywords.join(', ') : '' })),
           languages: list(r.languages).map((l) => (l.fluency ? `${l.language} (${l.fluency})` : l.language)).filter(Boolean).join(', '),
           certifications: list(r.certificates).map((c) => ({ name: c.name, issuer: c.issuer, date: date(c.date), link: c.url })),
+          awards: list(r.awards).map((a) => [a.title, a.awarder && `— ${a.awarder}`, a.date && `(${date(a.date)})`].filter(Boolean).join(' ')).join('\n'),
         };
       }
 
@@ -613,6 +656,8 @@
           [field('summary', { label: 'Professional summary', type: 'area', rows: 5, ph: '2–3 lines: who you are, years of experience, and what you do best.' })], hiddenTag('summary')),
         languages: () => card('languages', SECTIONS.languages,
           [field('languages', { label: 'Languages you speak', ph: 'English (fluent), Hindi (native)', hint: 'Separate with commas.', full: true })], hiddenTag('languages')),
+        awards: () => card('awards', SECTIONS.awards,
+          [field('awards', { label: 'Awards and achievements', type: 'area', rows: 4, ph: 'Won the Engineering Excellence Award for client delivery', hint: 'One per line. Each line becomes a bullet point.' })], hiddenTag('awards')),
       };
       for (const key of Object.keys(LISTS)) FORMS[key] = () => listCard(key);
 
@@ -746,6 +791,7 @@
             c.name.trim() && (c.link.trim() ? link(c.link, c.name.trim()) : c.name.trim()),
             c.issuer.trim() && ` — ${c.issuer.trim()}`, c.date.trim() && ` (${c.date.trim()})`))) : null;
         },
+        awards: () => list(state.awards),
         languages: () => text(csv(state.languages)),
       };
 
