@@ -20,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0  # Full history, so each page's "Last update" date comes from its own last commit
+
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
@@ -34,15 +36,16 @@ jobs:
           restore-keys: |
             mkdocs-material-
             
-      - run: pip install mkdocs-material mkdocs-redirects
-      
+      - run: pip install mkdocs-material mkdocs-redirects mkdocs-git-revision-date-localized-plugin
+
       # Retaining our folder hack to keep the root directory clean.
+      # docs/ is a git worktree (a second checkout sharing this repo's history) rather than a plain copy,
+      # so the git-revision-date plugin can still look up each page's commits.
       # The portfolio, College-Projects and Resume are published at the site root, so they stay out of the notes build.
       - name: Hack to fix the folder structure dynamically
         run: |
-          mkdir docs
-          rsync -av --exclude='docs' --exclude='.git' --exclude='.github' --exclude='mkdocs.yml' \
-            --exclude='/index.html' --exclude='/College-Projects' --exclude='/Resume' ./ docs/
+          git worktree add --detach docs
+          rm -rf docs/.github docs/mkdocs.yml docs/index.html docs/College-Projects docs/Resume
 
       # Turn the markdown sources of the Prompt Library and Useful Websites pages into the JSON they load
       - run: |
