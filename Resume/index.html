@@ -424,38 +424,43 @@
       // Rajat's own resume doubles as the example every first-time visitor sees.
       const SAMPLE = {
         personal: {
-          name: 'Rajat Kumar', title: 'Associate Staff Engineer', email: 'rajat15163@iiitd.ac.in',
-          phone: '+91 8285444609', location: '', website: '',
+          name: 'Rajat Kumar', title: 'Associate Staff Engineer', email: 'rajatk0506@gmail.com',
+          phone: '+91 8285444609', location: '', website: 'im-rajat.github.io',
         },
         links: ['linkedin.com/in/imRajat', 'github.com/im-Rajat'],
-        summary: 'Software engineer with 5+ years of experience in C, C++ and Python, focused on IoT, firmware and embedded systems. Involved in the full life cycle of feature development in agile/scrum teams. Strong problem solver who picks up new languages and technologies quickly.',
+        summary: 'Software engineer with 6+ years of experience building high-performance C++ systems, from embedded firmware and IoT to cloud services on Linux and AWS. Drove a legacy Windows-to-Linux migration that cut startup time by 75%, and own cloud networking, CI/CD and security work end to end.',
         experience: [
           {
             role: 'Associate Staff Engineer', company: 'Nagarro', start: 'Oct 2023', end: 'Present',
-            highlights: 'Work on C, C++ and Python projects focused on IoT, firmware and embedded systems.\nInvolved in the full life cycle of feature development using agile/scrum.',
+            highlights: 'Design and develop C++20 microservices that calculate real-time lease, finance and cash deals for auto dealers, with location-based state, county and city taxes, lender rules, incentives and trade-ins, serving millions of high-concurrency requests.\nDrove the final phase of the Windows-to-Linux migration (CMake presets, shared Docker dev image): startup fell from 20 to 4 minutes with no CPU spikes.\nOwned the move of AWS ECS services to private networking, from ALB vs NLB proof of concept and design to Terraform for private load balancers and Route 53 failover.\nRetired the last Jenkins pipelines, moving builds, releases and scheduled jobs to GitHub Actions and ECS Fargate.\nFixed 122 integer-overflow (CWE-190) findings in one sprint and added security scanning to CI.',
           },
           {
             role: 'Senior Engineer', company: 'Nagarro', start: 'May 2022', end: 'Sep 2023',
-            highlights: 'End-to-end hardware and firmware development for a handheld healthcare device.\nBuilt several proofs of concept to client requirements and demoed them to the client.',
+            highlights: 'Delivered C++ product features across the full life cycle in agile/scrum, and handled production issues and on-call.\nDecoupled Windows dependencies to make the code base Linux-compatible, the groundwork for the Linux migration.',
           },
           {
             role: 'Engineer', company: 'Nagarro', start: 'Oct 2020', end: 'Apr 2022',
-            highlights: 'Developed a contactless entry system that checks temperature with a thermal camera, detects face masks and verifies employees with individually encrypted QR codes (COVID project).\nHelped build a multitenant system for virtual consultations with health providers over IVR and WhatsApp, covering COVID, mental health and more.\nAdded create/delete services to the BACnet stack and ran BACnet servers in Docker containers on AWS EC2 (Linux).',
+            highlights: 'Unified the firmware of a handheld healthcare device and ported it from STM32L1 to STM32L0.\nBuilt a contactless entry system with thermal scanning, mask detection and encrypted QR codes (COVID).\nBuilt workflows and Python test automation for a virtual-consultation platform, and RF traffic logging in C/C++.',
           },
           {
             role: 'Associate Engineer', company: 'Nagarro', start: 'Jun 2019', end: 'Sep 2020',
-            highlights: 'One of the founding developers of Nagarro\'s new Embedded category (Sigma – Practice ISV).\nWorked across embedded, networking, IoT and Linux kernel development.\nUsed Wireshark, GDB, tcpdump, Code::Blocks, Visual Studio, PyCharm and IntelliJ IDEA day to day.\nHands-on with IoT boards including NVIDIA Jetson Nano and Raspberry Pi 4.',
+            highlights: 'One of the founding developers of Nagarro\'s Embedded practice (Sigma – Practice ISV).\nExtended the open-source BACnet stack, ran BACnet servers in Docker on AWS EC2, and built IoT proofs of concept on Raspberry Pi, Arduino and Zigbee.',
           },
         ],
         projects: [
           {
-            name: 'Firmware Development',
-            highlights: 'Merged 3 device firmware code bases into 1, building each variant with preprocessor flags.\nDeveloped and tested the HAL (Hardware Abstraction Layer) for several subsystems.\nPorted the firmware code base from STM32L1 to STM32L0.',
+            name: 'rkformat (open source)', link: 'github.com/im-Rajat/rkformat', start: '2026', end: '',
+            description: 'A file format that bundles a Markdown document and every image it references into one .rkf file you can just send someone.',
+            highlights: 'ZIP-based container that stores images as raw bytes, de-duplicated by SHA-256, with integrity checks and byte-identical output.\nPython library and rk CLI (pack, check, render, share and more), an installable offline web editor and a VS Code extension.\nHardened readers: path-traversal and zip-bomb limits, magic-byte type sniffing and allowlist HTML sanitizing.',
           },
           {
-            name: 'Virtual Consultation',
-            description: 'Multitenant system for virtual consultations with health providers over IVR and WhatsApp, for COVID, mental health and more.',
-            highlights: 'Worked on Statesman, the core RESTful state-machine module that moves each consultation through its workflow based on rules and health-provider responses.',
+            name: 'Personal Knowledge Base', link: 'im-rajat.github.io/Notes',
+            description: 'Public notes site built with MkDocs and GitHub Actions.',
+            highlights: 'Notes on C/C++, system design, operating systems, networks, DBMS and DevOps, with 40+ interactive explainers.\nAlso hosts a browser-only resume builder with PDF export, a prompt library and a curated tools list.',
+          },
+          {
+            name: 'Unified Firmware Architecture',
+            highlights: 'Merged 3 device firmware code bases into 1, building each variant with preprocessor flags.\nDeveloped and tested the HAL (Hardware Abstraction Layer) for several subsystems.\nPorted the firmware code base from STM32L1 to STM32L0.',
           },
           {
             name: 'Thermal Scanning & Mask Detection',
@@ -463,20 +468,8 @@
             highlights: 'Scanned temperature with a thermal camera, detected face masks and verified employees with individually encrypted QR codes.\nBuilt on Raspberry Pi, then moved to NVIDIA Jetson Nano for better performance.',
           },
           {
-            name: 'RF Sniffer Functionality',
-            highlights: 'Added remote enable/disable of RF network traffic logging to the processor device, replacing the standalone RF sniffer tool.\nCaptured those logs and served them over the network for remote analysis.\nAll traffic between the processor and RF devices is recorded, making issues easier to debug and root-cause.',
-          },
-          {
             name: 'BACnet Servers in Docker Containers on the Cloud',
-            highlights: 'Ran BACnet servers in Docker containers on cloud Linux hosts, created and terminated on demand.\nA BACnet client can talk to both the cloud servers and physical BACnet servers.\nEases load testing of the physical hub and allows testing when the physical device isn\'t available.',
-          },
-          {
-            name: 'Add/Delete Services in the BACnet Stack',
-            highlights: 'Implemented services still missing from the open-source BACnet Stack 0.8.6.\nAdded WritePropertyMultiple and Create/Delete Object services.',
-          },
-          {
-            name: 'Raspberry Pi – BACnet – Arduino Communication',
-            highlights: 'Controlled lights and switches on an Arduino from a PC: the PC talks to a Raspberry Pi over BACnet on Wi-Fi, and the Pi talks to the Arduino over Zigbee.',
+            highlights: 'Ran BACnet servers in Docker containers on cloud Linux hosts, created and terminated on demand, so physical hubs can be load-tested without hardware.\nAdded WritePropertyMultiple and Create/Delete Object services missing from the open-source BACnet Stack 0.8.6.',
           },
         ],
         education: [
@@ -485,18 +478,17 @@
             start: 'Aug 2015', end: 'May 2019',
             details: 'Technical electives: Data Structures and Algorithms, Competitive Programming, Advanced Programming',
           },
-          { school: 'Kala Niketan International School', location: 'Delhi', degree: 'Class 12', start: '2014', end: '2015' },
-          { school: 'Kala Niketan International School', location: 'Delhi', degree: 'Class 10', start: '2012', end: '2013' },
         ],
         skills: [
-          { title: 'Programming', items: 'C, C++, Java' },
-          { title: 'Familiar with', items: 'Python, Django, Bash scripting' },
-          { title: 'Databases', items: 'SQL, SQLite' },
-          { title: 'Tools', items: 'Visual Studio Code, Visual Studio, IntelliJ IDEA, PyCharm, Git, Bitbucket, Jira, Postman, Wireshark' },
-          { title: 'Platforms & Protocols', items: 'Docker, AWS EC2, BACnet, Raspberry Pi, Jetson Nano' },
+          { title: 'Languages', items: 'C++ (11–20), C, Python, Java, Bash, SQL' },
+          { title: 'Cloud & DevOps', items: 'AWS (ECS Fargate, ALB, Route 53, Lambda, EventBridge, CloudWatch, IAM, S3, EC2), Terraform, Docker, GitHub Actions, Jenkins, Nginx' },
+          { title: 'Build & Tools', items: 'CMake, Ninja, Conan, Git, clang-format, GDB, Wireshark, VS Code' },
+          { title: 'Data & Observability', items: 'Oracle, Redis, SQLite, New Relic, Splunk, Veracode' },
+          { title: 'Embedded & IoT', items: 'STM32, HAL, Linux, Raspberry Pi, Jetson Nano, Arduino, BACnet, Modbus, Zigbee' },
+          { title: 'Practices', items: 'Agile/Scrum, on-call support, AI-assisted development (Claude Code)' },
         ],
         certifications: [],
-        awards: 'Won the Engineering Excellence Award for outstanding contribution to client delivery.\nFeatured twice on the Cheer Board for excellent performance.',
+        awards: '"Brightest Mind" award, Nagarro Excellence Awards.\nEngineering Excellence Award for outstanding contribution to client delivery.\nFeatured three times on the Cheer Board for excellent performance.',
         languages: '',
       };
 
