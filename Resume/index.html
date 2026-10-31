@@ -127,10 +127,11 @@
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; color: var(--muted); font-size: 13px; }
     .field.full { grid-column: 1 / -1; }
-    .field input, .field textarea, .field select, .row input, .sec-row input[type="text"] {
+    .field input, .field textarea, .field select, .row input, .sec-row input[type="text"], .sec-row select {
       width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
       background: var(--bg); color: var(--text); font-size: 14px;
     }
+    .sec-row select { flex: none; width: 118px; padding: 8px 6px; }
     .field textarea { min-height: 60px; resize: vertical; line-height: 1.45; }
     input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
     input::placeholder, textarea::placeholder { color: var(--muted); opacity: .6; }
@@ -200,6 +201,22 @@
     .r-list { margin: .25em 0 0; padding-left: 1.25em; }
     .r-list li { margin-top: .12em; padding-left: .15em; overflow-wrap: anywhere; }
     .r-skill { margin: .15em 0 0; }
+    .r-section h3 { color: var(--accent); }
+    .r-meta { color: #5b6570; font-size: .92em; }
+
+    /* Two-column template: full-width header, main column + side column, then optional full-width pages */
+    .t-two .r-head { padding-bottom: .7em; border-bottom: 1px solid #d5dbe1; text-align: center; }
+    .t-two .r-name { letter-spacing: .02em; text-transform: uppercase; }
+    .r-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: .25em 1.1em; margin: .5em 0 0; font-size: .92em; }
+    .r-icons > span { display: inline-flex; align-items: center; gap: .35em; white-space: nowrap; }
+    .r-icons svg { flex: none; width: 1.05em; height: 1.05em; color: var(--accent); }
+    .r-cols { display: grid; grid-template-columns: minmax(0, 1fr) 34%; gap: 0 7mm; }
+    .t-two .r-section { margin-top: .95em; }
+    .t-two .r-section h3 { margin-bottom: .4em; border-bottom-color: #d5dbe1; letter-spacing: .04em; }
+    .r-side .r-entry + .r-entry, .r-side .r-skill + .r-skill { margin-top: .55em; }
+    .r-side .r-list { padding-left: 1.1em; }
+    .r-after:not(:first-child) { break-before: page; }
+    .r-after > .r-section:first-child { margin-top: 0; }
     .guide { position: absolute; left: 0; right: 0; border-top: 1px dashed #e11d48; pointer-events: none; }
     .guide span {
       position: absolute; right: 6px; top: 0; transform: translateY(-100%);
@@ -238,6 +255,7 @@
       .preview { display: block !important; padding: 0; overflow: visible; background: none; }
       .stage { width: auto !important; height: auto !important; margin: 0; overflow: visible; }
       .paper { width: auto; min-height: 0 !important; padding: 0; box-shadow: none; transform: none !important; }
+      .r-after { margin-top: 0 !important; }
     }
   </style>
 </head>
@@ -288,9 +306,17 @@
       const MM = 96 / 25.4; // CSS px per millimetre
 
       const SECTIONS = {
-        summary: 'Summary', experience: 'Work Experience', projects: 'Projects', education: 'Education',
-        skills: 'Skills', certifications: 'Certifications', awards: 'Awards & Achievements', languages: 'Languages',
+        summary: 'Summary', experience: 'Work Experience', projects: 'Projects', skills: 'Skills',
+        education: 'Education', certifications: 'Certifications', awards: 'Awards & Achievements', languages: 'Languages',
       };
+      // Where each section sits in the two-column template; "page" sections start a new full-width page.
+      const PLACES = { main: ['Main column'], side: ['Side column'], page: ['Next page'] };
+      const DEFAULT_PLACE = {
+        summary: 'main', experience: 'main', projects: 'page', skills: 'side',
+        education: 'side', certifications: 'side', awards: 'side', languages: 'side',
+      };
+      const TEMPLATES = { two: ['Two columns'], classic: ['Single column'] };
+      const ACCENTS = { blue: ['Blue', '#2e74b5'], teal: ['Teal', '#0f766e'], maroon: ['Maroon', '#9f1239'], black: ['Black', '#111111'] };
       const FONTS = {
         arial: ['Arial / Helvetica', 'Arial, Helvetica, "Liberation Sans", sans-serif'],
         calibri: ['Calibri', 'Calibri, Carlito, "Segoe UI", Arial, sans-serif'],
@@ -373,6 +399,13 @@
         download: 'M12 4v11m-5-5 5 5 5-5M5 20h14',
         printer: 'M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z',
         sparkle: 'M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z',
+        // contact icons in the two-column header
+        mail: 'M3 5h18v14H3zM3 6l9 7 9-7',
+        phone: 'M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2',
+        pin: 'M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5',
+        linkedin: 'M3 3h18v18H3zM8 10v7M8 7v.01M12 17v-7M12 13.5a3 3 0 0 1 5 0V17',
+        github: 'M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4M9 18c-4.51 2-5-2-7-2',
+        globe: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18',
       };
 
       const blank = () => ({
@@ -384,8 +417,8 @@
         skills: [{ title: 'Technical Skills', items: '' }, { title: 'Soft Skills', items: '' }],
         awards: '',
         languages: '',
-        layout: { order: Object.keys(SECTIONS), hidden: [], titles: {} },
-        settings: { font: 'arial', size: 'normal', paper: 'a4', margin: '15' },
+        layout: { order: Object.keys(SECTIONS), hidden: [], titles: {}, place: { ...DEFAULT_PLACE } },
+        settings: { template: 'two', accent: 'blue', font: 'arial', size: 'normal', paper: 'a4', margin: '15' },
       });
 
       // Rajat's own resume doubles as the example every first-time visitor sees.
@@ -520,7 +553,10 @@
         }
         if (Array.isArray(layout.hidden)) out.layout.hidden = layout.hidden.filter((k) => k in SECTIONS);
         for (const k of Object.keys(SECTIONS)) if (typeof layout.titles?.[k] === 'string') out.layout.titles[k] = layout.titles[k];
+        for (const k of Object.keys(SECTIONS)) if (layout.place?.[k] in PLACES) out.layout.place[k] = layout.place[k];
         const s = raw.settings || {};
+        if (s.template in TEMPLATES) out.settings.template = s.template;
+        if (s.accent in ACCENTS) out.settings.accent = s.accent;
         if (s.font in FONTS) out.settings.font = s.font;
         if (s.size in SIZES) out.settings.size = s.size;
         if (s.paper in PAPERS) out.settings.paper = s.paper;
@@ -680,6 +716,12 @@
           const off = state.layout.hidden.includes(k);
           const title = h('input', { type: 'text', 'data-path': `layout.titles.${k}`, placeholder: SECTIONS[k], 'aria-label': `Heading for ${SECTIONS[k]}` });
           title.value = state.layout.titles[k] || '';
+          let place = null;
+          if (state.settings.template === 'two') {
+            place = h('select', { 'data-path': `layout.place.${k}`, 'aria-label': `Where ${SECTIONS[k]} goes`, title: 'Where this section goes' },
+              Object.entries(PLACES).map(([value, [text]]) => h('option', { value }, text)));
+            place.value = state.layout.place[k];
+          }
           return h('div', { class: off ? 'sec-row off' : 'sec-row' },
             h('input', {
               type: 'checkbox', checked: !off, 'aria-label': `Show ${SECTIONS[k]}`, title: 'Show in resume',
@@ -689,17 +731,22 @@
               'data-focus': `sec.${k}`,
             }),
             title,
+            place,
             mini('up', `Move ${SECTIONS[k]} up`, `sec.${i}.up`, () => update(() => move(order, i, -1), { focus: `sec.${i - 1}.up` }), { disabled: i === 0 }),
             mini('down', `Move ${SECTIONS[k]} down`, `sec.${i}.down`, () => update(() => move(order, i, 1), { focus: `sec.${i + 1}.down` }), { disabled: i === order.length - 1 }));
         });
         return card('layout', 'Layout & style', [
           h('div', { class: 'grid' },
+            select('settings.template', TEMPLATES, 'Design'),
+            select('settings.accent', ACCENTS, 'Heading colour'),
             select('settings.font', FONTS, 'Font'),
             select('settings.size', SIZES, 'Text size'),
             select('settings.paper', PAPERS, 'Paper'),
             select('settings.margin', MARGINS, 'Margins')),
           h('p', { class: 'sub' }, 'Sections'),
-          h('p', { class: 'hint' }, 'Untick to hide, type to rename, arrows to reorder.'),
+          h('p', { class: 'hint' }, state.settings.template === 'two'
+            ? 'Untick to hide, type to rename, pick a column, arrows to reorder.'
+            : 'Untick to hide, type to rename, arrows to reorder.'),
           h('div', { class: 'sec-list' }, rows),
         ]);
       }
@@ -710,6 +757,7 @@
           tip('Mirror the job post.', 'Reuse its exact keywords in your skills and achievements; ATS filters match words, not meaning.'),
           tip('Lead with results.', 'Start each bullet with a verb and add a number: "Cut build time 40% by…".'),
           tip('Keep standard headings.', 'Parsers look for Experience, Education and Skills. Rename sections sparingly.'),
+          tip('Columns or not.', 'Two columns read fine in most modern ATS. For older portals, switch Design to "Single column" under Layout & style.'),
           tip('Aim for one page.', 'Two at most. The dashed red line in the preview marks where a new page starts.'),
           tip('Save as PDF.', 'In the print dialog pick "Save as PDF" and turn off "Headers and footers". The PDF keeps real, selectable text.'),
           tip('Back it up.', 'Your data is saved in this browser only. Export a JSON file to keep a copy or move to another device.'))]);
@@ -718,9 +766,9 @@
       function renderForm() {
         editor.replaceChildren(
           h('p', { class: 'lede' }, 'Fill in the sections and the preview updates as you type. When you are done, press ', h('b', {}, 'Download PDF'), '.'),
+          layoutCard(),
           personalCard(),
           ...state.layout.order.map((k) => FORMS[k]()),
-          layoutCard(),
           tipsCard());
       }
 
@@ -728,6 +776,7 @@
         const path = e.target.dataset.path;
         if (!path) return;
         setPath(path, e.target.value);
+        if (path === 'settings.template') return update(() => {}, { focus: path }); // column pickers come and go
         const item = e.target.closest('.item');
         if (item) {
           const { list, index } = item.dataset, def = LISTS[list];
@@ -795,6 +844,33 @@
         languages: () => text(csv(state.languages)),
       };
 
+      // Two-column variants, compact enough for the narrow side column. Sections not listed reuse RENDER.
+      const meta2 = (...bits) => { const t = bits.map(clean).filter(Boolean).join(' · '); return t && h('div', { class: 'r-meta' }, t); };
+      const TWO = {
+        experience: () => entries('experience', (e) => [
+          row([h('strong', {}, e.company.trim()), e.company.trim() && e.role.trim() && ', ', e.role.trim()], range(e.start, e.end)),
+          meta2(e.location), text(e.description), list(e.highlights)]),
+        education: () => entries('education', (e) => [
+          h('div', {}, h('strong', {}, e.school.trim()), e.school.trim() && e.location.trim() && ', ', e.location.trim()),
+          e.degree.trim() && h('div', {}, e.degree.trim()),
+          meta2(range(e.start, e.end)), text(e.details)]),
+        skills: () => {
+          const groups = state.skills.filter((g) => csv(g.items));
+          return groups.length ? groups.map((g) => h('div', { class: 'r-skill' }, g.title.trim() && h('strong', {}, g.title.trim()), h('div', {}, csv(g.items)))) : null;
+        },
+      };
+
+      function contactIcons(p) {
+        const kind = (u) => (/linkedin\./i.test(u) ? 'linkedin' : /github\./i.test(u) ? 'github' : 'globe');
+        return [
+          ['phone', p.phone.trim() && h('a', { href: `tel:${p.phone.replace(/[^\d+]/g, '')}` }, p.phone.trim())],
+          ['mail', p.email.includes('@') ? h('a', { href: `mailto:${p.email.trim()}` }, p.email.trim()) : p.email.trim()],
+          ['pin', p.location.trim()],
+          ['globe', p.website.trim() && link(p.website, pretty(p.website))],
+          ...state.links.filter(clean).map((u) => [kind(u), link(u, pretty(u))]),
+        ].filter(([, node]) => node).flatMap(([name, node], i) => [i ? ' ' : '', h('span', {}, icon(name), node)]);
+      }
+
       function renderPreview() {
         const { personal: p, settings: s } = state;
         const [, pageSize, width, height] = PAPERS[s.paper];
@@ -803,23 +879,43 @@
         paper.style.setProperty('--fs', SIZES[s.size][1]);
         paper.style.setProperty('--font', FONTS[s.font][1]);
         pageRule.textContent = `@page { size: ${pageSize}; margin: ${s.margin}mm; }`;
+        paper.style.setProperty('--accent', ACCENTS[s.accent][1]);
+        const two = s.template === 'two';
+        paper.className = two ? 'paper t-two' : 'paper t-classic';
 
-        const contact = [
-          p.email.includes('@') ? h('a', { href: `mailto:${p.email.trim()}` }, p.email.trim()) : p.email.trim(),
-          p.phone.trim() && h('a', { href: `tel:${p.phone.replace(/[^\d+]/g, '')}` }, p.phone.trim()),
-          p.location.trim(),
-          p.website.trim() && link(p.website, pretty(p.website)),
-          ...state.links.filter(clean).map((u) => link(u, pretty(u))),
-        ].filter(Boolean);
+        const sections = (where) => state.layout.order
+          .filter((k) => !state.layout.hidden.includes(k) && (!where || state.layout.place[k] === where))
+          .map((k) => {
+            const content = ((two && TWO[k]) || RENDER[k])();
+            return content && h('section', { class: 'r-section' }, h('h3', {}, sectionTitle(k)), content);
+          })
+          .filter(Boolean);
 
-        const parts = [];
-        if (p.name.trim()) parts.push(h('h2', { class: 'r-name' }, p.name.trim()));
-        if (p.title.trim()) parts.push(h('p', { class: 'r-title' }, p.title.trim()));
-        if (contact.length) parts.push(h('p', { class: 'r-contact' }, contact.flatMap((c, i) => (i ? [' | ', h('span', {}, c)] : [h('span', {}, c)]))));
-        for (const k of state.layout.order) {
-          if (state.layout.hidden.includes(k)) continue;
-          const content = RENDER[k]();
-          if (content) parts.push(h('section', { class: 'r-section' }, h('h3', {}, sectionTitle(k)), content));
+        const head = [];
+        if (p.name.trim()) head.push(h('h2', { class: 'r-name' }, p.name.trim()));
+        if (p.title.trim()) head.push(h('p', { class: 'r-title' }, p.title.trim()));
+        if (two) {
+          const icons = contactIcons(p);
+          if (icons.length) head.push(h('p', { class: 'r-icons' }, icons));
+        } else {
+          const contact = [
+            p.email.includes('@') ? h('a', { href: `mailto:${p.email.trim()}` }, p.email.trim()) : p.email.trim(),
+            p.phone.trim() && h('a', { href: `tel:${p.phone.replace(/[^\d+]/g, '')}` }, p.phone.trim()),
+            p.location.trim(),
+            p.website.trim() && link(p.website, pretty(p.website)),
+            ...state.links.filter(clean).map((u) => link(u, pretty(u))),
+          ].filter(Boolean);
+          if (contact.length) head.push(h('p', { class: 'r-contact' }, contact.flatMap((c, i) => (i ? [' | ', h('span', {}, c)] : [h('span', {}, c)]))));
+        }
+
+        const parts = head.length ? [h('header', { class: 'r-head' }, head)] : [];
+        let after = null;
+        if (two) {
+          const main = sections('main'), side = sections('side'), rest = sections('page');
+          if (main.length || side.length) parts.push(h('div', { class: 'r-cols' }, h('div', { class: 'r-main' }, main), h('div', { class: 'r-side' }, side)));
+          if (rest.length) parts.push(after = h('div', { class: 'r-after' }, rest));
+        } else {
+          parts.push(...sections());
         }
 
         const body = h('div', { class: 'r-body' }, parts.length ? parts : h('p', { class: 'r-empty' }, 'Start typing on the left and your resume appears here.'));
@@ -827,6 +923,11 @@
 
         // Page-break guides. The browser also moves whole entries to the next page, so this is an estimate.
         const margin = s.margin * MM, perPage = height * MM - 2 * margin;
+        if (after && after.previousSibling) {
+          // Print starts these sections on a fresh page; push them to the next page boundary here so the preview matches.
+          const y = after.offsetTop - margin;
+          after.style.marginTop = `${Math.max(1, Math.ceil(y / perPage)) * perPage - y}px`;
+        }
         const pages = Math.max(1, Math.ceil((body.offsetHeight - 1) / perPage));
         for (let k = 1; k < pages; k++) {
           paper.append(h('div', { class: 'guide', style: `top:${margin + k * perPage}px` }, h('span', {}, `Page ${k + 1}`)));
