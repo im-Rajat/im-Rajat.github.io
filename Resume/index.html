@@ -424,27 +424,31 @@
       // Rajat's own resume doubles as the example every first-time visitor sees.
       const SAMPLE = {
         personal: {
-          name: 'Rajat Kumar', title: 'Associate Staff Engineer', email: 'rajatk0506@gmail.com',
+          name: 'Rajat Kumar', title: 'Staff Engineer', email: 'rajatk0506@gmail.com',
           phone: '+91 8285444609', location: '', website: 'im-rajat.github.io',
         },
         links: ['linkedin.com/in/imRajat', 'github.com/im-Rajat'],
         summary: 'Software engineer with 6+ years of experience building high-performance C++ systems, from embedded firmware and IoT to cloud services on Linux and AWS. Drove a legacy Windows-to-Linux migration that cut startup time by 75%, and own cloud networking, CI/CD and security work end to end.',
         experience: [
           {
-            role: 'Associate Staff Engineer', company: 'Nagarro', start: 'Oct 2023', end: 'Present',
+            role: 'Staff Engineer', company: 'Nagarro', start: 'May 2025', end: 'Present',
             description: 'Same product since Jun 2022: a C++ payment platform for auto dealers, where I own product, migration, cloud and CI/CD work.',
-            highlights: 'Design and develop C++20 microservices that calculate real-time lease, finance and cash deals for auto dealers, with location-based state, county and city taxes, lender rules, incentives and trade-ins, serving millions of high-concurrency requests.\nDrove the final phase of the Windows-to-Linux migration (CMake presets, shared Docker dev image): startup fell from 20 to 4 minutes with no CPU spikes.\nOwned the move of AWS ECS services to private networking, from ALB vs NLB proof of concept and design to Terraform for private load balancers and Route 53 failover.\nRetired the last Jenkins pipelines, moving builds, releases and scheduled jobs to GitHub Actions and ECS Fargate.\nFixed 122 integer-overflow (CWE-190) findings in one sprint and added security scanning to CI.',
+            highlights: 'Drove the final phase of the Windows-to-Linux migration (CMake presets, shared Docker dev image): startup fell from 20 to 4 minutes with no CPU spikes.\nOwned the move of AWS ECS services to private networking, from ALB vs NLB proof of concept and design to Terraform for private load balancers and Route 53 failover.\nRetired the last Jenkins pipelines, moving builds, releases and scheduled jobs to GitHub Actions and ECS Fargate.',
           },
           {
-            role: 'Senior Engineer', company: 'Nagarro', start: 'May 2022', end: 'Sep 2023',
+            role: 'Associate Staff Engineer', company: 'Nagarro', start: 'Oct 2023', end: 'Apr 2025',
+            highlights: 'Design and develop C++20 microservices that calculate real-time lease, finance and cash deals for auto dealers, with location-based state, county and city taxes, lender rules, incentives and trade-ins, serving millions of high-concurrency requests.\nDelivered product features and enhancements across the full feature life cycle in agile/scrum, and fixed production defects.\nAdded a Redis cache, graceful shutdown on signals, clang-format and static security scanning in CI.',
+          },
+          {
+            role: 'Senior Engineer', company: 'Nagarro', start: 'Apr 2022', end: 'Sep 2023',
             highlights: 'Joined the payment platform in Jun 2022 after wrapping up a healthcare firmware port.\nDelivered C++ features in agile/scrum, handled production issues and on-call, and decoupled Windows dependencies as groundwork for the Linux migration.',
           },
           {
-            role: 'Engineer', company: 'Nagarro', start: 'Oct 2020', end: 'Apr 2022',
+            role: 'Engineer', company: 'Nagarro', start: 'Oct 2020', end: 'Mar 2022',
             highlights: 'Delivered firmware, computer-vision, backend and smart-home projects in C, C++ and Python, taking proofs of concept from first prototype to client demo.',
           },
           {
-            role: 'Associate Engineer', company: 'Nagarro', start: 'Jun 2019', end: 'Sep 2020',
+            role: 'Junior Engineer', company: 'Nagarro', start: 'Sep 2019', end: 'Sep 2020',
             highlights: 'One of the founding developers of Nagarro\'s Embedded practice (Sigma – Practice ISV).\nBuilt IoT and networking proofs of concept on Linux with BACnet, Modbus and Zigbee, debugging with Wireshark, GDB and tcpdump.',
           },
         ],
