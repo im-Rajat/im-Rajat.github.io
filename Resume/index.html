@@ -428,28 +428,28 @@
           phone: '+91 8285444609', location: '', website: 'im-rajat.github.io',
         },
         links: ['linkedin.com/in/imRajat', 'github.com/im-Rajat'],
-        summary: 'Software engineer with 6+ years of experience building high-performance C++ systems, from embedded firmware and IoT to cloud services on Linux and AWS. Drove a legacy Windows-to-Linux migration that cut startup time by 75%, and own cloud networking, CI/CD and security work end to end.',
+        summary: 'Staff Engineer with 7+ years of experience in C++, currently contributing to a real-time payment platform in the automobile domain. Drove its Windows-to-Linux migration (75% faster startup), moved its AWS services from public to private networking, and retired Jenkins for GitHub Actions. Earlier: firmware, IoT and backend projects in C, C++ and Python.',
         experience: [
           {
             role: 'Staff Engineer', company: 'Nagarro', start: 'May 2025', end: 'Present',
-            description: 'Same product since Jun 2022: a C++ payment platform for auto dealers, where I own product, migration, cloud and CI/CD work.',
-            highlights: 'Drove the final phase of the Windows-to-Linux migration (CMake presets, shared Docker dev image): startup fell from 20 to 4 minutes with no CPU spikes.\nOwned the move of AWS ECS services to private networking, from ALB vs NLB proof of concept and design to Terraform for private load balancers and Route 53 failover.\nRetired the last Jenkins pipelines, moving builds, releases and scheduled jobs to GitHub Actions and ECS Fargate.',
+            description: 'Contributing since Jun 2022 to a real-time C++ payment platform in the automobile domain: the software that calculates lease, finance and cash deals for auto dealers, applying taxes, lender rules, incentives and trade-ins.',
+            highlights: 'Took the Windows-to-Linux migration live in production: wrote the runbook the team followed and released with no pager incidents. Startup time fell from 20 min to 4 min (75%).\nMoved the platform\'s AWS services from public to private networking: evaluated ALB vs NLB, then rolled out private load balancers, VPC-bound traffic, security groups and Route 53 failover across two regions.\nRetired Jenkins: moved builds, releases, deploys and scheduled jobs to GitHub Actions and ECS Fargate.\nShare AWS, CI/CD and AI-assisted development practices with the team.',
           },
           {
             role: 'Associate Staff Engineer', company: 'Nagarro', start: 'Oct 2023', end: 'Apr 2025',
-            highlights: 'Design and develop C++20 microservices that calculate real-time lease, finance and cash deals for auto dealers, with location-based state, county and city taxes, lender rules, incentives and trade-ins, serving millions of high-concurrency requests.\nDelivered product features and enhancements across the full feature life cycle in agile/scrum, and fixed production defects.\nAdded a Redis cache, graceful shutdown on signals, clang-format and static security scanning in CI.',
+            highlights: 'Drove the final phase of the Windows-to-Linux migration: removed Windows-only code and builds, moved to CMake presets and a shared Docker dev image.\nDelivered product features and enhancements on the payment platform across the full feature life cycle in agile/scrum.\nInvestigated and fixed product and production defects.\nImproved reliability: added a Redis cache, graceful shutdown on signals, clang-format and static security scanning in CI.',
           },
           {
             role: 'Senior Engineer', company: 'Nagarro', start: 'Apr 2022', end: 'Sep 2023',
-            highlights: 'Joined the payment platform in Jun 2022 after wrapping up a healthcare firmware port.\nDelivered C++ features in agile/scrum, handled production issues and on-call, and decoupled Windows dependencies as groundwork for the Linux migration.',
+            highlights: 'Completed the healthcare device firmware port from STM32L1 to STM32L0.\nJoined the automotive C++ payment platform in June 2022: wrote features to requirement across the full life cycle in scrum.\nHandled PagerDuty and production issues, and improved existing code as part of continuous process improvement (CPI).\nMade the code base Linux-compatible by decoupling Windows dependencies, the groundwork for the later migration.',
           },
           {
             role: 'Engineer', company: 'Nagarro', start: 'Oct 2020', end: 'Mar 2022',
-            highlights: 'Delivered firmware, computer-vision, backend and smart-home projects in C, C++ and Python, taking proofs of concept from first prototype to client demo.',
+            highlights: 'Thermal scanning & mask detection (COVID): face and mask detection in Python/OpenCV, forehead-targeted thermal scanning and encrypted QR employee checks. Moved from Raspberry Pi to NVIDIA Jetson Nano for performance.\nRF traffic logging: wrote C/C++ in a smart-home controller to turn RF traffic logging on and off remotely and serve the logs over the network, replacing a standalone sniffer tool.\nVirtual consultation platform: built workflows, actions and transitions on a RESTful state-machine service for a multitenant IVR/WhatsApp health platform, plus Python scripts to provision and test every transition.\nHealthcare device firmware: merged three firmware code bases into one built per variant with preprocessor flags, wrote HAL wrappers for each subsystem, and made the application layer hardware-independent.',
           },
           {
             role: 'Junior Engineer', company: 'Nagarro', start: 'Sep 2019', end: 'Sep 2020',
-            highlights: 'One of the founding developers of Nagarro\'s Embedded practice (Sigma – Practice ISV).\nBuilt IoT and networking proofs of concept on Linux with BACnet, Modbus and Zigbee, debugging with Wireshark, GDB and tcpdump.',
+            highlights: 'One of the founding developers of Nagarro\'s Embedded practice (Sigma – Practice ISV).\nRan BACnet servers in Docker containers on AWS EC2, created and terminated on demand, so physical hubs could be load-tested without hardware.\nAdded WritePropertyMultiple and Create/Delete Object services to the open-source BACnet stack.\nBuilt a cloud BACnet client that backs up a device\'s configuration to EC2 so it can be restored.\nBuilt a Modbus-to-BACnet bridge in C on Linux, and PC → Raspberry Pi → Arduino smart-home control over BACnet and Zigbee, debugging with Wireshark, GDB and tcpdump.',
           },
         ],
         projects: [
