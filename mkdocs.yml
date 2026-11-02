@@ -80,9 +80,7 @@ plugins:
         'Share-Market/README.md': 'Wealth-and-Wisdom/Share-Market/README.md'
         'Personal-Notes/Life-Concepts-of-a-Programmer.md': 'Wealth-and-Wisdom/Life-Concepts-of-a-Programmer.md'
         'PDF/README.md': 'Resources/PDF/README.md'
-        'Websites/README.md': 'https://im-rajat.github.io/Notes/Resources/Websites/'
-        # Old static hub page (folder deleted). The plugin warns "not a valid markdown file" for this one but still writes the redirect.
-        'Resources/Websites/html/web-resource-hub.html': 'https://im-rajat.github.io/Notes/Resources/Websites/'
+        'Websites/README.md': 'https://im-rajat.github.io/Websites/'
         'Interviews/Interview-Questions/README.md': 'Interviews/README.md'
         'Interviews/Company-Interviews/012_Synopsis/README.md': 'Interviews/Company-Interviews/012-Synopsys/README.md'
         'Interviews/Company-Interviews/001_Amagi_Media_Labs/README.md': 'Interviews/Company-Interviews/001-Amagi-Media-Labs/README.md'
@@ -110,6 +108,7 @@ plugins:
         'AI/Prompts/Personal-Prompts.md': 'https://im-rajat.github.io/Notes/AI/Prompts/'
         'AI/Prompts/Library/index.md': 'https://im-rajat.github.io/Notes/AI/Prompts/'
         'Resume/index.md': 'https://im-rajat.github.io/Resume/'
+        'Resources/Websites/README.md': 'https://im-rajat.github.io/Websites/'
 
 markdown_extensions:
   - tables                    # Enables GitHub-style tables
