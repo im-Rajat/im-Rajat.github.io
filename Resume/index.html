@@ -437,7 +437,7 @@
           },
           {
             role: 'Associate Staff Engineer', company: 'Nagarro', start: 'Oct 2023', end: 'Apr 2025',
-            highlights: 'Drove the Windows-to-Linux migration: ran the investigation and spikes, decoupled Windows dependencies to make the code base Linux-compatible, then removed Windows-only code and builds and moved to CMake presets and a shared Docker dev image.\nDelivered product features and enhancements on the payment platform across the full feature life cycle in agile/scrum.\nInvestigated and fixed product and production defects.\nImproved reliability: added a Redis cache, graceful shutdown on signals, clang-format and static security scanning in CI.',
+            highlights: 'Drove the Windows-to-Linux migration: ran the investigation and spikes, decoupled Windows dependencies to make the code base Linux-compatible, then removed Windows-only code and builds and moved to CMake presets and a shared Docker dev image.\nDelivered product features and enhancements on the payment platform across the full feature life cycle in agile/scrum.\nInvestigated and fixed product and production defects.\nImproved reliability: added graceful shutdown on signals, clang-format and static security scanning in CI, and ran a spike on adding a Redis cache.',
           },
           {
             role: 'Senior Engineer', company: 'Nagarro', start: 'Apr 2022', end: 'Sep 2023',
@@ -459,7 +459,7 @@
             highlights: 'ZIP-based container that stores images as raw bytes, de-duplicated by SHA-256, with integrity checks and byte-identical output.\nPython library and rk CLI (pack, check, render, share and more), an installable offline web editor and a VS Code extension.\nHardened readers: path-traversal and zip-bomb limits, magic-byte type sniffing and allowlist HTML sanitizing.',
           },
           {
-            name: 'Resume Builder (side project)', link: 'im-rajat.github.io/Resume',
+            name: 'Resume Builder (side project)', link: 'im-rajat.github.io/Resume', start: 'Oct 2026', end: 'Present',
             description: 'A free, ATS-friendly resume builder that runs entirely in the browser.',
             highlights: 'Live print-ready preview with two-column and single-column templates, PDF export, and JSON import/export including JSON Resume.\nNo server or sign-up: data stays in the browser\'s local storage.',
           },
@@ -469,29 +469,41 @@
             highlights: 'Notes on C/C++, system design, operating systems, networks, DBMS and DevOps, with 40+ interactive explainers, a prompt library and a curated tools list.',
           },
           {
-            name: 'Unified Firmware Architecture',
+            name: 'Unified Firmware Architecture', start: 'Dec 2021', end: 'May 2022',
             highlights: 'Merged 3 firmware code bases of a handheld healthcare device into 1, building each variant with preprocessor flags.\nDeveloped and tested the HAL for several subsystems and ported the firmware from STM32L1 to STM32L0.',
           },
           {
-            name: 'Thermal Scanning & Mask Detection',
+            name: 'Thermal Scanning & Mask Detection', start: 'Oct 2020', end: 'Feb 2021',
             description: 'Contactless office entry solution for the post-COVID workplace.',
             highlights: 'Scanned temperature with a thermal camera, detected face masks and verified employees with encrypted QR codes; moved from Raspberry Pi to NVIDIA Jetson Nano for performance.',
           },
           {
-            name: 'Virtual Consultation',
+            name: 'Virtual Consultation', start: 'Jul 2021', end: 'Sep 2021',
             description: 'Multitenant system for virtual consultations with health providers over IVR and WhatsApp, for COVID, mental health and more.',
             highlights: 'Built the workflow, actions and transitions on a RESTful state-machine service, plus Python scripts that provision workflows and test every state transition.',
           },
           {
-            name: 'RF Sniffer Functionality',
+            name: 'RF Sniffer Functionality', start: 'Mar 2021', end: 'Jun 2021',
             highlights: 'Added remote enable/disable of RF traffic logging to a smart-home controller, replacing the standalone RF sniffer tool, and served the captured logs over the network for root-cause analysis.',
           },
           {
-            name: 'BACnet Servers in Docker Containers on the Cloud',
-            highlights: 'Ran BACnet servers in Docker containers on cloud Linux hosts, created and terminated on demand, so physical hubs can be load-tested without hardware.\nAdded WritePropertyMultiple and Create/Delete Object services missing from the open-source BACnet Stack 0.8.6.',
+            name: 'BACnet Servers in Docker Containers on the Cloud', start: 'Jun 2020', end: 'Sep 2020',
+            highlights: 'Ran BACnet servers in Docker containers on AWS EC2, created and terminated on demand, so physical hubs can be load-tested without hardware.\nThe same BACnet client talks to both the cloud servers and physical BACnet servers.',
           },
           {
-            name: 'Raspberry Pi – BACnet – Arduino Communication',
+            name: 'Open-Source BACnet Stack: New Services', start: 'Jul 2020', end: 'Aug 2020',
+            highlights: 'Added WritePropertyMultiple and Create/Delete Object services missing from the open-source BACnet Stack 0.8.6, by analyzing existing service packets in Wireshark and building the new ones from them.',
+          },
+          {
+            name: 'Modbus to BACnet Bridge', start: 'May 2020',
+            highlights: 'Bridged two industrial IoT protocols on Linux in C, mapping BACnet read/write services to Modbus coils and holding registers so data survives a BACnet server restart.',
+          },
+          {
+            name: 'Cloud Backup for BACnet Devices', start: 'Apr 2020',
+            highlights: 'Built a cloud-compatible BACnet client that writes a physical server\'s configuration to both the device and servers on AWS EC2, so the configuration can be restored if the device loses it.',
+          },
+          {
+            name: 'Raspberry Pi – BACnet – Arduino Communication', start: 'Feb 2020', end: 'Mar 2020',
             highlights: 'Controlled lights and switches on an Arduino from a PC: the PC talks to a Raspberry Pi over BACnet on Wi-Fi, and the Pi talks to the Arduino over Zigbee.',
           },
         ],

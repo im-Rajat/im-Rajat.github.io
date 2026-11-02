@@ -481,8 +481,8 @@
 
           <article class="panel stream">
             <div class="stream-top"><span class="num">05</span><h4>Security &amp; Reliability</h4><svg class="i i-lg ic"><use href="#i-code"/></svg></div>
-            <p>Added static security scanning to CI so issues are caught before release. Introduced clang-format, a Redis cache via redis-plus-plus and graceful shutdown on signals.</p>
-            <div class="tags"><span class="tag">SAST</span><span class="tag">Redis</span><span class="tag">clang-format</span></div>
+            <p>Added static security scanning to CI so issues are caught before release. Introduced clang-format and graceful shutdown on signals, and ran a spike on adding a Redis cache via redis-plus-plus to scope what would need to change.</p>
+            <div class="tags"><span class="tag">SAST</span><span class="tag">clang-format</span><span class="tag">Signals</span></div>
           </article>
         </div>
       </div>
@@ -636,7 +636,7 @@
             <ul>
               <li>Drove the Windows-to-Linux migration: ran the investigation and spikes, decoupled Windows dependencies, then removed Windows-only code and builds and moved to CMake presets and a shared Docker dev image.</li>
               <li>Delivered product features and enhancements across the full feature life cycle in agile/scrum, and fixed production defects.</li>
-              <li>Improved reliability with a Redis cache, graceful shutdown on signals, clang-format and static security scanning in CI.</li>
+              <li>Improved reliability with graceful shutdown on signals, clang-format and static security scanning in CI, and ran a spike on adding a Redis cache.</li>
             </ul>
           </article>
           <article class="job">
@@ -715,8 +715,15 @@
           <article class="panel card" data-cat="iot cloud">
             <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-cloud"/></svg></div><span class="kind">IoT · Cloud</span></div>
             <h3>BACnet Servers on AWS</h3>
-            <p>Ran BACnet servers in Docker containers on EC2, created and destroyed on demand, so physical hubs can be load-tested without hardware. Added WritePropertyMultiple and Create/Delete Object services to the open-source BACnet stack.</p>
+            <p>Ran BACnet servers in Docker containers on EC2, created and destroyed on demand, so physical hubs can be load-tested without hardware. The same client talks to both the cloud servers and physical BACnet servers.</p>
             <div class="tags"><span class="tag">Embedded C</span><span class="tag">Docker</span><span class="tag">AWS EC2</span><span class="tag">BACnet</span></div>
+          </article>
+
+          <article class="panel card" data-cat="iot">
+            <div class="card-top"><div class="ic"><svg class="i i-lg"><use href="#i-code"/></svg></div><span class="kind">Open Source · IoT</span></div>
+            <h3>Open-Source BACnet Stack: New Services</h3>
+            <p>Added WritePropertyMultiple and Create/Delete Object services to the open-source BACnet stack (0.8.6), which the community hadn't implemented yet, by analyzing existing service packets in Wireshark and building the new ones from them.</p>
+            <div class="tags"><span class="tag">Embedded C</span><span class="tag">BACnet</span><span class="tag">Wireshark</span></div>
           </article>
 
           <article class="panel card" data-cat="iot cloud">
