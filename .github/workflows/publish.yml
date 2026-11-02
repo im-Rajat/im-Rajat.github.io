@@ -59,7 +59,7 @@ jobs:
         run: |
           cp -r index.html Resume site/
           mkdir -p site/Websites
-          cp docs/Resources/Websites/index.html docs/Resources/Websites/websites.json site/Websites/
+          cp Resources/Websites/index.html docs/Resources/Websites/websites.json site/Websites/
           cp site/Notes/404.html site/404.html
 
       # Package the 'site/' folder into an artifact
