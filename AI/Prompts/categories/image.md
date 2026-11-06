@@ -25,6 +25,14 @@ Enhance or fix the lighting of this image with soft natural (not too much) light
 Keep everything exactly same including faces of people in the image. Strictly don't change the face structure or expression of anyone
 ```
 
+## Professionally Retouch
+
+```
+Professionally retouch this image while preserving the person's identity, facial features, skin texture, body proportions, hairstyle, clothing, and overall appearance.
+
+Improve the lighting, sharpness, color balance, exposure, and overall clarity while keeping the result natural and realistic.
+```
+
 ## Rainy Night Highway Car Shot
 
 ```
