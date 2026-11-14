@@ -20,6 +20,7 @@
 - Check if your email address is in a data breach    -    <https://haveibeenpwned.com/>
 - List all subdomains associated with a primary domain    →    https://crt.name/v1/search?apex=[domain-name-here]
 - How much X/twitter account have original content    -    <https://original.unfair.so/> | <https://x.com/i/under_the_hood>
+- Collection of free stuff    →    <https://fmhy.net/>
 
 <hr>
 
@@ -45,7 +46,6 @@
 <hr>
 
 ### Education :
-
 - Useful Git Repositories    →    <https://github.com/im-Rajat?tab=stars>
 - You can access all Medium articles for free    -    <https://freedium-mirror.cfd/>
 - OSINT4ALL: Curated masterboard and toolkit for Open Source Intelligence    -    <https://start.me/p/L1rEYQ/osint4all>
@@ -95,6 +95,7 @@
 <hr>
 
 ### Photo & Video Apps :
+- Free AI Video, Audio & Photo Tools    →    <https://www.cliputils.com/>
 - Post your images here and get URL    -    <https://postimages.org/>
 - Free Image URL Generator    -    <https://www.imghippo.com/>
 - Make passport size photos + other photo tools    -    <https://www.cutout.pro/passport-photo-maker>
